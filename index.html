@@ -29,7 +29,7 @@
             display: flex; flex-direction: column; position: relative;
         }
 
-        .screen { display: none; width: 100%; flex: 1; flex-direction: column; padding: 20px; overflow-y: auto; padding-bottom: 80px;}
+        .screen { display: none; width: 100%; flex: 1; flex-direction: column; padding: 20px; overflow-y: auto; padding-bottom: 90px;}
         .screen.active { display: flex; }
         
         /* НИЖНЕЕ МЕНЮ */
@@ -57,19 +57,21 @@
 
         /* КАРТОЧКА */
         .header { width: 100%; display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 12px; color: #888; font-weight: 700; text-transform: uppercase; }
-        .inmate-card { background: var(--card-bg); border: 2px solid var(--gold); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; cursor: pointer; }
+        .inmate-card { background: var(--card-bg); border: 2px solid var(--gold); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; cursor: pointer; }
         .inmate-card:active { transform: scale(0.98); }
         .inmate-svg { width: 90px; height: 90px; margin-bottom: 10px; }
         .inmate-name { font-size: 22px; font-weight: 900; color: var(--gold); text-transform: uppercase;}
         .inmate-label { font-size: 11px; color: #888; margin-top: 5px; }
 
-        .progress-bar { width: 100%; height: 10px; background: #000; border-radius: 5px; margin-bottom: 20px; overflow: hidden; border: 1px solid var(--border); }
+        .progress-container { width: 100%; margin-bottom: 20px; }
+        .progress-text { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 5px; color: #ccc; }
+        .progress-bar { width: 100%; height: 12px; background: #000; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
         .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
 
         .brutal-title { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 20px; text-transform: uppercase; line-height: 1.1;}
         .brutal-title span { color: var(--accent); }
 
-        .case-box { background: var(--card-bg); border-left: 4px solid var(--danger); padding: 20px; margin-bottom: 20px; font-size: 15px; line-height: 1.6; color: #ddd; }
+        .case-box { background: var(--card-bg); border-left: 4px solid var(--danger); padding: 20px; margin-bottom: 15px; font-size: 15px; line-height: 1.6; color: #ddd; }
         .timer { font-size: 52px; font-weight: 900; text-align: center; color: var(--gold); margin-bottom: 15px; }
         
         .choices { display: flex; gap: 15px; margin-top: auto; }
@@ -83,11 +85,7 @@
 
         .nav-back { background: none; border: none; color: #888; font-size: 14px; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-bottom: 20px; text-align: left; font-family: 'Space Grotesk', sans-serif;}
 
-        /* СПИСКИ */
         .list-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border); }
-        .list-item button { background: var(--accent); border: none; color: #000; padding: 5px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
-
-        /* ПОИСК */
         .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-input { flex: 1; background: var(--card-bg); border: 2px solid var(--border); color: white; padding: 12px; border-radius: 8px; font-family: 'Space Grotesk'; font-size: 14px; }
         .search-btn { background: var(--accent); border: none; color: #000; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
@@ -111,23 +109,42 @@
     <div id="main-menu" class="screen">
         <div class="header">
             <div id="player-name">ЗАКЛЮЧЕННЫЙ</div>
-            <div>ДЕЛА: <span id="exp-counter" style="color: var(--accent);">0</span></div>
+            <div>ОПЫТ: <span id="exp-counter" style="color: var(--accent);">0</span></div>
         </div>
 
         <div class="inmate-card" onclick="openDossier()">
-            <svg class="inmate-svg" id="avatar-svg" viewBox="0 0 100 100">
-                <path d="M20 40 Q50 10 80 40 L80 50 Q50 20 20 50 Z" fill="#333"/>
-                <circle cx="50" cy="50" r="20" fill="#222"/>
-                <rect x="40" y="45" width="20" height="5" fill="#00FF41"/>
-                <path d="M30 70 Q50 90 70 70 L80 80 Q50 100 20 80 Z" fill="#222"/>
-            </svg>
+            <div id="avatar-container"></div>
             <div class="inmate-name" id="level-name">ГЕНРИ ХИЛЛ</div>
             <div class="inmate-label">ОПАСНЫЙ ПРЕСТУПНИК</div>
         </div>
 
-        <div class="progress-bar"><div class="progress-fill" id="exp-bar"></div></div>
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>УРОВЕНЬ <span id="level-num">1</span></span>
+                <span id="exp-text">XP: 0 / 7</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="exp-bar"></div></div>
+        </div>
         
         <button class="btn btn-play" onclick="showScreen('mode-select')">В СУД</button>
+        <button class="btn" onclick="showScreen('rules')" style="border-color: var(--gold); color: var(--gold);">📜 ПРАВИЛА ИГРЫ</button>
+        
+        <div class="case-box" style="margin-top: 10px; font-size: 13px; border-color: #555;">
+            <b>СПРАВКА:</b> Дилемма заключенного — это фундаментальная проблема теории игр, показывающая, почему два человека могут не сотрудничать, даже если это выгодно обоим.
+        </div>
+    </div>
+
+    <!-- ПРАВИЛА -->
+    <div id="rules" class="screen">
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title">ПРАВИЛА</div>
+        <div class="case-box" style="border-color: var(--accent);">
+            1. Тебе дается дело.<br><br>
+            2. У тебя есть выбор: <b>СДАТЬ</b> напарника (выйти сухим) или <b>МОЛЧАТЬ</b> (сесть на 3 года).<br><br>
+            3. Если сдадите оба — получите по 7 лет.<br><br>
+            4. Побеждает тот, у кого срок меньше. Победа дает +1 XP.<br><br>
+            5. Набирай XP и открывай новых персонажей (от Генри Хилла до Пабло Эскобара).
+        </div>
     </div>
 
     <!-- РЕЖИМЫ -->
@@ -135,6 +152,7 @@
         <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
         <div class="brutal-title">РЕЖИМ</div>
         <button class="btn" onclick="startGame('bot')">🤖 С БОТОМ</button>
+        <button class="btn" onclick="startGame('online')">🌐 ОНЛАЙН (ПОИСК)</button>
         <button class="btn" onclick="startGame('local')">📱 ИГРАТЬ С ДРУГОМ</button>
         <button class="btn" onclick="startGame('infinite')">∞ БЕЗ ЛИМИТА</button>
     </div>
@@ -217,7 +235,7 @@
         <button class="btn btn-play" onclick="nextRound()">ДАЛЕЕ</button>
     </div>
 
-    <!-- НИЖНЕЕ МЕНЮ (всегда видно) -->
+    <!-- НИЖНЕЕ МЕНЮ -->
     <div class="bottom-nav" id="bottom-nav" style="display: none;">
         <div class="nav-item" onclick="showScreen('main-menu')"><i>🏠</i>Главная</div>
         <div class="nav-item" onclick="showScreen('rating')"><i>🏆</i>Рейтинг</div>
@@ -234,7 +252,20 @@
     const user = tg.initDataUnsafe?.user;
     if(user) document.getElementById('player-name').innerText = user.first_name.toUpperCase();
 
-    // ДАННЫЕ
+    // --- КРАСИВЫЕ АВАТАРКИ ---
+    const avatars = [
+        // 1. Генри (кепка)
+        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M20 45 Q50 15 80 45 L80 50 Q50 25 20 50 Z" fill="#333"/><rect x="25" y="40" width="50" height="8" fill="#00FF41"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M35 70 Q50 85 65 70 Z" fill="#555"/></svg>`,
+        // 2. Джо (шляпа)
+        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M15 40 L85 40 L75 25 L25 25 Z" fill="#444"/><rect x="15" y="40" width="70" height="5" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><rect x="35" y="60" width="30" height="8" fill="#000" rx="4"/><rect x="40" y="62" width="8" height="4" fill="#FFD700"/><rect x="52" y="62" width="8" height="4" fill="#FFD700"/></svg>`,
+        // 3. Аль Капоне (сигара)
+        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M25 40 Q50 20 75 40 L75 55 Q50 40 25 55 Z" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M40 60 L45 65" stroke="#fff" stroke-width="2"/><rect x="55" y="70" width="25" height="5" fill="#fff" transform="rotate(15 55 70)"/><circle cx="80" cy="72" r="3" fill="#FF003C"/></svg>`,
+        // 4. Фрэнк (маска)
+        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><rect x="20" y="35" width="60" height="30" fill="#000" rx="8"/><path d="M30 45 L40 50 L30 55 Z" fill="#FF003C"/><path d="M70 45 L60 50 L70 55 Z" fill="#FF003C"/><rect x="45" y="70" width="10" height="15" fill="#222"/></svg>`,
+        // 5. Пабло (очки)
+        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
+    ];
+
     const cases = [
         "Вы украли 50 млн на ремонт детсадов. У тебя двое детей, у напарника больная мать.",
         "Ваш автомобиль сбил пешехода. За рулем был друг, но вы оба пьяны.",
@@ -265,19 +296,16 @@
     let timer1, timer2;
     let currentMode = 'bot';
 
-    // НАВИГАЦИЯ
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         
-        // Показываем нижнее меню везде, кроме самой игры
-        if(id === 'case-screen' || id === 'game-screen' || id === 'result-screen' || id === 'intro' || id === 'pass-screen') {
+        if(id === 'case-screen' || id === 'game-screen' || id === 'result-screen' || id === 'intro' || id === 'pass-screen' || id === 'rules') {
             document.getElementById('bottom-nav').style.display = 'none';
         } else {
             document.getElementById('bottom-nav').style.display = 'flex';
         }
 
-        // Обновляем активную иконку в меню
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         if(id === 'main-menu') document.querySelectorAll('.nav-item')[0].classList.add('active');
         if(id === 'rating') document.querySelectorAll('.nav-item')[1].classList.add('active');
@@ -285,34 +313,31 @@
         if(id === 'clans') document.querySelectorAll('.nav-item')[3].classList.add('active');
     }
 
-    // ОБНОВЛЕНИЕ UI
     function updateUI() {
         let lvl = 0;
         if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4; if(totalExp >= 25) lvl = 5;
         
         document.getElementById('level-name').innerText = levels[Math.min(lvl, 4)].name;
         document.getElementById('exp-counter').innerText = totalExp;
+        document.getElementById('level-num').innerText = lvl + 1;
 
-        let colors = ['#00FF41', '#FF003C', '#FFD700', '#007aff', '#af52de'];
-        document.getElementById('avatar-svg').innerHTML = `
-            <path d="M20 40 Q50 10 80 40 L80 50 Q50 20 20 50 Z" fill="#333"/>
-            <circle cx="50" cy="50" r="20" fill="#222"/>
-            <rect x="40" y="45" width="20" height="5" fill="${colors[Math.min(lvl, 4)]}"/>
-            <path d="M30 70 Q50 90 70 70 L80 80 Q50 100 20 80 Z" fill="#222"/>
-        `;
+        document.getElementById('avatar-container').innerHTML = avatars[Math.min(lvl, 4)];
 
-        let p = (totalExp % 7) / 7 * 100;
-        if(lvl >= 5) p = 100;
-        document.getElementById('exp-bar').style.width = p + '%';
+        let prev = lvl > 0 ? [7, 12, 17, 22][lvl-1] : 0;
+        let curr = lvl < 5 ? [7, 12, 17, 22, 25][lvl] : 25;
+        let done = totalExp - prev;
+        let need = curr - prev;
+        if(need <= 0) { done = totalExp; need = 25; }
+        
+        document.getElementById('exp-text').innerText = `XP: ${done} / ${need}`;
+        document.getElementById('exp-bar').style.width = (done / need * 100) + '%';
 
-        // Друзья
         let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:20px;">Список друзей пуст</div>';
         friends.forEach(f => {
             fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--accent); font-size:12px;">В ИГРЕ</span></div>`;
         });
         document.getElementById('friends-list').innerHTML = fHtml;
 
-        // Клан
         if(clan) {
             document.getElementById('clan-create').style.display = 'none';
             document.getElementById('my-clan-info').style.display = 'block';
@@ -323,7 +348,6 @@
         }
     }
 
-    // ДОСЬЕ
     function openDossier() {
         let lvl = totalExp >= 25 ? 4 : (totalExp >= 22 ? 3 : (totalExp >= 17 ? 2 : (totalExp >= 12 ? 1 : (totalExp >= 7 ? 0 : 0))));
         if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4;
@@ -336,13 +360,10 @@
         showScreen('dossier');
     }
 
-    // ДРУЗЬЯ И КЛАНЫ
     function searchFriends() {
         let query = document.getElementById('friend-search').value.trim();
         if(!query) return tg.showAlert("Введите имя друга!");
         
-        // В реальном Telegram Mini App мы не можем вытащить всех контактов без специального запроса.
-        // Поэтому мы просто добавляем введенного пользователя в список друзей.
         if(!friends.includes(query)) {
             friends.push(query);
             localStorage.setItem('myFriends', JSON.stringify(friends));
@@ -376,10 +397,20 @@
         tg.showAlert('Вы покинули клан.');
     }
 
-    // ИГРА
     function startGame(mode) {
         currentMode = mode;
         round = 1;
+        
+        if(mode === 'online') {
+            tg.showAlert("ПОИСК СОПЕРНИКА...");
+            setTimeout(() => {
+                tg.showAlert("СОПЕРНИК НАЙДЕН: KILLER_99");
+                currentMode = 'bot';
+                nextRound();
+            }, 1500);
+            return;
+        }
+        
         nextRound();
     }
 
@@ -419,9 +450,8 @@
         }, 1000);
     }
 
-    // ЗДЕСЬ БЫЛА ОШИБКА, ИСПРАВЛЕНО
     function makeChoice(choice) {
-        clearInterval(timer2); // Таймер стопается
+        clearInterval(timer2);
         
         if(currentMode === 'local') {
             if(!p1Selected) {
@@ -434,7 +464,6 @@
             }
         } else {
             p1Choice = choice;
-            // Бот делает выбор
             p2Choice = Math.random() > 0.5 ? 'betray' : 'silent';
         }
 
@@ -451,10 +480,10 @@
         let text = `Твой срок: ${p1Y} лет.<br>Срок напарника: ${p2Y} лет.<br><br>`;
 
         if(p1Y < p2Y) {
-            text += "<span style='color:var(--accent); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span>";
+            text += "<span style='color:var(--accent); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
             if(currentMode !== 'local') totalExp++;
         } else if(p1Y > p2Y) {
-            text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span>";
+            text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span><br><span style='font-size:12px;'>-1 XP</span>";
             if(currentMode !== 'local') totalExp--;
         } else {
             text += "<span style='color:#888; font-size:20px;'>НИЧЬЯ.</span>";
@@ -470,7 +499,6 @@
         round++;
     }
 
-    // ЗАПУСК
     updateUI();
 </script>
 </body>
