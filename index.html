@@ -9,63 +9,62 @@
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap');
 
         :root {
-            --bg: #0d0d0d; --text: #ffffff; --accent: #00FF41; 
-            --danger: #FF003C; --border: #333; --gold: #FFD700;
-            --card-bg: #1a1a1a;
+            --bg: #080808; --text: #fff; --accent: #00FF41; 
+            --danger: #FF003C; --border: #222; --gold: #FFD700;
+            --card: #141414;
         }
 
         * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0; padding: 20px; font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--bg); color: var(--text);
+            background: var(--bg); color: var(--text);
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, var(--bg) 70%);
+            background-image: radial-gradient(circle at 50% 0%, #1c1c1c 0%, var(--bg) 80%);
         }
 
-        .screen { display: none; width: 100%; max-width: 400px; flex-direction: column; animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .screen { display: none; width: 100%; max-width: 400px; flex-direction: column; animation: slideUp 0.2s ease; }
         .screen.active { display: flex; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .btn {
-            background: var(--card-bg); color: var(--text); border: 2px solid var(--border);
-            padding: 18px 20px; font-size: 16px; font-weight: 700; text-transform: uppercase;
-            cursor: pointer; width: 100%; transition: all 0.2s; text-align: left; 
-            display: flex; justify-content: space-between; align-items: center; border-radius: 4px;
-            margin-bottom: 10px; font-family: 'Space Grotesk', sans-serif;
+            background: var(--card); color: var(--text); border: 2px solid var(--border);
+            padding: 15px; font-size: 15px; font-weight: 700; text-transform: uppercase;
+            cursor: pointer; width: 100%; border-radius: 8px; margin-bottom: 10px; 
+            font-family: 'Space Grotesk', sans-serif; display: flex; justify-content: space-between;
         }
-        .btn:active { border-color: var(--accent); background: rgba(0, 255, 65, 0.1); color: var(--accent); }
-        .btn-play { background: var(--accent); color: #000; border: none; justify-content: center; font-size: 22px; font-weight: 900; }
+        .btn:active { border-color: var(--accent); color: var(--accent); }
+        .btn-play { background: var(--accent); color: #000; justify-content: center; font-size: 20px; border: none; }
 
         .header { width: 100%; display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 12px; color: #888; font-weight: 700; text-transform: uppercase; }
 
         .inmate-card {
-            background: var(--card-bg); border: 2px solid var(--gold); border-radius: 8px;
+            background: var(--card); border: 2px solid var(--gold); border-radius: 12px;
             padding: 20px; display: flex; flex-direction: column; align-items: center;
-            margin-bottom: 20px; cursor: pointer; position: relative; overflow: hidden;
+            margin-bottom: 20px; cursor: pointer;
         }
         .inmate-card:active { transform: scale(0.98); }
-        .inmate-svg { width: 100px; height: 100px; margin-bottom: 15px; }
-        .inmate-name { font-size: 22px; font-weight: 900; text-transform: uppercase; color: var(--gold); }
-        .inmate-label { font-size: 12px; color: #888; margin-top: 5px; letter-spacing: 1px; }
+        .inmate-svg { width: 90px; height: 90px; margin-bottom: 10px; }
+        .inmate-name { font-size: 22px; font-weight: 900; color: var(--gold); text-transform: uppercase;}
+        .inmate-label { font-size: 11px; color: #888; margin-top: 5px; }
 
-        .progress-bar { width: 100%; height: 8px; background: var(--border); margin-bottom: 20px; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
+        .progress-bar { width: 100%; height: 10px; background: #000; border-radius: 5px; margin-bottom: 20px; overflow: hidden; border: 1px solid var(--border); }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
 
-        .brutal-title { font-size: 32px; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; letter-spacing: -1px; text-align: center; }
+        .brutal-title { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 20px; text-transform: uppercase; }
         .brutal-title span { color: var(--accent); }
 
-        .case-box { background: var(--card-bg); border-left: 4px solid var(--danger); padding: 20px; margin-bottom: 20px; font-size: 15px; line-height: 1.5; color: #ccc; }
-        .timer { font-size: 48px; font-weight: 900; text-align: center; color: var(--gold); margin-bottom: 15px; font-variant-numeric: tabular-nums; }
+        .case-box { background: var(--card); border-left: 4px solid var(--danger); padding: 20px; margin-bottom: 20px; font-size: 15px; line-height: 1.6; color: #ddd; }
+        .timer { font-size: 52px; font-weight: 900; text-align: center; color: var(--gold); margin-bottom: 15px; }
         .timer.red { color: var(--danger); animation: pulse 1s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         .choices { display: flex; gap: 15px; margin-top: auto; }
-        .choice-btn { flex: 1; padding: 25px 10px; font-size: 18px; font-weight: 900; border: none; text-transform: uppercase; border-radius: 4px; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-family: 'Space Grotesk', sans-serif; }
+        .choice-btn { flex: 1; padding: 22px 10px; font-size: 16px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-family: 'Space Grotesk', sans-serif;}
         .c-alpha { background: var(--accent); color: #000; }
         .c-beta { background: var(--danger); color: #fff; }
 
-        .lawyer-hint { background: #007aff; color: white; padding: 15px; text-align: center; font-weight: 700; margin-bottom: 15px; display: none; border-radius: 4px; }
+        .lawyer-hint { background: #007aff; color: white; padding: 15px; text-align: center; font-weight: 700; margin-bottom: 15px; display: none; border-radius: 6px; }
 
         .dossier-section { width: 100%; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .dossier-label { font-size: 12px; color: var(--accent); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
@@ -76,14 +75,16 @@
 </head>
 <body>
 
+    <!-- ИНСТРУКЦИЯ -->
     <div id="intro" class="screen active">
-        <div class="brutal-title" id="t-intro-title">ДОБРО<br><span>ПОЖАЛОВАТЬ</span></div>
+        <div class="brutal-title" id="t-intro-title">ДОБРО<br><span>ПОЖАЛОВАТЬ В АД</span></div>
         <div class="case-box" id="t-intro-text">
-            Тебя взяли. Следователь дает выбор: <b>СДАТЬ</b> напарника и выйти сухим, или <b>МОЛЧАТЬ</b> и сесть на 3 года.
+            Следователь швыряет папку на стол. У тебя есть выбор: сдать своего напарника и выйти сухим, или молчать и получить срок. Но помни — он думает точно так же.
         </div>
-        <button class="btn btn-play" onclick="showScreen('main-menu')" id="t-btn-ready">Я ГОТОВ</button>
+        <button class="btn btn-play" onclick="showScreen('main-menu')" id="t-btn-ready">ПРИНЯТЬ ПРАВИЛА</button>
     </div>
 
+    <!-- ГЛАВНОЕ МЕНЮ -->
     <div id="main-menu" class="screen">
         <div class="header">
             <div id="player-name">ЗАКЛЮЧЕННЫЙ</div>
@@ -108,6 +109,7 @@
         <button class="btn" onclick="showScreen('settings')" id="t-btn-settings">⚙️ НАСТРОЙКИ</button>
     </div>
 
+    <!-- НАСТРОЙКИ -->
     <div id="settings" class="screen">
         <button class="nav-back" onclick="showScreen('main-menu')" id="t-btn-back1">← НАЗАД</button>
         <div class="brutal-title" id="t-settings-title">НАСТРОЙКИ</div>
@@ -122,6 +124,7 @@
         </div>
     </div>
 
+    <!-- ДОСЬЕ -->
     <div id="dossier" class="screen">
         <button class="nav-back" onclick="showScreen('main-menu')" id="t-btn-back2">← НАЗАД</button>
         <div class="brutal-title" id="dossier-name">ИМЯ</div>
@@ -130,6 +133,7 @@
         <div class="dossier-section"><div class="dossier-label" id="t-doss-partner">НАПАРНИК</div><div class="dossier-text" id="dossier-partner">...</div></div>
     </div>
 
+    <!-- РЕЖИМЫ -->
     <div id="mode-select" class="screen">
         <button class="nav-back" onclick="showScreen('main-menu')" id="t-btn-back3">← НАЗАД</button>
         <div class="brutal-title" id="t-mode-title">РЕЖИМ</div>
@@ -138,12 +142,14 @@
         <button class="btn" onclick="startGame('infinite')" id="t-mode-inf">∞ БЕЗ ЛИМИТА</button>
     </div>
 
+    <!-- ИНВЕНТАРЬ -->
     <div id="inventory" class="screen">
         <button class="nav-back" onclick="showScreen('main-menu')" id="t-btn-back4">← НАЗАД</button>
         <div class="brutal-title" id="t-inv-title">МОИ РОЛИ</div>
         <div id="inventory-list" style="width: 100%;"></div>
     </div>
 
+    <!-- ЧТЕНИЕ ДЕЛА -->
     <div id="case-screen" class="screen">
         <div class="timer" id="timer-read">25</div>
         <div id="active-role" class="dossier-label" style="display: none; text-align: center; margin-bottom: 10px;"><span id="t-active-role">РОЛЬ:</span> <span id="role-name"></span></div>
@@ -153,6 +159,7 @@
         <button class="btn btn-play" onclick="startChoosingPhase()" id="t-btn-read">Я ПРОЧИТАЛ</button>
     </div>
 
+    <!-- СУД -->
     <div id="game-screen" class="screen">
         <div class="header"><div id="t-court">СУД</div><div id="round-text">1/2</div></div>
         <div class="timer" id="timer-choose">90</div>
@@ -166,14 +173,16 @@
         </div>
     </div>
 
+    <!-- ПЕРЕДАЙ ТЕЛЕФОН -->
     <div id="pass-screen" class="screen">
         <div class="brutal-title" style="margin-top: 50px;" id="t-pass-title">ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span></div>
         <div class="case-box" style="text-align: center;" id="t-pass-text">Игрок 1 сделал выбор. Передайте телефон Игроку 2.</div>
         <button class="btn btn-play" onclick="showScreen('game-screen')" id="t-btn-ready2">Я ГОТОВ</button>
     </div>
 
+    <!-- РЕЗУЛЬТАТ -->
     <div id="result-screen" class="screen">
-        <div class="brutal-title" id="result-title" style="margin-top: 50px;" id="t-verdict">ПРИГОВОР</div>
+        <div class="brutal-title" style="margin-top: 50px;" id="t-verdict">ПРИГОВОР</div>
         <div class="case-box" style="border-color: var(--accent);" id="result-text"></div>
         <button class="btn btn-play" onclick="nextRound()" id="t-btn-next">ДАЛЕЕ</button>
     </div>
@@ -187,32 +196,32 @@
         // --- ПЕРЕВОДЫ ---
         const translations = {
             ru: {
-                intro_title: "ДИЛЕММА<br><span>ЗАКЛЮЧЕННОГО</span>", intro_text: "Тебя взяли. Следователь дает выбор: СДАТЬ напарника и выйти сухим, или МОЛЧАТЬ и сесть на 3 года.",
-                btn_ready: "Я ГОТОВ", cases: "ДЕЛА:", dangerous: "ОПАСНЫЙ ПРЕСТУПНИК", btn_play: "В СУД", btn_roles: "🎭 МОИ РОЛИ", btn_settings: "⚙️ НАСТРОЙКИ", btn_back: "← НАЗАД",
+                intro_title: "ДОБРО<br><span>ПОЖАЛОВАТЬ В АД</span>", intro_text: "Следователь швыряет папку на стол. У тебя есть выбор: сдать напарника и выйти сухим, или молчать и получить срок.",
+                btn_ready: "ПРИНЯТЬ ПРАВИЛА", cases: "ДЕЛА:", dangerous: "ОПАСНЫЙ ПРЕСТУПНИК", btn_play: "В СУД", btn_roles: "🎭 МОИ РОЛИ", btn_settings: "⚙️ НАСТРОЙКИ", btn_back: "← НАЗАД",
                 settings_title: "НАСТРОЙКИ", lang: "ЯЗЫК", doss_before: "КЛИЧКА И ПРОШЛОЕ", doss_family: "РОДСТВЕННИКИ", doss_partner: "НАПАРНИК", mode_title: "РЕЖИМ", mode_bot: "🤖 С БОТОМ", mode_local: "📱 ИГРАТЬ С ДРУГОМ", mode_inf: "∞ БЕЗ ЛИМИТА",
                 inv_title: "МОИ РОЛИ", active_role: "РОЛЬ:", btn_use_role: "🎭 ИСПОЛЬЗОВАТЬ", btn_read: "Я ПРОЧИТАЛ", court: "СУД", lawyer: "⚖️ АДВОКАТ: ОН ВЫБРАЛ", make_choice: "Примите решение", choice_betray: "СДАТЬ", choice_silent: "МОЛЧАТЬ", years_0: "(0 лет)", years_3: "(3 года)",
                 pass_title: "ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span>", pass_text: "Игрок 1 сделал выбор. Передайте телефон Игроку 2.", verdict: "ПРИГОВОР", btn_next: "ДАЛЕЕ",
                 win: "ТЫ ВЫШЕЛ НА СВОБОДУ!<br>(Сгорело 1 дело)", lose: "ВЕЧЕР В ХАТУ...<br>(+1 дело к сроку)", draw: "НИЧЬЯ. Судья устал.", your_time: "Твой срок: {0} лет.<br>Срок напарника: {1} лет.<br><br>", empty: "Пусто..."
             },
             en: {
-                intro_title: "PRISONER'S<br><span>DILEMMA</span>", intro_text: "You got caught. The investigator gives you a choice: BETRAY your partner and walk free, or STAY SILENT and do 3 years.",
-                btn_ready: "I'M READY", cases: "CASES:", dangerous: "DANGEROUS CRIMINAL", btn_play: "GO TO COURT", btn_roles: "🎭 MY ROLES", btn_settings: "⚙️ SETTINGS", btn_back: "← BACK",
+                intro_title: "WELCOME<br><span>TO HELL</span>", intro_text: "The investigator throws a folder on the table. You have a choice: betray your partner and walk free, or stay silent and take the sentence.",
+                btn_ready: "ACCEPT RULES", cases: "CASES:", dangerous: "DANGEROUS CRIMINAL", btn_play: "GO TO COURT", btn_roles: "🎭 MY ROLES", btn_settings: "⚙️ SETTINGS", btn_back: "← BACK",
                 settings_title: "SETTINGS", lang: "LANGUAGE", doss_before: "NICKNAME & PAST", doss_family: "RELATIVES", doss_partner: "PARTNER", mode_title: "MODE", mode_bot: "🤖 VS BOT", mode_local: "📱 PLAY WITH FRIEND", mode_inf: "∞ ENDLESS",
                 inv_title: "MY ROLES", active_role: "ROLE:", btn_use_role: "🎭 USE", btn_read: "I READ IT", court: "COURT", lawyer: "⚖️ LAWYER: HE CHOSE", make_choice: "Make a decision", choice_betray: "BETRAY", choice_silent: "SILENT", years_0: "(0 years)", years_3: "(3 years)",
                 pass_title: "PASS<br><span>THE PHONE</span>", pass_text: "Player 1 made a choice. Pass the phone to Player 2.", verdict: "VERDICT", btn_next: "NEXT",
                 win: "YOU ARE FREE!<br>(1 case burned)", lose: "WELCOME TO THE CLINK...<br>(+1 case to sentence)", draw: "DRAW. The judge is tired.", your_time: "Your time: {0} years.<br>Partner's time: {1} years.<br><br>", empty: "Empty..."
             },
             de: {
-                intro_title: "GEFANGENEN-<br><span>DILEMMA</span>", intro_text: "Du wurdest geschnappt. Der Ermittler gibt dir eine Wahl: VERRATEN deinen Partner und geh frei, oder SCHWEIGEN und 3 Jahre absitzen.",
-                btn_ready: "ICH BIN BEREIT", cases: "FÄLLE:", dangerous: "GEFÄHRLICHER KRIMINELLER", btn_play: "VOR GERICHT", btn_roles: "🎭 MEINE ROLLEN", btn_settings: "⚙️ EINSTELLUNGEN", btn_back: "← ZURÜCK",
+                intro_title: "WILLKOMMEN<br><span>IN DER HÖLLE</span>", intro_text: "Der Ermittler wirft eine Akte auf den Tisch. Du hast die Wahl: Verrate deinen Partner und geh frei, oder schweige und nimm die Strafe.",
+                btn_ready: "REGELN AKZEPTIEREN", cases: "FÄLLE:", dangerous: "GEFÄHRLICHER KRIMINELLER", btn_play: "VOR GERICHT", btn_roles: "🎭 MEINE ROLLEN", btn_settings: "⚙️ EINSTELLUNGEN", btn_back: "← ZURÜCK",
                 settings_title: "EINSTELLUNGEN", lang: "SPRACHE", doss_before: "SPITZNAME & VERGANGENHEIT", doss_family: "VERWANDTE", doss_partner: "PARTNER", mode_title: "MODUS", mode_bot: "🤖 GEGEN BOT", mode_local: "📱 MIT FREUND SPIELEN", mode_inf: "∞ ENDLOS",
                 inv_title: "MEINE ROLLEN", active_role: "ROLLE:", btn_use_role: "🎭 BENUTZEN", btn_read: "GELESEN", court: "GERICHT", lawyer: "⚖️ ANWALT: ER WÄHLTE", make_choice: "Entscheide dich", choice_betray: "VERRATEN", choice_silent: "SCHWEIGEN", years_0: "(0 Jahre)", years_3: "(3 Jahre)",
                 pass_title: "TELEFON<br><span>WEITERGEBEN</span>", pass_text: "Spieler 1 hat gewählt. Gib das Telefon an Spieler 2.", verdict: "URTEIL", btn_next: "WEITER",
                 win: "DU BIST FREI!<br>(1 Fall verbrannt)", lose: "WILLKOMMEN IM KNAST...<br>(+1 Fall zur Strafe)", draw: "UNENTSCHIEDEN. Der Richter ist müde.", your_time: "Deine Zeit: {0} Jahre.<br>Zeit des Partners: {1} Jahre.<br><br>", empty: "Leer..."
             },
             zh: {
-                intro_title: "囚徒<br><span>困境</span>", intro_text: "你被抓了。调查员给你一个选择：背叛你的搭档获得自由，或者保持沉默服刑3年。",
-                btn_ready: "我准备好了", cases: "案件:", dangerous: "危险罪犯", btn_play: "上法庭", btn_roles: "🎭 我的角色", btn_settings: "⚙️ 设置", btn_back: "← 返回",
+                intro_title: "欢迎来到<br><span>地狱</span>", intro_text: "调查员把文件夹扔在桌上。你有一个选择：背叛你的搭档获得自由，或者保持沉默接受惩罚。",
+                btn_ready: "接受规则", cases: "案件:", dangerous: "危险罪犯", btn_play: "上法庭", btn_roles: "🎭 我的角色", btn_settings: "⚙️ 设置", btn_back: "← 返回",
                 settings_title: "设置", lang: "语言", doss_before: "绰号与过去", doss_family: "亲属", doss_partner: "搭档", mode_title: "模式", mode_bot: "🤖 对战电脑", mode_local: "📱 和朋友玩", mode_inf: "∞ 无尽模式",
                 inv_title: "我的角色", active_role: "角色:", btn_use_role: "🎭 使用", btn_read: "我读完了", court: "法庭", lawyer: "⚖️ 律师：他选择了", make_choice: "做出决定", choice_betray: "背叛", choice_silent: "沉默", years_0: "(0 年)", years_3: "(3 年)",
                 pass_title: "传递<br><span>手机</span>", pass_text: "玩家 1 已选择。请将手机交给玩家 2。", verdict: "判决", btn_next: "下一个",
@@ -279,23 +288,13 @@
             "Вы обманули 100 пенсионеров на 10 млн. Сдашь напарника — вернешь часть денег.",
             "Вы сожгли конкурентный бизнес. Погиб сторож. Сдашь первым — скостят срок.",
             "Вы взломали базу данных банка и перевели деньги на оффшоры. Сдашь пароли — защита свидетелей.",
-            "Вы перевозили запрещенные вещества через границу. Вас взяли на таможне. Сдашь цепочку — станешь свидетелем.",
-            "Вы и напарник — фальшивомонетчики. Нашли станок в гараже. Сдашь друга — заберут только его.",
-            "Вы ворвались в дом богача, но сработала сигнализация. Сдашь друга — скажешь, что он заставил.",
-            "Вы сбывали краденые драгоценности через ломбард. Сдашь скупщика — получишь иммунитет.",
-            "Напарник попросил тебя перевезти сумку, а там оказались наркотики. Сдашь его — тебя отпустят.",
-            "Вы вместе уклонялись от налогов на 30 млн. Сдашь бухгалтера — тебе дадут штраф вместо срока.",
-            "Вы украли картину из музея. Сдашь напарника и место тайника — тебя не посадят.",
-            "Вы устроили подпольный казино. Сдашь организатора — тебя отпустят как рядового крупье.",
-            "Вы сбили человека на самокате и скрылись. Сдашь друга, который был с тобой — тебя не найдут.",
-            "Вы продавали поддельные лекарства. Умер ребенок. Сдашь поставщика — дадут минимальный срок.",
-            "Вы шантажировали политика. Он подал в суд. Сдашь напарника, который сливал фото — выйдешь сухим."
+            "Вы перевозили запрещенные вещества через границу. Вас взяли на таможне. Сдашь цепочку — станешь свидетелем."
         ];
 
         const roles = [
-            { id: 'lawyer', title: "АДВОКАТ / LAWYER", desc: "Показывает выбор врага / Shows enemy choice" },
-            { id: 'mute', title: "МОЛЧУН / MUTE", desc: "Срок за молчание 2 года / Silent - 2 years" },
-            { id: 'rat', title: "КРЫСА / RAT", desc: "Срок при сдаче сокращается / Reduced betray sentence" }
+            { id: 'lawyer', title: "АДВОКАТ", desc: "Показывает выбор врага" },
+            { id: 'mute', title: "МОЛЧУН", desc: "Срок за молчание - 2 года" },
+            { id: 'rat', title: "КРЫСА", desc: "Срок при сдаче сокращается" }
         ];
 
         const levels = [
@@ -311,7 +310,7 @@
         let activeRole = null, round = 1, p1Choice = null, p2Choice = null, p1Selected = false;
         let timer1, timer2, botPreChoice = null;
         let currentMode = 'bot';
-        let playerHistory = []; // Для умного бота
+        let playerHistory = [];
 
         function updateUI() {
             let lvl = 0;
@@ -364,6 +363,7 @@
             currentMode = mode;
             round = 1; 
             activeRole = null; 
+            playerHistory = []; // Сброс истории для нового матча
             nextRound();
         }
 
@@ -443,13 +443,10 @@
                 if (botPreChoice) {
                     p2Choice = botPreChoice;
                 } else {
-                    // Бот анализирует историю игрока
                     playerHistory.push(p1Choice);
                     let betrayCount = playerHistory.filter(x => x === 'betray').length;
                     let betrayRate = betrayCount / playerHistory.length;
 
-                    // Если игрок часто сдает, бот тоже сдает с вероятностью 80%
-                    // Если игрок молчит, бот сдает с вероятностью 30% (пытается поймать на доверии)
                     if (betrayRate > 0.5) {
                         p2Choice = Math.random() < 0.8 ? 'betray' : 'silent';
                     } else {
