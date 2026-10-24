@@ -338,3 +338,180 @@
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+        }
+
+        function openDossier() {
+            let exp = totalExp;
+            let lvl = 0;
+            if(exp >= 7) lvl = 1; if(exp >= 12) lvl = 2; if(exp >= 17) lvl = 3; if(exp >= 22) lvl = 4; if(exp >= 25) lvl = 5;
+            let d = levels[Math.min(lvl, 4)];
+            document.getElementById('dossier-name').innerText = d.name;
+            document.getElementById('dossier-before').innerText = d.before;
+            document.getElementById('dossier-family').innerText = d.family;
+            document.getElementById('dossier-partner').innerText = d.partner;
+            showScreen('dossier');
+        }
+
+        function showInventory() {
+            let html = '';
+            inventory.forEach(r => html += `<div class="case-box" style="border-color: var(--gold);"><b style="color: var(--gold)">${r.title}</b><br><span style="font-size:12px;">${r.desc}</span></div>`);
+            if(inventory.length === 0) html = `<div style='color:#888; text-align:center;'>${translations[currentLang].empty}</div>`;
+            document.getElementById('inventory-list').innerHTML = html;
+            showScreen('inventory');
+        }
+
+        function startGame(mode) {
+            currentMode = mode;
+            round = 1; 
+            activeRole = null; 
+            nextRound();
+        }
+
+        function nextRound() {
+            if (round > (currentMode === 'infinite' ? 999 : 2)) {
+                showScreen('main-menu'); return;
+            }
+            let c = cases[Math.floor(Math.random() * cases.length)];
+            document.getElementById('case-text').innerText = c;
+            document.getElementById('round-text').innerText = currentMode === 'infinite' ? '∞' : `${round}/2`;
+            
+            document.getElementById('lawyer-hint').style.display = 'none';
+            document.getElementById('active-role').style.display = 'none';
+            document.getElementById('use-role-btn').style.display = 'none';
+            if (inventory.length > 0 && !activeRole) document.getElementById('use-role-btn').style.display = 'block';
+
+            p1Selected = false; botPreChoice = null;
+            showScreen('case-screen');
+
+            let time = 20;
+            document.getElementById('timer-read').innerText = time;
+            clearInterval(timer1);
+            timer1 = setInterval(() => {
+                time--; document.getElementById('timer-read').innerText = time;
+                if (time <= 0) { clearInterval(timer1); startChoosingPhase(); }
+            }, 1000);
+        }
+
+        function useRole() {
+            if (inventory.length === 0) return;
+            activeRole = inventory.shift();
+            localStorage.setItem('roleInventory', JSON.stringify(inventory));
+            updateUI();
+            document.getElementById('use-role-btn').style.display = 'none';
+            document.getElementById('active-role').style.display = 'block';
+            document.getElementById('role-name').innerText = activeRole.title;
+            tg.showAlert(`🎭 ${activeRole.title}`);
+        }
+
+        function startChoosingPhase() {
+            clearInterval(timer1);
+            showScreen('game-screen');
+            
+            if (activeRole && activeRole.id === 'lawyer') {
+                botPreChoice = Math.random() > 0.5 ? 'betray' : 'silent';
+                let txt = botPreChoice === 'betray' ? translations[currentLang].choice_betray : translations[currentLang].choice_silent;
+                document.getElementById('bot-choice-hint').innerText = txt;
+                document.getElementById('lawyer-hint').style.display = 'block';
+            }
+
+            let time = 90;
+            document.getElementById('timer-choose').innerText = time;
+            clearInterval(timer2);
+            timer2 = setInterval(() => {
+                time--; document.getElementById('timer-choose').innerText = time;
+                if(time < 10) document.getElementById('timer-choose').classList.add('red');
+                if (time <= 0) { clearInterval(timer2); makeChoice('betray'); }
+            }, 1000);
+        }
+
+        function makeChoice(choice) {
+            clearInterval(timer2);
+
+            if (currentMode === 'local') {
+                if (!p1Selected) {
+                    p1Choice = choice;
+                    p1Selected = true;
+                    showScreen('pass-screen');
+                    return;
+                } else {
+                    p2Choice = choice;
+                }
+            } else {
+                p1Choice = choice;
+                
+                // Умный бот
+                if (botPreChoice) {
+                    p2Choice = botPreChoice;
+                } else {
+                    // Бот анализирует историю игрока
+                    playerHistory.push(p1Choice);
+                    let betrayCount = playerHistory.filter(x => x === 'betray').length;
+                    let betrayRate = betrayCount / playerHistory.length;
+
+                    // Если игрок часто сдает, бот тоже сдает с вероятностью 80%
+                    // Если игрок молчит, бот сдает с вероятностью 30% (пытается поймать на доверии)
+                    if (betrayRate > 0.5) {
+                        p2Choice = Math.random() < 0.8 ? 'betray' : 'silent';
+                    } else {
+                        p2Choice = Math.random() < 0.3 ? 'betray' : 'silent';
+                    }
+                }
+            }
+
+            calculate();
+        }
+
+        function calculate() {
+            let p1Y = 0, p2Y = 0;
+            if (p1Choice === 'betray' && p2Choice === 'silent') { p1Y = 0; p2Y = 7; }
+            if (p1Choice === 'silent' && p2Choice === 'betray') { p1Y = 7; p2Y = 0; }
+            if (p1Choice === 'betray' && p2Choice === 'betray') { p1Y = 7; p2Y = 7; }
+            if (p1Choice === 'silent' && p2Choice === 'silent') { p1Y = 3; p2Y = 3; }
+            
+            if(activeRole && activeRole.id === 'mute' && p1Choice === 'silent') p1Y = 2;
+            if(activeRole && activeRole.id === 'rat' && p1Choice === 'betray' && p2Choice === 'betray') p1Y = 5;
+
+            let t = translations[currentLang];
+            let text = t.your_time.replace('{0}', p1Y).replace('{1}', p2Y);
+            
+            let isWin = p1Y < p2Y;
+            let isLose = p1Y > p2Y;
+
+            if (isWin) {
+                text += `<span style='color:var(--accent); font-size:20px; font-weight:bold;'>${t.win}</span>`;
+                if(currentMode !== 'local') {
+                    totalExp++; if(totalExp > 25) totalExp = 25;
+                    if(totalExp % 7 === 0 && inventory.length < 5) {
+                        let r = roles[Math.floor(Math.random()*roles.length)];
+                        inventory.push(r);
+                        tg.showAlert(`🔥 НОВЫЙ УРОВЕНЬ! РОЛЬ: ${r.title}`);
+                    }
+                }
+            } else if (isLose) {
+                text += `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>${t.lose}</span>`;
+                if(currentMode !== 'local') {
+                    totalExp--; if(totalExp < 0) totalExp = 0;
+                }
+            } else {
+                text += `<span style='color:#888; font-size:20px;'>${t.draw}</span>`;
+            }
+
+            localStorage.setItem('prisonExp', totalExp);
+            localStorage.setItem('roleInventory', JSON.stringify(inventory));
+            updateUI();
+
+            document.getElementById('result-text').innerHTML = text;
+            showScreen('result-screen');
+            round++;
+        }
+
+        applyLanguage();
+        
+        if (!localStorage.getItem('introSeen')) {
+            showScreen('intro'); localStorage.setItem('introSeen', 'true');
+        } else {
+            showScreen('main-menu');
+        }
+    </script>
+</body>
+</html>
