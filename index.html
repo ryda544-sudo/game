@@ -67,143 +67,131 @@
             <b>СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...</b><br><br>
             Ты часть мафии. Тебя взяли. Следователь дает выбор: сдать напарника и выйти сухим, или молчать и получить срок. Но в конце каждого уровня тебе придется выбирать — предать ли Главу мафии, рискуя своей семьей, или прикрыть его.
         </div>
-        <button class="btn btn-play" onclick="showScreen('main-menu')" id="t-btn-ready">ВОЙТИ В ИГРУ</button>
+        <button class="btn btn-play" onclick="showScreen('main-menu')">ВОЙТИ В ИГРУ</button>
     </div>
 
     <div id="main-menu" class="screen">
         <div class="header">
             <div id="player-name">ЗАКЛЮЧЕННЫЙ</div>
-            <div id="t-exp-label">ОПЫТ: <span id="exp-counter" style="color: var(--accent);">0</span></div>
+            <div>ОПЫТ: <span id="exp-counter" style="color: var(--accent);">0</span></div>
         </div>
+
         <div class="inmate-card" onclick="openDossier()">
             <div id="avatar-container"></div>
             <div class="inmate-name" id="level-name">ГЕНРИ ХИЛЛ</div>
-            <div class="inmate-label" id="t-level-label">ГЛАВА КЛАНА</div>
+            <div class="inmate-label">ГЛАВА КЛАНА</div>
         </div>
         <div class="progress-container">
             <div class="progress-text">
-                <span id="t-level-text">УРОВЕНЬ <span id="level-num">1</span></span>
+                <span>УРОВЕНЬ <span id="level-num">1</span></span>
                 <span id="exp-text">XP: 0 / 7</span>
             </div>
             <div class="progress-bar"><div class="progress-fill" id="exp-bar"></div></div>
         </div>
-        <button class="btn btn-play" onclick="showScreen('mode-select')" id="t-btn-play">В СУД</button>
-        <button class="btn" onclick="showScreen('rules')" style="border-color: var(--gold); color: var(--gold);" id="t-btn-rules">📜 ПРАВИЛА ИГРЫ</button>
+        <button class="btn btn-play" onclick="showScreen('mode-select')">В СУД</button>
+        <button class="btn" onclick="showScreen('rules')" style="border-color: var(--gold); color: var(--gold);">📜 ПРАВИЛА ИГРЫ</button>
         
-        <div class="case-box" style="margin-top: 10px; font-size: 12px; border-color: #555;" id="t-theory-box">
-            <b>ТЕОРИЯ ИГР:</b> Дилемма заключенного — фундаментальная проблема теории игр. Она показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим.
+        <div class="case-box" style="margin-top: 10px; font-size: 13px; border-color: #555;">
+            <b>ТЕОРИЯ ИГР:</b> Дилемма заключенного — фундаментальная проблема теории игр. Она показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим. В этой игре «Сдать» не всегда лучший выбор, так как твой напарник может поступить так же.
         </div>
     </div>
 
     <div id="rules" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="t-btn-back1">← НАЗАД</button>
-        <div class="brutal-title" id="t-rules-title">ПРАВИЛА</div>
-        <div class="case-box" style="border-color: var(--accent); font-size: 14px;" id="t-rules-text">
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title">ПРАВИЛА</div>
+        <div class="case-box" style="border-color: var(--accent); font-size: 14px;">
             1. Матч длится 2 раунда. Победа в раунде дает +1 XP.<br><br>
             2. <b>Сдать + Молчать:</b> Ты 0, он 10.<br>
             3. <b>Молчать + Сдать:</b> Ты 10, он 0.<br>
             4. <b>Сдать + Сдать:</b> По 6 лет.<br>
             5. <b>Молчать + Молчать:</b> По 3 года.<br><br>
-            В последнем деле уровня следователь предложит сдать Главу мафии. Если ты сдашь — мафия будет мстить твоей семье. Если промолчишь — мафия поможет тебе со сроком.
+            В финале сдашь босса — мафия мстит. Промолчишь — поможет.
         </div>
     </div>
 
     <div id="mode-select" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="t-btn-back2">← НАЗАД</button>
-        <div class="brutal-title" id="t-mode-title">РЕЖИМ</div>
-        <button class="btn" onclick="startGame('bot')" id="t-mode-bot">🤖 С БОТОМ</button>
-        <button class="btn" onclick="startGame('online')" id="t-mode-online">🌐 ОНЛАЙН (ПОИСК)</button>
-        <button class="btn" onclick="startGame('local')" id="t-mode-local">📱 ИГРАТЬ С ДРУГОМ</button>
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title">РЕЖИМ</div>
+        <button class="btn" onclick="startGame('bot')">🤖 С БОТОМ</button>
+        <button class="btn" onclick="startGame('online')">🌐 ОНЛАЙН (ПОИСК)</button>
+        <button class="btn" onclick="startGame('local')">📱 ИГРАТЬ С ДРУГОМ</button>
     </div>
 
     <div id="friends" class="screen">
-        <div class="brutal-title" id="t-friends-title">ДРУЗЬЯ</div>
+        <div class="brutal-title">ДРУЗЬЯ</div>
         <div class="search-box">
             <input type="text" id="friend-search" class="search-input" placeholder="Ник друга...">
             <button class="search-btn" onclick="searchFriends()">🔍</button>
         </div>
         <div id="friends-list" style="width: 100%;"></div>
         <div style="text-align: center; margin-top: 20px;">
-            <button class="btn" style="justify-content: center; border-color: var(--gold); color: var(--gold);" onclick="inviteFriend()" id="t-btn-invite">ПРИГЛАСИТЬ</button>
+            <button class="btn" style="justify-content: center; border-color: var(--gold); color: var(--gold);" onclick="inviteFriend()">ПРИГЛАСИТЬ</button>
         </div>
     </div>
 
     <div id="rating" class="screen">
-        <div class="brutal-title" id="t-rating-title">РЕЙТИНГ</div>
+        <div class="brutal-title">РЕЙТИНГ</div>
         <div id="rating-list" style="width: 100%;">
-            <div style="text-align: center; color: #888; margin-top: 50px;" id="t-rating-empty">Пока нет игроков.</div>
+            <div style="text-align: center; color: #888; margin-top: 50px;">Пока нет игроков.</div>
         </div>
     </div>
 
     <div id="clans" class="screen">
-        <div class="brutal-title" id="t-clans-title">КЛАНЫ</div>
+        <div class="brutal-title">КЛАНЫ</div>
         <div id="clan-create" style="margin-bottom: 20px;">
             <input type="text" id="clan-name-input" class="search-input" placeholder="Название клана..." style="width: 100%; margin-bottom: 10px;">
-            <button class="btn btn-play" onclick="createClan()" id="t-btn-create-clan">СОЗДАТЬ КЛАН</button>
+            <button class="btn btn-play" onclick="createClan()">СОЗДАТЬ КЛАН</button>
         </div>
         <div id="my-clan-info" style="display: none; width: 100%;">
             <div class="case-box" style="border-color: var(--gold);">
                 <div style="font-size: 20px; font-weight: 900; color: var(--gold);" id="display-clan-name">КЛАН</div>
-                <div style="font-size: 12px; color: #888;" id="t-clan-leader">Лидер: ВЫ</div>
+                <div style="font-size: 12px; color: #888;">Лидер: ВЫ</div>
             </div>
-            <button class="btn" style="color: var(--danger); border-color: var(--danger); justify-content: center;" onclick="leaveClan()" id="t-btn-leave-clan">ПОКИНУТЬ</button>
-        </div>
-    </div>
-
-    <div id="settings" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="t-btn-back3">← НАЗАД</button>
-        <div class="brutal-title" id="t-settings-title">НАСТРОЙКИ</div>
-        <div class="dossier-section" style="display: flex; justify-content: space-between; align-items: center;">
-            <div class="dossier-label" style="margin: 0;" id="t-lang-label">ЯЗЫК</div>
-            <select id="lang-select" onchange="changeLanguage()" style="background: var(--bg); color: var(--accent); border: 1px solid var(--accent); padding: 8px; font-family: 'Space Grotesk'; font-weight: bold; border-radius: 4px;">
-                <option value="ru">РУССКИЙ</option>
-                <option value="en">ENGLISH</option>
-                <option value="zh">中文</option>
-            </select>
+            <button class="btn" style="color: var(--danger); border-color: var(--danger); justify-content: center;" onclick="leaveClan()">ПОКИНУТЬ</button>
         </div>
     </div>
 
     <div id="dossier" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="t-btn-back4">← НАЗАД</button>
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
         <div class="brutal-title" id="dossier-name">ИМЯ</div>
-        <div class="dossier-section"><div class="dossier-label" id="t-doss-before">ПРОШЛОЕ</div><div class="dossier-text" id="dossier-before">...</div></div>
-        <div class="dossier-section"><div class="dossier-label" id="t-doss-family">СЕМЬЯ</div><div class="dossier-text" id="dossier-family">...</div></div>
-        <div class="dossier-section"><div class="dossier-label" id="t-doss-partner">НАПАРНИК</div><div class="dossier-text" id="dossier-partner">...</div></div>
+        <div class="dossier-section"><div class="dossier-label">ПРОШЛОЕ</div><div class="dossier-text" id="dossier-before">...</div></div>
+        <div class="dossier-section"><div class="dossier-label">СЕМЬЯ</div><div class="dossier-text" id="dossier-family">...</div></div>
+        <div class="dossier-section"><div class="dossier-label">НАПАРНИК</div><div class="dossier-text" id="dossier-partner">...</div></div>
     </div>
 
     <div id="case-screen" class="screen">
         <div class="timer" id="timer-read">25</div>
         <div class="case-box" id="case-text">Текст дела...</div>
-        <button class="btn btn-play" onclick="startChoosingPhase()" id="t-btn-read">Я ПРОЧИТАЛ</button>
+        <button class="btn btn-play" onclick="startChoosingPhase()">Я ПРОЧИТАЛ</button>
     </div>
 
     <div id="game-screen" class="screen">
-        <div class="header"><div id="t-court">СУД</div><div id="round-text">1/2</div></div>
+        <div class="header"><div>СУД</div><div id="round-text">1/2</div></div>
         <div class="timer" id="timer-choose">90</div>
-        <div class="case-box" style="font-size: 12px; border: none; background: transparent; text-align: center; color: #888;" id="t-choice-label">Примите решение</div>
+        <div class="case-box" style="font-size: 12px; border: none; background: transparent; text-align: center; color: #888;">Примите решение</div>
         <div class="choices">
-            <button class="choice-btn c-alpha" onclick="makeChoice('betray')" id="btn-betray">СДАТЬ<br><span style="font-size: 12px;">(0 / 6)</span></button>
-            <button class="choice-btn c-beta" onclick="makeChoice('silent')" id="btn-silent">МОЛЧАТЬ<br><span style="font-size: 12px;">(3 / 10)</span></button>
+            <button class="choice-btn c-alpha" onclick="makeChoice('betray')">СДАТЬ<br><span style="font-size: 12px;">(0 / 6)</span></button>
+            <button class="choice-btn c-beta" onclick="makeChoice('silent')">МОЛЧАТЬ<br><span style="font-size: 12px;">(3 / 10)</span></button>
         </div>
     </div>
 
     <div id="pass-screen" class="screen">
-        <div class="brutal-title" style="margin-top: 50px;" id="t-pass-title">ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span></div>
-        <div class="case-box" style="text-align: center;" id="t-pass-text">Передайте телефон Игроку 2.</div>
-        <button class="btn btn-play" onclick="showScreen('game-screen')" id="t-btn-ready2">Я ГОТОВ</button>
+        <div class="brutal-title" style="margin-top: 50px;">ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span></div>
+        <div class="case-box" style="text-align: center;">Передайте телефон Игроку 2.</div>
+        <button class="btn btn-play" onclick="showScreen('game-screen')">Я ГОТОВ</button>
     </div>
 
     <div id="result-screen" class="screen">
-        <div class="brutal-title" style="margin-top: 50px;" id="t-verdict">ПРИГОВОР</div>
+        <div class="brutal-title" style="margin-top: 50px;">ПРИГОВОР</div>
         <div class="case-box" style="border-color: var(--accent);" id="result-text"></div>
-        <button class="btn btn-play" onclick="nextRound()" id="t-btn-next">ДАЛЕЕ</button>
+        <button class="btn btn-play" onclick="nextRound()">ДАЛЕЕ</button>
     </div>
 
     <div class="bottom-nav" id="bottom-nav" style="display: none;">
-        <div class="nav-item" onclick="showScreen('main-menu')"><i>🏠</i><span id="t-nav-home">Главная</span></div>
-        <div class="nav-item" onclick="showScreen('rating')"><i>🏆</i><span id="t-nav-rating">Рейтинг</span></div>
-        <div class="nav-item" onclick="showScreen('friends')"><i>👥</i><span id="t-nav-friends">Друзья</span></div>
-        <div class="nav-item" onclick="showScreen('clans')"><i>🛡️</i><span id="t-nav-clans">Кланы</span></div>
+        <div class="nav-item" onclick="showScreen('main-menu')"><i>🏠</i>Главная</div>
+        <div class="nav-item" onclick="showScreen('rating')"><i>🏆</i>Рейтинг</div>
+        <div class="nav-item" onclick="showScreen('friends')"><i>👥</i>Друзья</div>
+        <div class="nav-item" onclick="showScreen('clans')"><i>🛡️</i>Кланы</div>
     </div>
 </div>
 
@@ -213,97 +201,6 @@
     const user = tg.initDataUnsafe?.user;
     if(user) document.getElementById('player-name').innerText = user.first_name.toUpperCase();
 
-    // ПЕРЕВОДЫ
-    const translations = {
-        ru: {
-            title: "ДИЛЕММА<br><span>ЗАКЛЮЧЕННОГО</span>", intro: "СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...<br><br>Ты часть мафии. Тебя взяли. Следователь дает выбор: сдать напарника и выйти сухим, или молчать и получить срок.",
-            btn_start: "ВОЙТИ В ИГРУ", exp: "ОПЫТ:", level: "УРОВЕНЬ", clan_leader: "ГЛАВА КЛАНА", btn_play: "В СУД", btn_rules: "📜 ПРАВИЛА ИГРЫ", theory: "ТЕОРИЯ ИГР: Дилемма заключенного — фундаментальная проблема теории игр.",
-            rules_title: "ПРАВИЛА", rules_text: "1. Матч 2 раунда. Победа +1 XP.<br><br>2. <b>Сдать + Молчать:</b> Ты 0, он 10.<br>3. <b>Молчать + Сдать:</b> Ты 10, он 0.<br>4. <b>Сдать + Сдать:</b> По 6 лет.<br>5. <b>Молчать + Молчать:</b> По 3 года.<br><br>В финале сдашь босса — мафия мстит. Промолчишь — поможет.",
-            mode_title: "РЕЖИМ", mode_bot: "🤖 С БОТОМ", mode_online: "🌐 ОНЛАЙН", mode_local: "📱 С ДРУГОМ",
-            friends_title: "ДРУЗЬЯ", invite: "ПРИГЛАСИТЬ", rating_title: "РЕЙТИНГ", rating_empty: "Пока нет игроков.", clans_title: "КЛАНЫ", btn_create_clan: "СОЗДАТЬ КЛАН", btn_leave_clan: "ПОКИНУТЬ",
-            settings_title: "НАСТРОЙКИ", lang_label: "ЯЗЫК", doss_before: "ПРОШЛОЕ", doss_family: "СЕМЬЯ", doss_partner: "НАПАРНИК",
-            court: "СУД", choice_label: "Примите решение", choice_betray: "СДАТЬ", choice_silent: "МОЛЧАТЬ", pass_title: "ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span>", pass_text: "Передайте телефон Игроку 2.", verdict: "ПРИГОВОР", btn_next: "ДАЛЕЕ", btn_back: "← НАЗАД",
-            win: "ТЫ ВЫШЕЛ НА СВОБОДУ!", lose: "ВЕЧЕР В ХАТУ...", draw: "НИЧЬЯ.",
-            nav_home: "Главная", nav_rating: "Рейтинг", nav_friends: "Друзья", nav_clans: "Кланы"
-        },
-        en: {
-            title: "PRISONER'S<br><span>DILEMMA</span>", intro: "SYSTEM STARTING RECORDING...<br><br>You are part of the mafia. You got caught. The investigator gives you a choice: betray your partner and walk free, or stay silent.",
-            btn_start: "ENTER GAME", exp: "EXP:", level: "LEVEL", clan_leader: "CLAN LEADER", btn_play: "GO TO COURT", btn_rules: "📜 RULES", theory: "GAME THEORY: Prisoner's dilemma is a fundamental problem in game theory.",
-            rules_title: "RULES", rules_text: "1. 2 rounds. Win +1 XP.<br><br>2. <b>Betray + Silent:</b> You 0, he 10.<br>3. <b>Silent + Betray:</b> You 10, he 0.<br>4. <b>Betray + Betray:</b> 6 years each.<br>5. <b>Silent + Silent:</b> 3 years each.",
-            mode_title: "MODE", mode_bot: "🤖 VS BOT", mode_online: "🌐 ONLINE", mode_local: "📱 WITH FRIEND",
-            friends_title: "FRIENDS", invite: "INVITE", rating_title: "RATING", rating_empty: "No players yet.", clans_title: "CLANS", btn_create_clan: "CREATE CLAN", btn_leave_clan: "LEAVE",
-            settings_title: "SETTINGS", lang_label: "LANGUAGE", doss_before: "PAST", doss_family: "FAMILY", doss_partner: "PARTNER",
-            court: "COURT", choice_label: "Make a decision", choice_betray: "BETRAY", choice_silent: "SILENT", pass_title: "PASS<br><span>PHONE</span>", pass_text: "Pass the phone to Player 2.", verdict: "VERDICT", btn_next: "NEXT", btn_back: "← BACK",
-            win: "YOU ARE FREE!", lose: "WELCOME TO THE CLINK...", draw: "DRAW.",
-            nav_home: "Home", nav_rating: "Rating", nav_friends: "Friends", nav_clans: "Clans"
-        },
-        zh: {
-            title: "囚徒<br><span>困境</span>", intro: "系统开始记录...<br><br>你是黑手党的一员。你被抓了。调查员给你选择：背叛搭档或者保持沉默。",
-            btn_start: "进入游戏", exp: "经验:", level: "等级", clan_leader: "家族首领", btn_play: "上法庭", btn_rules: "📜 规则", theory: "博弈论: 囚徒困境是博弈论中的一个基本问题。",
-            rules_title: "规则", rules_text: "1. 2回合。胜利+1经验。<br><br>2. <b>背叛+沉默:</b> 你0，他10。<br>3. <b>沉默+背叛:</b> 你10，他0。<br>4. <b>背叛+背叛:</b> 各6年。<br>5. <b>沉默+沉默:</b> 各3年。",
-            mode_title: "模式", mode_bot: "🤖 对战电脑", mode_online: "🌐 在线", mode_local: "📱 和朋友玩",
-            friends_title: "朋友", invite: "邀请", rating_title: "排行榜", rating_empty: "暂无玩家。", clans_title: "部落", btn_create_clan: "创建部落", btn_leave_clan: "离开",
-            settings_title: "设置", lang_label: "语言", doss_before: "过去", doss_family: "家庭", doss_partner: "搭档",
-            court: "法庭", choice_label: "做出决定", choice_betray: "背叛", choice_silent: "沉默", pass_title: "传递<br><span>手机</span>", pass_text: "将手机交给玩家2。", verdict: "判决", btn_next: "下一个", btn_back: "← 返回",
-            win: "你自由了！", lose: "欢迎来到监狱...", draw: "平局。",
-            nav_home: "主页", nav_rating: "排行榜", nav_friends: "朋友", nav_clans: "部落"
-        }
-    };
-
-    let currentLang = localStorage.getItem('lang') || 'ru';
-
-    function applyLanguage() {
-        let t = translations[currentLang];
-        document.getElementById('t-btn-ready').innerText = t.btn_start;
-        document.getElementById('t-exp-label').innerText = t.exp;
-        document.getElementById('t-level-label').innerText = t.clan_leader;
-        document.getElementById('t-level-text').innerHTML = t.level + ' <span id="level-num">1</span>';
-        document.getElementById('t-btn-play').innerText = t.btn_play;
-        document.getElementById('t-btn-rules').innerText = t.btn_rules;
-        document.getElementById('t-theory-box').innerHTML = t.theory;
-        document.getElementById('t-rules-title').innerText = t.rules_title;
-        document.getElementById('t-rules-text').innerHTML = t.rules_text;
-        document.getElementById('t-mode-title').innerText = t.mode_title;
-        document.getElementById('t-mode-bot').innerText = t.mode_bot;
-        document.getElementById('t-mode-online').innerText = t.mode_online;
-        document.getElementById('t-mode-local').innerText = t.mode_local;
-        document.getElementById('t-friends-title').innerText = t.friends_title;
-        document.getElementById('t-btn-invite').innerText = t.invite;
-        document.getElementById('t-rating-title').innerText = t.rating_title;
-        document.getElementById('t-rating-empty').innerText = t.rating_empty;
-        document.getElementById('t-clans-title').innerText = t.clans_title;
-        document.getElementById('t-btn-create-clan').innerText = t.btn_create_clan;
-        document.getElementById('t-btn-leave-clan').innerText = t.btn_leave_clan;
-        document.getElementById('t-settings-title').innerText = t.settings_title;
-        document.getElementById('t-lang-label').innerText = t.lang_label;
-        document.getElementById('t-doss-before').innerText = t.doss_before;
-        document.getElementById('t-doss-family').innerText = t.doss_family;
-        document.getElementById('t-doss-partner').innerText = t.doss_partner;
-        document.getElementById('t-court').innerText = t.court;
-        document.getElementById('t-choice-label').innerText = t.choice_label;
-        document.getElementById('btn-betray').innerHTML = `${t.choice_betray}<br><span style="font-size: 12px;">(0 / 6)</span>`;
-        document.getElementById('btn-silent').innerHTML = `${t.choice_silent}<br><span style="font-size: 12px;">(3 / 10)</span>`;
-        document.getElementById('t-pass-title').innerHTML = t.pass_title;
-        document.getElementById('t-pass-text').innerText = t.pass_text;
-        document.getElementById('t-verdict').innerText = t.verdict;
-        document.getElementById('t-btn-next').innerText = t.btn_next;
-        document.getElementById('t-btn-back1').innerText = t.btn_back;
-        document.getElementById('t-btn-back2').innerText = t.btn_back;
-        document.getElementById('t-btn-back3').innerText = t.btn_back;
-        document.getElementById('t-btn-back4').innerText = t.btn_back;
-        document.getElementById('t-nav-home').innerText = t.nav_home;
-        document.getElementById('t-nav-rating').innerText = t.nav_rating;
-        document.getElementById('t-nav-friends').innerText = t.nav_friends;
-        document.getElementById('t-nav-clans').innerText = t.nav_clans;
-        updateUI();
-    }
-
-    function changeLanguage() {
-        currentLang = document.getElementById('lang-select').value;
-        localStorage.setItem('lang', currentLang);
-        applyLanguage();
-    }
-
     const avatars = [
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M20 45 Q50 15 80 45 L80 50 Q50 25 20 50 Z" fill="#333"/><rect x="25" y="40" width="50" height="8" fill="#00FF41"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M35 70 Q50 85 65 70 Z" fill="#555"/></svg>`,
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M15 40 L85 40 L75 25 L25 25 Z" fill="#444"/><rect x="15" y="40" width="70" height="5" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><rect x="35" y="60" width="30" height="8" fill="#000" rx="4"/><rect x="40" y="62" width="8" height="4" fill="#FFD700"/><rect x="52" y="62" width="8" height="4" fill="#FFD700"/></svg>`,
@@ -312,45 +209,39 @@
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
-    // БОЛЬШЕ ТЕКСТА, ДЕЛА, НАПАРНИКИ, СЕМЬЯ
     const allCases = [
-        // 1 уровень (Генри Хилл)
-        { t: "Ты и твой напарник Джимми вломились в центральный банк. Сработала тихая сигнализация, и вас взяли с поличным. Следователь знает, что Джимми — твой друг детства, и давит на это. У тебя двое детей, и если ты сядешь, они останутся без отца. Сдай его, и ты выйдешь сухим.", p: "Джимми Конвей. Друг детства. Он пошел на это ради своей больной матери." },
-        { t: "Вы с Джимми угнали дорогой спорткар, чтобы покататься, но случайно разбили его. Владелец — сын прокурора. Следователь обещает отпустить тебя, если ты скажешь, что Джимми заставил тебя это сделать. Помни, что твоя семья зависит от тебя.", p: "Джимми Конвей. Он умоляет тебя не сдавать его, ведь у него нет денег на адвоката." },
-        { t: "Вы с Джимми ограбили ювелирный магазин. Охранник получил тяжелые травмы. Следователь говорит, что если ты сдашь Джимми, тебе скостят срок до условного. Но если ты промолчишь, вы оба получите по 10 лет.", p: "Джимми Конвей. Он в панике и хочет сдать тебя первым, чтобы спастись." },
-        { t: "Вы с Джимми перевозили краденые драгоценности через границу. Вас остановили на таможне. Следователь предлагает сделку: сдай Джимми и место тайника, и тебя отпустят прямо в зале суда.", p: "Джимми Конвей. Он доверяет тебе, но не знает, что ты уже думаешь о сделке." },
-        { t: "Вы с Джимми подделали документы на продажу чужой квартиры. Следователь обещает условный срок, если ты сдашь его. Если промолчите — обоим дадут реальный срок за крупное мошенничество.", p: "Джимми Конвей. Он хочет провернуть еще одно дело, чтобы отдать долг." },
-        { t: "Вы с Джимми устроили поджог конкурентного бизнеса. Погиб сторож. Следователь говорит, что если ты сдашь Джимми первым, тебе скостят срок. Если оба будете молчать — обоим дадут по 10 лет строгого режима.", p: "Джимми Конвей. Он не знает, что ты уже готов сдать его ради семьи." },
-        { t: "ФИНАЛ: Следователь предлагает сдать твоего Босса — Генри Хилла. Но если ты сдашь, его люди придут за твоей семьей. Если промолчишь — он тебя прикроет и оплатит лучшего адвоката.", p: "ГЕНРИ ХИЛЛ (Твой Босс). Угрожает семье, если сдашь. Если промолчишь — наградит." },
+        { t: "Ты и твой напарник Джимми вломились в центральный банк. Сработала тихая сигнализация. У тебя двое детей, и если ты сядешь, они останутся без отца. Сдай его, и ты выйдешь сухим.", p: "Джимми Конвей. Друг детства. Он пошел на это ради больной матери." },
+        { t: "Вы с Джимми угнали спорткар и разбили его. Владелец — сын прокурора. Следователь обещает отпустить тебя, если ты скажешь, что Джимми заставил тебя.", p: "Джимми Конвей. Он умоляет тебя не сдавать, ведь у него нет денег на адвоката." },
+        { t: "Вы с Джимми ограбили ювелирку. Охранник получил травмы. Сдай Джимми, и тебе скостят срок до условного.", p: "Джимми Конвей. Он в панике и хочет сдать тебя первым." },
+        { t: "Вы с Джимми перевозили краденое через границу. Вас взяли. Сдай Джимми и место тайника, и тебя отпустят.", p: "Джимми Конвей. Он доверяет тебе, но не знает, что ты уже думаешь о сделке." },
+        { t: "Вы с Джимми подделали документы на продажу квартиры. Следователь обещает условный срок за его сдачу.", p: "Джимми Конвей. Он хочет провернуть еще одно дело, чтобы отдать долг." },
+        { t: "Вы с Джимми устроили поджог. Погиб сторож. Сдай его первым, и тебе скостят срок.", p: "Джимми Конвей. Он не знает, что ты готов сдать его ради семьи." },
+        { t: "ФИНАЛ: Следователь предлагает сдать твоего Босса — Генри Хилла. Но если ты сдашь, его люди придут за семьей. Если промолчишь — он тебя прикроет.", p: "ГЕНРИ ХИЛЛ (Твой Босс). Угрожает семье, если сдашь. Если промолчишь — наградит." },
 
-        // 2 уровень (Джо Пеши)
-        { t: "Ты и твой подручный Томми вымогали деньги у бизнесмена. Он написал заявление в полицию. Сдай Томми, и тебя отпустят, но твоя семья останется без денег.", p: "Томми 'Два Пальца'. Психопат, но преданный." },
-        { t: "Вы с Томми сожгли конкурентный бар. Следователь предлагает сделку: сдай его, и ты получишь иммунитет. Но если промолчишь, мафия поможет твоей семье.", p: "Томми 'Два Пальца'. Он думает, что ты его не сдашь." },
-        { t: "Вы с Томми крышевали бордель. Полиция взяла вас. Сдай его, и тебя переведут в свидетели. Он знает слишком много о твоей семье.", p: "Томми 'Два Пальца'. Он угрожает рассказать о твоих делишках." },
+        { t: "Ты и Томми вымогали деньги у бизнесмена. Он написал заявление. Сдай Томми, и тебя отпустят, но твоя семья останется без денег.", p: "Томми 'Два Пальца'. Психопат, но преданный." },
+        { t: "Вы с Томми сожгли конкурентный бар. Следователь предлагает сделку: сдай его, и ты получишь иммунитет.", p: "Томми 'Два Пальца'. Он думает, что ты его не сдашь." },
+        { t: "Вы с Томми крышевали бордель. Полиция взяла вас. Сдай его, и тебя переведут в свидетели.", p: "Томми 'Два Пальца'. Он знает слишком много о твоей семье." },
         { t: "Вы с Томми подставили политика. Он подал в суд. Сдай Томми, и ты выйдешь сухим, но мафия запомнит это.", p: "Томми 'Два Пальца'. Он хочет сбежать из страны." },
         { t: "ФИНАЛ: Сдай Джо Пеши, и получишь иммунитет. Но он знает, где живет твоя мать. Промолчишь — он оплатит лучшего адвоката.", p: "ДЖО ПЕШИ (Твой Босс). Давит на мать, если сдашь." },
 
-        // 3 уровень (Аль Капоне)
-        { t: "Ты и твой капитан Фрэнк перевозили контрабанду. Вас взяли на таможне. Сдай Фрэнка, и тебя отпустят, но твой бизнес заберут.", p: "Фрэнк Нитти. Гений тактики. Он стал слишком амбициозным." },
-        { t: "Вы с Фрэнком устроили подпольное казино. Сдай его, и ты получишь условный срок. Но твоя семья останется ни с чем.", p: "Фрэнк Нитти. Он хочет забрать твой бизнес." },
-        { t: "Вы с Фрэнком подкупили судью. Следователь предлагает сделку: сдай его, и ты выйдешь сухим, но твоя семья будет в опасности.", p: "Фрэнк Нитти. Он знает, что ты колеблешься." },
+        { t: "Ты и Фрэнк перевозили контрабанду. Вас взяли на таможне. Сдай Фрэнка, и тебя отпустят, но бизнес заберут.", p: "Фрэнк Нитти. Гений тактики. Он стал слишком амбициозным." },
+        { t: "Вы с Фрэнком устроили подпольное казино. Сдай его, и ты получишь условный срок. Но семья останется ни с чем.", p: "Фрэнк Нитти. Он хочет забрать твой бизнес." },
+        { t: "Вы с Фрэнком подкупили судью. Следователь предлагает сделку: сдай его, и ты выйдешь сухим.", p: "Фрэнк Нитти. Он знает, что ты колеблешься." },
         { t: "ФИНАЛ: Сдай Аль Капоне, станешь свободным. Но его киллеры у твоего дома. Промолчишь — он вытащит тебя под залог.", p: "АЛЬ КАПОНЕ (Твой Босс). Угрожает семье, если сдашь." },
 
-        // 4 уровень (Фрэнк Лукас)
-        { t: "Ты и твой курьер Ники перевозили героин. Вас взяли. Сдай Ники, и тебя отпустят, но твоя семья будет под угрозой.", p: "Ники Барнс. Он доверял тебе больше, чем родным." },
-        { t: "Вы с Ники обманули поставщика. Он подал в суд. Сдай Ники, и ты выйдешь сухим. Промолчишь — мафия поможет.", p: "Ники Барнс. Он хочет уйти из бизнеса." },
+        { t: "Ты и Ники перевозили героин. Вас взяли. Сдай Ники, и тебя отпустят, но семья будет под угрозой.", p: "Ники Барнс. Он доверял тебе больше, чем родным." },
+        { t: "Вы с Ники обманули поставщика. Он подал в суд. Сдай Ники, и ты выйдешь сухим.", p: "Ники Барнс. Он хочет уйти из бизнеса." },
         { t: "ФИНАЛ: Сдай Фрэнка Лукаса, и ты выйдешь. Но он обещал убить тебя. Промолчишь — он даст денег на семью.", p: "ФРЭНК ЛУКАС (Твой Босс). Угрожает тебе лично." },
 
-        // 5 уровень (Пабло Эскобар)
-        { t: "ФИНАЛ: Сдай Пабло Эскобара, и ты свободен. Но твоя семья в опасности. Промолчишь — он вытащит тебя из тюрьмы.", p: "ПАБЛО ЭСКОБАР (Твой Босс). Контролирует всё." }
+        { t: "ФИНАЛ: Сдай Пабло Эскобара, и ты свободен. Но семья в опасности. Промолчишь — он вытащит тебя из тюрьмы.", p: "ПАБЛО ЭСКОБАР (Твой Босс). Контролирует всё." }
     ];
 
     const levels = [
-        { name: "ГЕНРИ ХИЛЛ", before: "Охранник банка. Пошел на дело ради семьи.", family: "Жена Карен и двое детей. Они верят, что ты изменишься.", partner: "Джимми Конвей." },
-        { name: "ДЖО ПЕШИ", before: "Владелец баров. Использовал их как прикрытие.", family: "Мать-итальянка. Она больна и ждет тебя.", partner: "Томми 'Два Пальца'." },
-        { name: "АЛЬ КАПОНЕ", before: "Глава мафии. Контролировал весь город.", family: "Жена Мэй и сын. Они в опасности.", partner: "Фрэнк Нитти." },
-        { name: "ФРЭНК ЛУКАС", before: "Водитель грузовика. Создал наркоимперию.", family: "8 братьев и сестер. Ты был кормильцем.", partner: "Ники Барнс." },
-        { name: "ПАБЛО ЭСКОБАР", before: "Самый опасный наркобарон в истории.", family: "Жена и пятеро детей. Ты построил им крепость.", partner: "Гонсало Родригес." }
+        { name: "ГЕНРИ ХИЛЛ", before: "Охранник банка. Пошел на дело ради семьи.", family: "Жена Карен и двое детей.", partner: "Джимми Конвей." },
+        { name: "ДЖО ПЕШИ", before: "Владелец баров. Прикрытие для бизнеса.", family: "Мать-итальянка. Она больна.", partner: "Томми 'Два Пальца'." },
+        { name: "АЛЬ КАПОНЕ", before: "Глава мафии. Контролировал город.", family: "Жена Мэй и сын.", partner: "Фрэнк Нитти." },
+        { name: "ФРЭНК ЛУКАС", before: "Водитель грузовика. Создал наркоимперию.", family: "8 братьев и сестер.", partner: "Ники Барнс." },
+        { name: "ПАБЛО ЭСКОБАР", before: "Самый опасный наркобарон.", family: "Жена и пятеро детей.", partner: "Гонсало Родригес." }
     ];
 
     const levelCases = [[0,1,2,3,4,5,6], [7,8,9,10,11], [12,13,14,15], [16,17,18], [19]];
@@ -359,7 +250,7 @@
     let friends = JSON.parse(localStorage.getItem('myFriends')) || [];
     let clan = localStorage.getItem('myClan') || null;
     let round = 1, p1Choice = null, p2Choice = null, p1Selected = false, timer1, timer2, currentMode = 'bot';
-    let fakeThreat = false; // Флаг фейковой угрозы
+    let fakeThreat = false;
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -441,10 +332,8 @@
         let caseIndex = casesForLevel[Math.floor(Math.random() * casesForLevel.length)];
         let c = allCases[caseIndex];
 
-        // Проверка на финальное дело (где есть ФИНАЛ)
         fakeThreat = false;
         if (c.t.includes("ФИНАЛ")) {
-            // 50% шанс, что угроза фейковая
             fakeThreat = Math.random() > 0.5;
             if (fakeThreat) {
                 c.t += " <br><br><span style='color:#FFD700;'>Следователь шепчет: 'Он блефует. Если сдашь его, мы тебя прикроем'.</span>";
@@ -497,17 +386,13 @@
 
         if (isFinal) {
             if (p1Choice === 'betray') {
-                // Сдал босса
                 if (!fakeThreat) {
-                    // Угроза реальная - проигрыш и сброс
                     isLoseAll = true;
-                    totalExp = 0; // Сброс опыта
+                    totalExp = 0;
                 } else {
-                    // Угроза фейковая - победа
                     p1Y = 0; p2Y = 10;
                 }
             } else {
-                // Промолчал - мафия помогает
                 p1Y = Math.max(1, p1Y - 2);
             }
         }
@@ -535,7 +420,7 @@
         round++;
     }
 
-    applyLanguage();
+    updateUI();
 </script>
 </body>
 </html>
