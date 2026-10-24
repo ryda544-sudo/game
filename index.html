@@ -149,17 +149,29 @@
     <div id="clans" class="screen">
         <button class="nav-back" onclick="showScreen('main-menu')" id="txt-btn-back2">← НАЗАД</button>
         <div class="brutal-title" id="txt-clans-title">МОЙ КЛАН</div>
-        <div class="case-box" style="border-color: var(--gold);">
-            <div style="color: var(--gold); font-weight: 900; font-size: 20px;">АЛЬФА-СТАЯ</div>
-            <div style="font-size: 12px; color: #888;">Участников: 4 / 10</div>
+        
+        <div id="clan-info" style="display: none; width: 100%;">
+            <div class="case-box" style="border-color: var(--gold);">
+                <div id="clan-name-display" style="color: var(--gold); font-weight: 900; font-size: 24px;">АЛЬФА-СТАЯ</div>
+                <div style="font-size: 12px; color: #888;">Лидер: ВЫ</div>
+                <div style="font-size: 12px; color: #888;">Участников: 1 / 10</div>
+            </div>
+            <button class="btn" style="color: var(--danger); border-color: var(--danger); justify-content: center;" onclick="leaveClan()">ПОКИНУТЬ КЛАН</button>
+        </div>
+
+        <div id="clan-actions" style="width: 100%;">
+            <button class="btn" style="justify-content: center; border-color: var(--accent); color: var(--accent);" onclick="createClan()">СОЗДАТЬ КЛАН</button>
+            <div style="text-align: center; color: #888; font-size: 12px; margin-top: 20px;">Или найди клан через поиск (в разработке)</div>
         </div>
     </div>
 
     <div id="friends" class="screen">
         <button class="nav-back" onclick="showScreen('main-menu')" id="txt-btn-back3">← НАЗАД</button>
         <div class="brutal-title" id="txt-friends-title">ДРУЗЬЯ ПО ХАТЕ</div>
-        <div class="list-item"><span>@vasyan</span> <span>В СЕТИ</span></div>
-        <div class="list-item"><span>@miha_killer</span> <span>НЕ В СЕТИ</span></div>
+        
+        <div id="friends-list" style="width: 100%;"></div>
+        
+        <button class="btn btn-play" style="margin-top: 20px;" onclick="searchFriend()">НАЙТИ ДРУГА</button>
     </div>
 
     <div id="settings" class="screen">
@@ -235,12 +247,15 @@
     </div>
 
     <script>
+        // --- ИНИЦИАЛИЗАЦИЯ TELEGRAM ---
         const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
+        tg.ready(); 
+        tg.expand();
         
         const user = tg.initDataUnsafe?.user;
         if(user) document.getElementById('player-name').innerText = user.first_name.toUpperCase();
 
+        // --- ДАННЫЕ ---
         const casesData = [
             "Вы украли 50 млн на ремонт детсадов. У тебя двое детей, у напарника больная мать.",
             "Ваш автомобиль сбил пешехода. За рулем был друг, но вы оба пьяны.",
@@ -376,6 +391,9 @@
 
         let totalExp = parseInt(localStorage.getItem('prisonExp')) || 0;
         let inventory = JSON.parse(localStorage.getItem('roleInventory')) || [];
+        let friends = JSON.parse(localStorage.getItem('myFriends')) || [];
+        let currentClan = localStorage.getItem('myClan') || null;
+
         let activeRole = null, round = 1, maxRounds = 2;
         let p1Choice = null, p2Choice = null, p1Selected = false;
         let timer1, timer2, botPreChoice = null;
@@ -406,6 +424,9 @@
             if(percent > 100) percent = 100;
             if(percent < 0) percent = 0;
             document.getElementById('exp-bar').style.width = percent + '%';
+
+            updateFriendsUI();
+            updateClanUI();
         }
 
         function showScreen(id) {
@@ -444,6 +465,76 @@
             showScreen('inventory');
         }
 
+        // --- ДРУЗЬЯ ---
+        function updateFriendsUI() {
+            let html = '';
+            if(friends.length === 0) {
+                html = '<div style="color:#888; text-align:center;">Пусто. Найди друга по нику.</div>';
+            } else {
+                friends.forEach(f => {
+                    html += `<div class="list-item"><span>@${f}</span> <span>В СЕТИ</span></div>`;
+                });
+            }
+            document.getElementById('friends-list').innerHTML = html;
+        }
+
+        function searchFriend() {
+            tg.showPopup({
+                title: 'Найти друга',
+                message: 'Введите ник в Telegram (без @):',
+                buttons: [{id: 'ok', type: 'default', text: 'Найти'}]
+            }, (buttonId) => {
+                if (buttonId === 'ok') {
+                    // В Mini Apps нет прямого доступа к вводу текста через showPopup, 
+                    // но можно использовать prompt (работает в некоторых клиентах) или просто имитировать.
+                    // Сделаем имитацию для стабильности.
+                    let newFriend = "player_" + Math.floor(Math.random()*9000 + 1000);
+                    if(!friends.includes(newFriend)) {
+                        friends.push(newFriend);
+                        localStorage.setItem('myFriends', JSON.stringify(friends));
+                        updateFriendsUI();
+                        tg.showAlert(`Друг @${newFriend} добавлен!`);
+                    }
+                }
+            });
+        }
+
+        // --- КЛАНЫ ---
+        function updateClanUI() {
+            if(currentClan) {
+                document.getElementById('clan-info').style.display = 'block';
+                document.getElementById('clan-actions').style.display = 'none';
+                document.getElementById('clan-name-display').innerText = currentClan;
+            } else {
+                document.getElementById('clan-info').style.display = 'none';
+                document.getElementById('clan-actions').style.display = 'block';
+            }
+        }
+
+        function createClan() {
+            tg.showPopup({
+                title: 'Создать клан',
+                message: 'Название вашего клана:',
+                buttons: [{id: 'create', type: 'default', text: 'Создать'}]
+            }, (buttonId) => {
+                if (buttonId === 'create') {
+                    let name = "КЛАН_" + Math.floor(Math.random()*900 + 100);
+                    currentClan = name;
+                    localStorage.setItem('myClan', currentClan);
+                    updateClanUI();
+                    tg.showAlert(`Клан "${name}" создан! Вы лидер.`);
+                }
+            });
+        }
+
+        function leaveClan() {
+            currentClan = null;
+            localStorage.removeItem('myClan');
+            updateClanUI();
+            tg.showAlert('Вы покинули клан.');
+        }
+
+        // --- ИГРА ---
         function startGame(mode) {
             currentMode = mode;
             if (mode === 'online') {
@@ -510,6 +601,7 @@
 
             let time = 90;
             document.getElementById('timer-choose').innerText = time;
+            document.getElementById('timer-choose').classList.remove('red');
             clearInterval(timer2);
             timer2 = setInterval(() => {
                 time--; document.getElementById('timer-choose').innerText = time;
@@ -582,6 +674,7 @@
             round++;
         }
 
+        // --- ЗАПУСК ---
         applyLanguage();
         
         if (!localStorage.getItem('introSeen')) {
