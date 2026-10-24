@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Дилемма Заключенного: Мафия</title>
+    <title>Дилемма Заключенного: Детектив</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap');
@@ -57,9 +57,12 @@
         .search-input { flex: 1; background: var(--card); border: 2px solid var(--border); color: white; padding: 12px; border-radius: 8px; font-family: 'Space Grotesk'; font-size: 14px; }
         .search-btn { background: var(--accent); border: none; color: #000; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* УЛИКИ */
-        .evidence-box { background: rgba(0, 255, 65, 0.1); border: 1px solid var(--accent); padding: 10px; margin-bottom: 10px; border-radius: 8px; font-size: 13px; }
-        .evidence-title { color: var(--accent); font-weight: 900; margin-bottom: 5px; }
+        .evidence-box { background: rgba(0, 255, 65, 0.1); border: 1px solid var(--accent); padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        .evidence-title { color: var(--accent); font-weight: 900; font-size: 14px; margin-bottom: 5px; text-transform: uppercase;}
+        .evidence-text { font-size: 13px; color: #ddd; }
+        .family-box { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--gold); padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        .family-title { color: var(--gold); font-weight: 900; font-size: 14px; margin-bottom: 5px; text-transform: uppercase;}
+        .family-text { font-size: 13px; color: #ddd; }
     </style>
 </head>
 <body>
@@ -96,7 +99,7 @@
         <button class="btn" onclick="showScreen('rules')" style="border-color: var(--gold); color: var(--gold);">📜 ПРАВИЛА ИГРЫ</button>
         
         <div class="case-box" style="margin-top: 10px; font-size: 13px; border-color: #555;">
-            <b>ДЕТЕКТИВ:</b> У тебя есть улики на напарника. Сдашь — выйдешь, но рискуешь, что он тоже сдаст. Промолчишь — получишь срок, но мафия оценит верность.
+            <b>ТЕОРИЯ ИГР:</b> Дилемма заключенного — фундаментальная проблема теории игр. Она показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим.
         </div>
     </div>
 
@@ -109,7 +112,7 @@
             3. <b>Молчать + Сдать:</b> Ты 10, он 0 (-3 XP).<br>
             4. <b>Сдать + Сдать:</b> По 6 лет (-1 XP).<br>
             5. <b>Молчать + Молчать:</b> По 3 года (+0.5 XP).<br><br>
-            Внимание: Если у напарника есть семья, и ты его сдашь, ты получишь штраф к опыту. Если промолчишь — бонус.
+            <b>ДЕТЕКТИВ:</b> Если сдашь напарника с семьей — потеряешь опыт. Если промолчишь — получишь бонус.
         </div>
     </div>
 
@@ -164,13 +167,13 @@
     </div>
 
     <div id="case-screen" class="screen">
-        <div class="timer" id="timer-read">25</div>
+        <div class="timer" id="timer-read">30</div>
         <div class="case-box" id="case-text">Текст дела...</div>
         <button class="btn btn-play" onclick="startChoosingPhase()">Я ПРОЧИТАЛ</button>
     </div>
 
     <div id="game-screen" class="screen">
-        <div class="header"><div>СУД</div><div>1/1</div></div>
+        <div class="header"><div>СУД</div><div id="round-text">1/1</div></div>
         <div class="timer" id="timer-choose">90</div>
         <div class="case-box" style="font-size: 12px; border: none; background: transparent; text-align: center; color: #888;">Примите решение</div>
         <div class="choices">
@@ -188,7 +191,7 @@
     <div id="result-screen" class="screen">
         <div class="brutal-title" style="margin-top: 50px;">ПРИГОВОР</div>
         <div class="case-box" style="border-color: var(--accent);" id="result-text"></div>
-        <button class="btn btn-play" onclick="nextRound()">ДАЛЕЕ</button>
+        <button class="btn btn-play" onclick="backToMenu()">В МЕНЮ</button>
     </div>
 
     <div class="bottom-nav" id="bottom-nav" style="display: none;">
@@ -213,36 +216,30 @@
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
-    // ДЕТЕКТИВНЫЕ ДЕЛА С УЛИКАМИ
     const allCases = [
-        // 1 ур (Генри)
-        { t: "Ты и Джимми вломились в банк. Сработала сигнализация. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе отпечатки Джимми. Если сдашь его, он сядет, а ты выйдешь.", fam: "У Джимми больная мать." },
+        { t: "Ты и Джимми вломились в банк. Сработала сигнализация. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе отпечатки Джимми. Если сдашь его, он сядет, а ты выйдешь.", fam: "У Джимми больная мать, он единственный кормилец." },
         { t: "Вы угнали спорткар. Владелец — сын прокурора. В машине нашли твою куртку.", p: "Джимми Конвей.", ev: "Твоя куртка в машине. Джимми может подтвердить, что ты был за рулем.", fam: "У тебя двое детей." },
-        { t: "Ограбление ювелирки. Охранник ранен. На записи камер видно двоих.", p: "Джимми Конвей.", ev: "Запись размыта, но Джимми в кадре. Сдай его — тебе скостят срок.", fam: "Джимми недавно женился." },
+        { t: "Ограбление ювелирки. Охранник ранен. На записи камер видно двоих.", p: "Джимми Конвей.", ev: "Запись размыта, но Джимми в кадре. Сдай его — тебе скостят срок.", fam: "Джимми недавно женился, жена беременна." },
         { t: "Контрабанда через границу. Таможня нашла груз.", p: "Джимми Конвей.", ev: "Джимми оставил свой телефон в машине с уликами.", fam: "У Джимми маленький ребенок." },
         { t: "Подделка документов на квартиру. Нотариус дал показания.", p: "Джимми Конвей.", ev: "Нотариус видел Джимми. Он может дать показания против него.", fam: "Твоя жена беременна вторым." },
         { t: "Поджог конкурента. Погиб сторож. Следователь нашел канистру.", p: "Джимми Конвей.", ev: "На канистре отпечатки Джимми.", fam: "Джимми должен денег опасным людям." },
         { t: "ФИНАЛ: Следователь предлагает сдать Босса — Генри Хилла. У него есть компромат на тебя.", p: "ГЕНРИ ХИЛЛ.", ev: "У следователя есть доказательства твоей причастности. Если сдашь Босса — выйдешь. Но его люди знают, где твоя семья.", fam: "Твоя семья под защитой мафии." },
 
-        // 2 ур (Джо)
         { t: "Вымогательство у бизнесмена. Он написал заявление.", p: "Томми 'Два Пальца'.", ev: "Бизнесмен опознал Томми. Сдай его — тебя отпустят.", fam: "У Томми есть брат-полицейский." },
         { t: "Сожгли конкурентный бар. Полиция нашла записи.", p: "Томми 'Два Пальца'.", ev: "Томми звонил заказчику с твоего телефона.", fam: "Томми ухаживает за твоей сестрой." },
         { t: "Крышевали бордель. Полиция взяла вас.", p: "Томми 'Два Пальца'.", ev: "Томми хранил деньги в твоем сейфе.", fam: "У Томми двое детей." },
         { t: "Подставили политика. Он подал в суд.", p: "Томми 'Два Пальца'.", ev: "Томми оставил улики в машине.", fam: "Томми шантажирует тебя." },
         { t: "ФИНАЛ: Сдай Джо Пеши. Но он знает, где живет твоя мать.", p: "ДЖО ПЕШИ.", ev: "У следователя есть ордер на арест Джо. Если сдашь — получишь иммунитет.", fam: "Твоя мать больна. Джо оплачивает лечение." },
 
-        // 3 ур (Аль)
         { t: "Контрабанда. Таможня нашла груз.", p: "Фрэнк Нитти.", ev: "Фрэнк оставил накладные с твоей подписью.", fam: "У Фрэнка есть жена и любовница." },
         { t: "Подпольное казино. Полиция накрыла.", p: "Фрэнк Нитти.", ev: "Фрэнк сливал информацию конкурентам.", fam: "Фрэнк предал тебя первым." },
         { t: "Подкупили судью. Следователь нашел переводы.", p: "Фрэнк Нитти.", ev: "Переводы шли на счет Фрэнка.", fam: "У Фрэнка рак. Он не доживет до суда." },
         { t: "ФИНАЛ: Сдай Аль Капоне. Его киллеры у твоего дома.", p: "АЛЬ КАПОНЕ.", ev: "У следователя есть доказательства. Если сдашь — тебя спрячут.", fam: "Твой сын в школе. Киллеры знают адрес." },
 
-        // 4 ур (Фрэнк)
         { t: "Перевозили героин. Вас взяли.", p: "Ники Барнс.", ev: "Ники оставил наркотики в твоей машине.", fam: "Ники хочет уйти из бизнеса." },
         { t: "Обманули поставщика. Он подал в суд.", p: "Ники Барнс.", ev: "Поставщик опознал Ники.", fam: "У Ники больная дочь." },
         { t: "ФИНАЛ: Сдай Фрэнка Лукаса. Но он обещал убить тебя.", p: "ФРЭНК ЛУКАС.", ev: "У следователя есть компромат на Фрэнка. Но Фрэнк знает твой адрес.", fam: "Твоя семья в опасности." },
 
-        // 5 ур (Пабло)
         { t: "ФИНАЛ: Сдай Пабло Эскобара. Но он контролирует всё.", p: "ПАБЛО ЭСКОБАР.", ev: "У следователя есть доказательства. Но Пабло может уничтожить твою семью.", fam: "Твоя семья под охраной Пабло." }
     ];
 
@@ -352,16 +349,19 @@
             <span style="color:var(--gold);">Напарник:</span> ${currentCaseData.p}<br><br>
             <div class="evidence-box">
                 <div class="evidence-title">УЛИКИ:</div>
-                ${currentCaseData.ev}
+                <div class="evidence-text">${currentCaseData.ev}</div>
             </div>
-            <span style="color:#888; font-size:13px;">Семья напарника: ${currentCaseData.fam}</span>
-            ${currentCaseData.t.includes("ФИНАЛ") ? '<br><br>' + hint : ''}
+            <div class="family-box">
+                <div class="family-title">ИНФО О СЕМЬЕ:</div>
+                <div class="family-text">${currentCaseData.fam}</div>
+            </div>
+            ${currentCaseData.t.includes("ФИНАЛ") ? '<br>' + hint : ''}
         `;
         
         p1Selected = false; p2Choice = null;
         showScreen('case-screen');
         
-        let time = 30; // Больше времени на чтение
+        let time = 30;
         document.getElementById('timer-read').innerText = time;
         clearInterval(timer1);
         timer1 = setInterval(() => { time--; document.getElementById('timer-read').innerText = time; if(time <= 0) { clearInterval(timer1); startChoosingPhase(); } }, 1000);
@@ -383,7 +383,6 @@
             else { p2Choice = choice; }
         } else {
             p1Choice = choice;
-            // Умный бот: если улики против него, он сдает с вероятностью 70%
             let botBetrayChance = 0.5;
             if (currentCaseData.ev && (currentCaseData.ev.includes('отпечатки') || currentCaseData.ev.includes('улики'))) {
                 botBetrayChance = 0.7;
@@ -417,7 +416,6 @@
             }
         }
 
-        // Влияние семьи на опыт
         if (p1Choice === 'betray' && currentCaseData.fam && !currentCaseData.fam.includes('нет')) {
             extraText += "<br><span style='color:var(--danger);'>Ты предал напарника, зная о его семье. Репутация упала (-0.5 XP).</span>";
             if(!isLoseAll) totalExp -= 0.5;
@@ -450,7 +448,7 @@
         showScreen('result-screen');
     }
 
-    function nextRound() {
+    function backToMenu() {
         showScreen('main-menu');
     }
 
