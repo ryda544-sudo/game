@@ -73,6 +73,11 @@
         .pub-title { color: var(--pub-gold); font-weight: 900; font-size: 16px; font-family: 'Playfair Display', serif;}
         
         .prize-box { background: linear-gradient(45deg, #1a3a2a, #0a0a0a); border: 2px solid var(--pub-gold); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center;}
+        
+        /* БЛОК СЮЖЕТА В МЕНЮ */
+        .story-continue-box { background: linear-gradient(135deg, #1a3a2a 0%, #0a0a0a 100%); border: 2px solid var(--pub-gold); border-radius: 12px; padding: 20px; margin-bottom: 15px; display: none; }
+        .story-continue-title { color: var(--pub-gold); font-weight: 900; font-size: 18px; font-family: 'Playfair Display', serif; margin-bottom: 10px; }
+        .story-continue-text { font-size: 14px; color: #ddd; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -90,15 +95,24 @@
     <!-- ВЫБОР ИМЕНИ -->
     <div id="choose-name" class="screen">
         <div class="brutal-title">КАК ТЕБЯ ЗОВУТ?</div>
-        <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич»</button>
-        <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола»</button>
-        <button class="btn" onclick="selectName('Ленни Молот')">Ленни «Молот»</button>
+        <div class="case-box" style="font-size: 13px; margin-bottom: 20px;">
+            Каждый из них мечтал о другой жизни. Но Лондон не прощает ошибок. Кем ты станешь?
+        </div>
+        <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Работал охранником, но хотел большего. У него есть жена и двое детей.</span></button>
+        <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Бывший военный. Воевал, но нашел себя в криминале. У него есть больная мать.</span></button>
+        <button class="btn" onclick="selectName('Ленни Молот')">Ленни «Молот»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Вырос в бедном районе. Всегда прикрывал друзей. У него есть младшая сестра.</span></button>
     </div>
 
     <div id="main-menu" class="screen">
         <div class="header">
             <div id="player-name">ДЖОННИ КИРПИЧ</div>
             <div>ОПЫТ: <span id="exp-counter" style="color: var(--pub-gold);">0</span></div>
+        </div>
+
+        <!-- СЮЖЕТНЫЙ БЛОК ПРОДОЛЖЕНИЯ -->
+        <div id="story-continue" class="story-continue-box">
+            <div class="story-continue-title" id="story-continue-title">ГЛАВА 2</div>
+            <div class="story-continue-text" id="story-continue-text">...</div>
         </div>
 
         <div class="inmate-card" onclick="openDossier()">
@@ -255,23 +269,30 @@
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
-    // СЮЖЕТНЫЕ ДЕЛА
+    // СЮЖЕТНЫЕ ДЕЛА (с историей)
     const storyCases = [
-        { t: "ВСТУПЛЕНИЕ: Тебя зовут в банду. Первое дело — ограбление банка на Паддингтон-стрит. Вы с Джимми вскрыли сейф, но сработала сигнализация. Полиция приехала через 5 минут. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе четкие отпечатки Джимми. Следователь обещает тебе иммунитет, если ты подтвердишь, что он был за рулем.", fam: "У Джимми больная мать, Элизабет, которая живет в доме престарелых. Он единственный, кто оплачивает ее лечение." },
-        { t: "ДЕЛО 2: Угон спорткара 'Ягуар' у сына прокурора. Вы с Джимми угнали тачку, чтобы покататься, но разбили ее в кювете. Полиция нашла твою куртку на заднем сиденье.", p: "Джимми Конвей.", ev: "Твоя куртка в машине. Джимми может подтвердить, что ты был за рулем, если его прижмут.", fam: "У тебя двое детей, Джек и Мэри. Жена Карен беременна третьим. Если ты сядешь, она останется одна с детьми." },
-        { t: "ДЕЛО 3: Ограбление ювелирного магазина 'Тиффани'. Вы с Джимми вынесли драгоценностей на 2 млн. Охранник получил травмы. На записи камер видно двоих.", p: "Джимми Конвей.", ev: "Запись размыта, но Джимми в кадре. Следователь говорит, что если ты сдашь его, тебе скостят срок до условного.", fam: "Джимми недавно женился на Софи. Она беременна. Он клянется, что это его последнее дело." },
-        { t: "ДЕЛО 4: Контрабанда через границу. Вы с Джимми перевозили ирландский виски без акциза. Таможня нашла груз в твоей машине.", p: "Джимми Конвей.", ev: "Джимми оставил свой телефон в машине. В нем есть переписка с заказчиком, где он берет всю вину на себя.", fam: "У Джимми маленький ребенок, Томми. Он хочет уйти из бизнеса и открыть паб." },
-        { t: "ДЕЛО 5: Подделка документов на продажу квартиры в Сохо. Нотариус дал показания, что видел Джимми с поддельными бумагами.", p: "Джимми Конвей.", ev: "Нотариус опознал Джимми. Он может дать показания против него в суде.", fam: "Твоя жена беременна вторым. Ты клянешься, что это последнее дело. Джимми знает о твоей семье." },
-        { t: "ДЕЛО 6: Поджог конкурента — паба 'Красный лев'. Погиб сторож. Следователь нашел канистру с бензином.", p: "Джимми Конвей.", ev: "На канистре отпечатки Джимми. Но также там есть следы перчаток, которые могут принадлежать тебе.", fam: "Джимми должен денег опасным людям. Он в отчаянии и может сдать тебя первым." },
-        { t: "ФИНАЛ: Следователь предлагает сдать Босса — ТОММИ. У него есть компромат на тебя. Но если ты сдашь, его люди придут за твоей семьей.", p: "ТОММИ (Босс).", ev: "У следователя есть доказательства твоей причастности. Если сдашь Босса — выйдешь. Но его люди знают, где твоя семья.", fam: "Твоя семья под защитой мафии, но только пока ты верен." }
+        { t: "ГЛАВА 1: Тебя зовут в банду. Первое дело — ограбление банка на Паддингтон-стрит. Вы с Джимми вскрыли сейф, но сработала сигнализация. Полиция приехала через 5 минут. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе четкие отпечатки Джимми. Следователь обещает тебе иммунитет, если ты подтвердишь, что он был за рулем.", fam: "У Джимми больная мать, Элизабет, которая живет в доме престарелых. Он единственный, кто оплачивает ее лечение." },
+        { t: "ГЛАВА 2: Ты вышел из тюрьмы (или отсиделся). Джимми пропал. Ты узнаешь, что он сдал тебя и скрылся. Тебя снова берут на дело — угон 'Ягуара' у сына прокурора. Но на этот раз твой напарник — Томми, правая рука босса. Он знает, что ты был в тюрьме.", p: "Томми 'Два Ствола'.", ev: "Томми оставил свои отпечатки на руле. Полиция нашла твою куртку на заднем сиденье.", fam: "У Томми больная мать. Он не хочет садиться, чтобы не оставить ее одну." },
+        { t: "ГЛАВА 3: Томми тоже пропал. Ходят слухи, что его убили люди босса. Тебя берут на ограбление ювелирки 'Тиффани'. Твой новый напарник — Ленни, старый друг. Он клянется, что не сдаст тебя.", p: "Ленни 'Молот'.", ev: "На записи камер видно двоих. Ленни был в кадре, но лицо размыто. Следователь предлагает сделку.", fam: "Ленни недавно женился. Его жена беременна. Он хочет выйти из игры." },
+        { t: "ГЛАВА 4: Ленни сдал тебя, но ты вышел под залог. Тебя снова зовут на дело — контрабанда виски. Твой напарник — Эрни, человек с принципами. Он не любит предателей.", p: "Эрни 'Тихий'.", ev: "Эрни оставил свой телефон в машине. Там переписка, где он берет всю вину на себя.", fam: "У Эрни маленький сын. Он хочет уйти из бизнеса и открыть паб." },
+        { t: "ГЛАВА 5: Эрни мертв. Ты остался один. Босс Томми вызывает тебя. Он знает, что ты сдавал его людей. Он предлагает тебе последнее дело — поджог паба 'Красный лев'.", p: "ТОММИ (Босс).", ev: "На канистре отпечатки Томми. Но также там есть следы перчаток, которые могут принадлежать тебе.", fam: "Твоя семья под защитой мафии. Но если ты сдашь босса — их не станет." }
+    ];
+
+    // ПРОДОЛЖЕНИЯ ИСТОРИИ (После каждого уровня)
+    const storyContinuations = [
+        { title: "ГЛАВА 1 ЗАВЕРШЕНА", text: "Ты вышел из зала суда. Джимми сдал тебя, и теперь его ищут. Ты понимаешь, что в этом городе никому нельзя верить. Тебя снова зовут на дело." },
+        { title: "ГЛАВА 2 ЗАВЕРШЕНА", text: "Томми оказался крысой. Он сдал тебя боссу, и теперь ты под колпаком. Но ты выжил. Ты знаешь, что следующий напарник — Ленни, и он тоже может предать." },
+        { title: "ГЛАВА 3 ЗАВЕРШЕНА", text: "Ленни сдал тебя, но ты вышел. Ты понимаешь, что даже старые друзья становятся врагами. Босс дает тебе последний шанс — контрабанда. Но напарник — Эрни, который тебя не знает." },
+        { title: "ГЛАВА 4 ЗАВЕРШЕНА", text: "Эрни оказался честным парнем. Он взял всю вину на себя, и его убили в тюрьме. Ты понимаешь, что босс избавляется от всех. Теперь очередь за тобой." },
+        { title: "ФИНАЛ", text: "Ты стоишь перед боссом. Он знает всё. Твое последнее дело — поджог. Но теперь ты знаешь: либо ты сдашь его, либо он убьет тебя. Судьба решается." }
     ];
 
     const levels = [
         { name: "ТОММИ", before: "Глава банды.", family: "Жена и двое детей.", partner: "Джимми Конвей." },
-        { name: "ЛЕННИ", before: "Владелец паба.", family: "Мать-итальянка.", partner: "Томми 'Два Пальца'." },
-        { name: "ЭРНИ", before: "Глава мафии.", family: "Жена Мэй и сын.", partner: "Фрэнк Нитти." },
-        { name: "ДЖЕК", before: "Водитель грузовика.", family: "8 братьев и сестер.", partner: "Ники Барнс." },
-        { name: "ГАРРИ", before: "Наркобарон.", family: "Жена и пятеро детей.", partner: "Гонсало Родригес." }
+        { name: "ЛЕННИ", before: "Владелец паба.", family: "Мать-итальянка.", partner: "Томми 'Два Ствола'." },
+        { name: "ЭРНИ", before: "Глава мафии.", family: "Жена Мэй и сын.", partner: "Ленни 'Молот'." },
+        { name: "ДЖЕК", before: "Водитель грузовика.", family: "8 братьев и сестер.", partner: "Эрни 'Тихий'." },
+        { name: "ГАРРИ", before: "Наркобарон.", family: "Жена и пятеро детей.", partner: "Томми (Босс)." }
     ];
 
     let totalExp = parseFloat(localStorage.getItem('prisonExp')) || 0;
@@ -281,6 +302,7 @@
     let fakeThreat = false;
     let currentCaseData = null;
     let currentStoryIndex = 0;
+    let storyProgress = parseInt(localStorage.getItem('storyProgress')) || 0;
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -295,6 +317,21 @@
         if(id === 'rating') document.querySelectorAll('.nav-item')[1].classList.add('active');
         if(id === 'friends') document.querySelectorAll('.nav-item')[2].classList.add('active');
         if(id === 'clans') document.querySelectorAll('.nav-item')[3].classList.add('active');
+        
+        if(id === 'main-menu') updateStoryUI();
+    }
+
+    function updateStoryUI() {
+        let lvl = 0;
+        if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4; if(totalExp >= 25) lvl = 5;
+        
+        if (lvl > 0 && lvl <= 5) {
+            document.getElementById('story-continue').style.display = 'block';
+            document.getElementById('story-continue-title').innerText = storyContinuations[lvl-1].title;
+            document.getElementById('story-continue-text').innerText = storyContinuations[lvl-1].text;
+        } else {
+            document.getElementById('story-continue').style.display = 'none';
+        }
     }
 
     function selectName(name) {
@@ -330,6 +367,8 @@
             document.getElementById('clan-create').style.display = 'block';
             document.getElementById('my-clan-info').style.display = 'none';
         }
+        
+        updateStoryUI();
     }
 
     function openDossier() {
@@ -355,6 +394,11 @@
     function startGame(mode) {
         currentMode = mode;
         currentStoryIndex = 0;
+        if(mode === 'story') {
+            let lvl = 0;
+            if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4;
+            currentStoryIndex = lvl;
+        }
         if(mode === 'online') { tg.showAlert("ПОИСК..."); setTimeout(() => { tg.showAlert("НАЙДЕН: KILLER_99"); currentMode = 'bot'; nextRound(); }, 1000); return; }
         nextRound();
     }
@@ -375,7 +419,7 @@
         }
 
         fakeThreat = false;
-        if (currentCaseData.t.includes("ФИНАЛ")) {
+        if (currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5")) {
             fakeThreat = Math.random() > 0.5;
         }
 
@@ -392,7 +436,7 @@
                 <div class="family-title">ИНФО О СЕМЬЕ:</div>
                 <div class="family-text">${currentCaseData.fam}</div>
             </div>
-            ${currentCaseData.t.includes("ФИНАЛ") ? '<br>' + hint : ''}
+            ${(currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5")) ? '<br>' + hint : ''}
         `;
         
         p1Selected = false; p2Choice = null;
@@ -436,7 +480,7 @@
         if(p1Choice === 'betray' && p2Choice === 'betray') { p1Y = 6; p2Y = 6; }
         if(p1Choice === 'silent' && p2Choice === 'silent') { p1Y = 3; p2Y = 3; }
 
-        let isFinal = currentCaseData.t.includes('ФИНАЛ');
+        let isFinal = currentCaseData.t.includes('ФИНАЛ') || currentCaseData.t.includes('ГЛАВА 5');
         let isLoseAll = false;
         let extraText = "";
 
@@ -484,7 +528,10 @@
         document.getElementById('result-text').innerHTML = text;
         showScreen('result-screen');
         
-        if (currentMode === 'story') currentStoryIndex++;
+        if (currentMode === 'story') {
+            currentStoryIndex++;
+            if (currentStoryIndex > storyCases.length) currentStoryIndex = storyCases.length;
+        }
     }
 
     function backToMenu() {
