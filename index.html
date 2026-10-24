@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Дилемма Заключенного: Детектив</title>
+    <title>Дилемма Заключенного: Джентльмены</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap');
-        :root { --bg: #0a0a0a; --text: #fff; --accent: #00FF41; --danger: #FF003C; --border: #222; --gold: #FFD700; --card: #141414; }
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=Playfair+Display:wght@700;900&display=swap');
+        :root { 
+            --bg: #0a0a0a; --text: #fff; --accent: #00FF41; --danger: #FF003C; 
+            --border: #333; --gold: #FFD700; --card: #141414; 
+            --pub-green: #1a3a2a; --pub-gold: #c9a84c;
+        }
         * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; padding: 0; font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; background-image: radial-gradient(circle at 50% 0%, #1c1c1c 0%, var(--bg) 80%); overflow: hidden; }
         .app-container { width: 100%; max-width: 400px; height: 100vh; display: flex; flex-direction: column; position: relative; }
@@ -21,33 +25,34 @@
 
         .btn { background: var(--card); color: var(--text); border: 2px solid var(--border); padding: 15px; font-size: 15px; font-weight: 700; text-transform: uppercase; cursor: pointer; width: 100%; border-radius: 8px; margin-bottom: 10px; font-family: 'Space Grotesk', sans-serif; display: flex; justify-content: space-between; align-items: center; }
         .btn:active { border-color: var(--accent); color: var(--accent); }
-        .btn-play { background: var(--accent); color: #000; justify-content: center; font-size: 20px; border: none; }
+        .btn-play { background: var(--pub-green); color: var(--pub-gold); border: 2px solid var(--pub-gold); justify-content: center; font-size: 20px; }
+        .btn-play:active { background: var(--pub-gold); color: #000; }
 
         .header { width: 100%; display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 12px; color: #888; font-weight: 700; text-transform: uppercase; }
-        .inmate-card { background: var(--card); border: 2px solid var(--gold); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; cursor: pointer; }
+        .inmate-card { background: var(--card); border: 2px solid var(--pub-gold); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; cursor: pointer; }
         .inmate-card:active { transform: scale(0.98); }
         .inmate-svg { width: 90px; height: 90px; margin-bottom: 10px; }
-        .inmate-name { font-size: 22px; font-weight: 900; color: var(--gold); text-transform: uppercase;}
+        .inmate-name { font-size: 22px; font-weight: 900; color: var(--pub-gold); text-transform: uppercase; font-family: 'Playfair Display', serif;}
         .inmate-label { font-size: 11px; color: #888; margin-top: 5px; }
 
         .progress-container { width: 100%; margin-bottom: 20px; }
         .progress-text { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 5px; color: #ccc; }
         .progress-bar { width: 100%; height: 12px; background: #000; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
+        .progress-fill { height: 100%; background: var(--pub-green); width: 0%; transition: 0.3s; box-shadow: 0 0 10px var(--pub-gold); }
 
-        .brutal-title { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 20px; text-transform: uppercase; line-height: 1.1;}
-        .brutal-title span { color: var(--accent); }
+        .brutal-title { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 20px; text-transform: uppercase; line-height: 1.1; font-family: 'Playfair Display', serif;}
+        .brutal-title span { color: var(--pub-gold); }
 
-        .case-box { background: var(--card); border-left: 4px solid var(--danger); padding: 20px; margin-bottom: 15px; font-size: 15px; line-height: 1.6; color: #ddd; }
-        .timer { font-size: 52px; font-weight: 900; text-align: center; color: var(--gold); margin-bottom: 15px; }
+        .case-box { background: var(--card); border-left: 4px solid var(--pub-gold); padding: 20px; margin-bottom: 15px; font-size: 15px; line-height: 1.6; color: #ddd; }
+        .timer { font-size: 52px; font-weight: 900; text-align: center; color: var(--pub-gold); margin-bottom: 15px; }
         
         .choices { display: flex; gap: 15px; margin-top: auto; }
         .choice-btn { flex: 1; padding: 22px 10px; font-size: 16px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-family: 'Space Grotesk', sans-serif;}
-        .c-alpha { background: var(--accent); color: #000; }
+        .c-alpha { background: var(--pub-green); color: var(--pub-gold); border: 2px solid var(--pub-gold); }
         .c-beta { background: var(--danger); color: #fff; }
 
         .dossier-section { width: 100%; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .dossier-label { font-size: 12px; color: var(--accent); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+        .dossier-label { font-size: 12px; color: var(--pub-gold); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
         .dossier-text { font-size: 14px; color: #ccc; line-height: 1.4; }
 
         .nav-back { background: none; border: none; color: #888; font-size: 14px; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-bottom: 20px; text-align: left; font-family: 'Space Grotesk', sans-serif;}
@@ -55,32 +60,36 @@
         .list-item { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border); }
         .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-input { flex: 1; background: var(--card); border: 2px solid var(--border); color: white; padding: 12px; border-radius: 8px; font-family: 'Space Grotesk'; font-size: 14px; }
-        .search-btn { background: var(--accent); border: none; color: #000; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .search-btn { background: var(--pub-gold); border: none; color: #000; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        .evidence-box { background: rgba(0, 255, 65, 0.1); border: 1px solid var(--accent); padding: 15px; margin-bottom: 15px; border-radius: 8px; }
-        .evidence-title { color: var(--accent); font-weight: 900; font-size: 14px; margin-bottom: 5px; text-transform: uppercase;}
+        .evidence-box { background: rgba(201, 168, 76, 0.1); border: 1px solid var(--pub-gold); padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        .evidence-title { color: var(--pub-gold); font-weight: 900; font-size: 14px; margin-bottom: 5px; text-transform: uppercase;}
         .evidence-text { font-size: 13px; color: #ddd; }
-        .family-box { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--gold); padding: 15px; margin-bottom: 15px; border-radius: 8px; }
-        .family-title { color: var(--gold); font-weight: 900; font-size: 14px; margin-bottom: 5px; text-transform: uppercase;}
+        .family-box { background: rgba(255, 0, 60, 0.1); border: 1px solid var(--danger); padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        .family-title { color: var(--danger); font-weight: 900; font-size: 14px; margin-bottom: 5px; text-transform: uppercase;}
         .family-text { font-size: 13px; color: #ddd; }
+
+        /* Стиль паба */
+        .pub-bg { background: var(--pub-green); border: 2px solid var(--pub-gold); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .pub-title { color: var(--pub-gold); font-weight: 900; font-size: 16px; font-family: 'Playfair Display', serif;}
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div id="intro" class="screen active" style="justify-content: center; text-align: center;">
-        <div class="brutal-title" style="font-size: 40px;">ДИЛЕММА<br><span>ЗАКЛЮЧЕННОГО</span></div>
-        <div class="case-box" style="text-align: left; border-color: var(--gold);">
+        <div class="brutal-title" style="font-size: 40px;">ДИЛЕММА<br><span>ДЖЕНТЛЬМЕНОВ</span></div>
+        <div class="case-box" style="text-align: left; border-color: var(--pub-gold);">
             <b>СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...</b><br><br>
-            Ты часть мафии. Тебя взяли. Следователь дает выбор: сдать напарника и выйти сухим, или молчать и получить срок. Но помни: у каждого есть семья, и твои решения имеют последствия.
+            Ты — Джонни «Кирпич», мелкий мошенник. Тебя взяли. Следователь дает выбор: сдать напарника и выйти сухим, или молчать и получить срок. Но помни: у каждого есть семья, и твои решения имеют последствия.
         </div>
         <button class="btn btn-play" onclick="showScreen('main-menu')">ВОЙТИ В ИГРУ</button>
     </div>
 
     <div id="main-menu" class="screen">
         <div class="header">
-            <div id="player-name">ЗАКЛЮЧЕННЫЙ</div>
-            <div>ОПЫТ: <span id="exp-counter" style="color: var(--accent);">0</span></div>
+            <div id="player-name">ДЖОННИ КИРПИЧ</div>
+            <div>ОПЫТ: <span id="exp-counter" style="color: var(--pub-gold);">0</span></div>
         </div>
 
         <div class="inmate-card" onclick="openDossier()">
@@ -96,17 +105,20 @@
             <div class="progress-bar"><div class="progress-fill" id="exp-bar"></div></div>
         </div>
         <button class="btn btn-play" onclick="showScreen('mode-select')">В СУД</button>
-        <button class="btn" onclick="showScreen('rules')" style="border-color: var(--gold); color: var(--gold);">📜 ПРАВИЛА ИГРЫ</button>
+        <button class="btn" onclick="showScreen('rules')" style="border-color: var(--pub-gold); color: var(--pub-gold);">📜 ПРАВИЛА ИГРЫ</button>
         
-        <div class="case-box" style="margin-top: 10px; font-size: 13px; border-color: #555;">
-            <b>ТЕОРИЯ ИГР:</b> Дилемма заключенного — фундаментальная проблема теории игр. Она показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим.
+        <div class="pub-bg" style="margin-top: 10px;">
+            <div class="pub-title">ТЕОРИЯ ИГР:</div>
+            <div style="font-size: 13px; color: #ddd; margin-top: 5px;">
+                Дилемма заключенного показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим. В этой игре «Сдать» не всегда лучший выбор, так как твой напарник может поступить так же.
+            </div>
         </div>
     </div>
 
     <div id="rules" class="screen">
         <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
         <div class="brutal-title">ПРАВИЛА</div>
-        <div class="case-box" style="border-color: var(--accent); font-size: 14px;">
+        <div class="case-box" style="border-color: var(--pub-gold); font-size: 14px;">
             1. Один матч = одно дело.<br><br>
             2. <b>Сдать + Молчать:</b> Ты 0, он 10 (+1 XP).<br>
             3. <b>Молчать + Сдать:</b> Ты 10, он 0 (-3 XP).<br>
@@ -132,7 +144,7 @@
         </div>
         <div id="friends-list" style="width: 100%;"></div>
         <div style="text-align: center; margin-top: 20px;">
-            <button class="btn" style="justify-content: center; border-color: var(--gold); color: var(--gold);" onclick="inviteFriend()">ПРИГЛАСИТЬ</button>
+            <button class="btn" style="justify-content: center; border-color: var(--pub-gold); color: var(--pub-gold);" onclick="inviteFriend()">ПРИГЛАСИТЬ</button>
         </div>
     </div>
 
@@ -150,8 +162,8 @@
             <button class="btn btn-play" onclick="createClan()">СОЗДАТЬ КЛАН</button>
         </div>
         <div id="my-clan-info" style="display: none; width: 100%;">
-            <div class="case-box" style="border-color: var(--gold);">
-                <div style="font-size: 20px; font-weight: 900; color: var(--gold);" id="display-clan-name">КЛАН</div>
+            <div class="pub-bg">
+                <div class="pub-title" id="display-clan-name">КЛАН</div>
                 <div style="font-size: 12px; color: #888;">Лидер: ВЫ</div>
             </div>
             <button class="btn" style="color: var(--danger); border-color: var(--danger); justify-content: center;" onclick="leaveClan()">ПОКИНУТЬ</button>
@@ -190,7 +202,7 @@
 
     <div id="result-screen" class="screen">
         <div class="brutal-title" style="margin-top: 50px;">ПРИГОВОР</div>
-        <div class="case-box" style="border-color: var(--accent);" id="result-text"></div>
+        <div class="case-box" style="border-color: var(--pub-gold);" id="result-text"></div>
         <button class="btn btn-play" onclick="backToMenu()">В МЕНЮ</button>
     </div>
 
@@ -209,13 +221,14 @@
     if(user) document.getElementById('player-name').innerText = user.first_name.toUpperCase();
 
     const avatars = [
-        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M20 45 Q50 15 80 45 L80 50 Q50 25 20 50 Z" fill="#333"/><rect x="25" y="40" width="50" height="8" fill="#00FF41"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M35 70 Q50 85 65 70 Z" fill="#555"/></svg>`,
-        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M15 40 L85 40 L75 25 L25 25 Z" fill="#444"/><rect x="15" y="40" width="70" height="5" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><rect x="35" y="60" width="30" height="8" fill="#000" rx="4"/><rect x="40" y="62" width="8" height="4" fill="#FFD700"/><rect x="52" y="62" width="8" height="4" fill="#FFD700"/></svg>`,
+        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M20 45 Q50 15 80 45 L80 50 Q50 25 20 50 Z" fill="#333"/><rect x="25" y="40" width="50" height="8" fill="#c9a84c"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M35 70 Q50 85 65 70 Z" fill="#555"/></svg>`,
+        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M15 40 L85 40 L75 25 L25 25 Z" fill="#444"/><rect x="15" y="40" width="70" height="5" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><rect x="35" y="60" width="30" height="8" fill="#000" rx="4"/><rect x="40" y="62" width="8" height="4" fill="#c9a84c"/><rect x="52" y="62" width="8" height="4" fill="#c9a84c"/></svg>`,
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M25 40 Q50 20 75 40 L75 55 Q50 40 25 55 Z" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M40 60 L45 65" stroke="#fff" stroke-width="2"/><rect x="55" y="70" width="25" height="5" fill="#fff" transform="rotate(15 55 70)"/><circle cx="80" cy="72" r="3" fill="#FF003C"/></svg>`,
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><rect x="20" y="35" width="60" height="30" fill="#000" rx="8"/><path d="M30 45 L40 50 L30 55 Z" fill="#FF003C"/><path d="M70 45 L60 50 L70 55 Z" fill="#FF003C"/><rect x="45" y="70" width="10" height="15" fill="#222"/></svg>`,
-        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
+        `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
+    // СЮЖЕТНЫЕ ДЕЛА (Мафия Гая Ричи)
     const allCases = [
         { t: "Ты и Джимми вломились в банк. Сработала сигнализация. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе отпечатки Джимми. Если сдашь его, он сядет, а ты выйдешь.", fam: "У Джимми больная мать, он единственный кормилец." },
         { t: "Вы угнали спорткар. Владелец — сын прокурора. В машине нашли твою куртку.", p: "Джимми Конвей.", ev: "Твоя куртка в машине. Джимми может подтвердить, что ты был за рулем.", fam: "У тебя двое детей." },
@@ -223,32 +236,32 @@
         { t: "Контрабанда через границу. Таможня нашла груз.", p: "Джимми Конвей.", ev: "Джимми оставил свой телефон в машине с уликами.", fam: "У Джимми маленький ребенок." },
         { t: "Подделка документов на квартиру. Нотариус дал показания.", p: "Джимми Конвей.", ev: "Нотариус видел Джимми. Он может дать показания против него.", fam: "Твоя жена беременна вторым." },
         { t: "Поджог конкурента. Погиб сторож. Следователь нашел канистру.", p: "Джимми Конвей.", ev: "На канистре отпечатки Джимми.", fam: "Джимми должен денег опасным людям." },
-        { t: "ФИНАЛ: Следователь предлагает сдать Босса — Генри Хилла. У него есть компромат на тебя.", p: "ГЕНРИ ХИЛЛ.", ev: "У следователя есть доказательства твоей причастности. Если сдашь Босса — выйдешь. Но его люди знают, где твоя семья.", fam: "Твоя семья под защитой мафии." },
+        { t: "ФИНАЛ: Следователь предлагает сдать Босса — Микки Пирсона. У него есть компромат на тебя.", p: "МИККИ ПИРСОН (Босс).", ev: "У следователя есть доказательства твоей причастности. Если сдашь Босса — выйдешь. Но его люди знают, где твоя семья.", fam: "Твоя семья под защитой мафии." },
 
         { t: "Вымогательство у бизнесмена. Он написал заявление.", p: "Томми 'Два Пальца'.", ev: "Бизнесмен опознал Томми. Сдай его — тебя отпустят.", fam: "У Томми есть брат-полицейский." },
         { t: "Сожгли конкурентный бар. Полиция нашла записи.", p: "Томми 'Два Пальца'.", ev: "Томми звонил заказчику с твоего телефона.", fam: "Томми ухаживает за твоей сестрой." },
         { t: "Крышевали бордель. Полиция взяла вас.", p: "Томми 'Два Пальца'.", ev: "Томми хранил деньги в твоем сейфе.", fam: "У Томми двое детей." },
         { t: "Подставили политика. Он подал в суд.", p: "Томми 'Два Пальца'.", ev: "Томми оставил улики в машине.", fam: "Томми шантажирует тебя." },
-        { t: "ФИНАЛ: Сдай Джо Пеши. Но он знает, где живет твоя мать.", p: "ДЖО ПЕШИ.", ev: "У следователя есть ордер на арест Джо. Если сдашь — получишь иммунитет.", fam: "Твоя мать больна. Джо оплачивает лечение." },
+        { t: "ФИНАЛ: Сдай Роско. Но он знает, где живет твоя мать.", p: "РОСКО (Босс).", ev: "У следователя есть ордер на арест Роско. Если сдашь — получишь иммунитет.", fam: "Твоя мать больна. Роско оплачивает лечение." },
 
         { t: "Контрабанда. Таможня нашла груз.", p: "Фрэнк Нитти.", ev: "Фрэнк оставил накладные с твоей подписью.", fam: "У Фрэнка есть жена и любовница." },
         { t: "Подпольное казино. Полиция накрыла.", p: "Фрэнк Нитти.", ev: "Фрэнк сливал информацию конкурентам.", fam: "Фрэнк предал тебя первым." },
         { t: "Подкупили судью. Следователь нашел переводы.", p: "Фрэнк Нитти.", ev: "Переводы шли на счет Фрэнка.", fam: "У Фрэнка рак. Он не доживет до суда." },
-        { t: "ФИНАЛ: Сдай Аль Капоне. Его киллеры у твоего дома.", p: "АЛЬ КАПОНЕ.", ev: "У следователя есть доказательства. Если сдашь — тебя спрячут.", fam: "Твой сын в школе. Киллеры знают адрес." },
+        { t: "ФИНАЛ: Сдай Гарри. Его киллеры у твоего дома.", p: "ГАРРИ (Босс).", ev: "У следователя есть доказательства. Если сдашь — тебя спрячут.", fam: "Твой сын в школе. Киллеры знают адрес." },
 
         { t: "Перевозили героин. Вас взяли.", p: "Ники Барнс.", ev: "Ники оставил наркотики в твоей машине.", fam: "Ники хочет уйти из бизнеса." },
         { t: "Обманули поставщика. Он подал в суд.", p: "Ники Барнс.", ev: "Поставщик опознал Ники.", fam: "У Ники больная дочь." },
-        { t: "ФИНАЛ: Сдай Фрэнка Лукаса. Но он обещал убить тебя.", p: "ФРЭНК ЛУКАС.", ev: "У следователя есть компромат на Фрэнка. Но Фрэнк знает твой адрес.", fam: "Твоя семья в опасности." },
+        { t: "ФИНАЛ: Сдай Дина. Но он обещал убить тебя.", p: "ДИН (Босс).", ev: "У следователя есть компромат на Дина. Но Дин знает твой адрес.", fam: "Твоя семья в опасности." },
 
-        { t: "ФИНАЛ: Сдай Пабло Эскобара. Но он контролирует всё.", p: "ПАБЛО ЭСКОБАР.", ev: "У следователя есть доказательства. Но Пабло может уничтожить твою семью.", fam: "Твоя семья под охраной Пабло." }
+        { t: "ФИНАЛ: Сдай Винни. Но он контролирует всё.", p: "ВИННИ (Босс).", ev: "У следователя есть доказательства. Но Винни может уничтожить твою семью.", fam: "Твоя семья под охраной Винни." }
     ];
 
     const levels = [
-        { name: "ГЕНРИ ХИЛЛ", before: "Охранник банка.", family: "Жена Карен и двое детей.", partner: "Джимми Конвей." },
-        { name: "ДЖО ПЕШИ", before: "Владелец баров.", family: "Мать-итальянка.", partner: "Томми 'Два Пальца'." },
-        { name: "АЛЬ КАПОНЕ", before: "Глава мафии.", family: "Жена Мэй и сын.", partner: "Фрэнк Нитти." },
-        { name: "ФРЭНК ЛУКАС", before: "Водитель грузовика.", family: "8 братьев и сестер.", partner: "Ники Барнс." },
-        { name: "ПАБЛО ЭСКОБАР", before: "Наркобарон.", family: "Жена и пятеро детей.", partner: "Гонсало Родригес." }
+        { name: "МИККИ ПИРСОН", before: "Охранник банка.", family: "Жена Карен и двое детей.", partner: "Джимми Конвей." },
+        { name: "РОСКО", before: "Владелец баров.", family: "Мать-итальянка.", partner: "Томми 'Два Пальца'." },
+        { name: "ГАРРИ", before: "Глава мафии.", family: "Жена Мэй и сын.", partner: "Фрэнк Нитти." },
+        { name: "ДИН", before: "Водитель грузовика.", family: "8 братьев и сестер.", partner: "Ники Барнс." },
+        { name: "ВИННИ", before: "Наркобарон.", family: "Жена и пятеро детей.", partner: "Гонсало Родригес." }
     ];
 
     const levelCases = [[0,1,2,3,4,5,6], [7,8,9,10,11], [12,13,14,15], [16,17,18], [19]];
@@ -291,7 +304,7 @@
         document.getElementById('exp-bar').style.width = (done / need * 100) + '%';
 
         let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:20px;">Список пуст</div>';
-        friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--accent); font-size:12px;">В ИГРЕ</span></div>`);
+        friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--pub-gold); font-size:12px;">В ИГРЕ</span></div>`);
         document.getElementById('friends-list').innerHTML = fHtml;
 
         if(clan) {
@@ -342,11 +355,11 @@
             fakeThreat = Math.random() > 0.5;
         }
 
-        let hint = fakeThreat ? "<span style='color:#FFD700;'>Следователь шепчет: 'Он блефует. Сдай его, и мы тебя прикроем'.</span>" : "<span style='color:var(--danger);'>Следователь шепчет: 'Он не блефует. Твоя семья в реальной опасности'.</span>";
+        let hint = fakeThreat ? "<span style='color:var(--pub-gold);'>Следователь шепчет: 'Он блефует. Сдай его, и мы тебя прикроем'.</span>" : "<span style='color:var(--danger);'>Следователь шепчет: 'Он не блефует. Твоя семья в реальной опасности'.</span>";
         
         document.getElementById('case-text').innerHTML = `
             <b>${currentCaseData.t}</b><br><br>
-            <span style="color:var(--gold);">Напарник:</span> ${currentCaseData.p}<br><br>
+            <span style="color:var(--pub-gold);">Напарник:</span> ${currentCaseData.p}<br><br>
             <div class="evidence-box">
                 <div class="evidence-title">УЛИКИ:</div>
                 <div class="evidence-text">${currentCaseData.ev}</div>
@@ -420,7 +433,7 @@
             extraText += "<br><span style='color:var(--danger);'>Ты предал напарника, зная о его семье. Репутация упала (-0.5 XP).</span>";
             if(!isLoseAll) totalExp -= 0.5;
         } else if (p1Choice === 'silent' && currentCaseData.fam && !currentCaseData.fam.includes('нет')) {
-            extraText += "<br><span style='color:var(--accent);'>Ты защитил семью напарника. Мафия ценит верность (+0.5 XP).</span>";
+            extraText += "<br><span style='color:var(--pub-gold);'>Ты защитил семью напарника. Мафия ценит верность (+0.5 XP).</span>";
             if(!isLoseAll) totalExp += 0.5;
         }
 
@@ -429,7 +442,7 @@
         if (isLoseAll) {
             text = `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>МАФИЯ КАЗНИЛА ТВОЮ СЕМЬЮ...</span><br><br>Ты сдал босса, но это была не пустая угроза. Ты потерял всё. Опыт сброшен.<br><br>`;
         } else if(p1Y < p2Y) {
-            text += "<span style='color:var(--accent); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
+            text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
             totalExp += 1;
         } else if(p1Y > p2Y) {
             text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span><br><span style='font-size:12px;'>-1 XP</span>";
