@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Beta Game</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #1c1c1e; /* Тёмная тема как в тг */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .score { font-size: 24px; margin-bottom: 20px; }
+        .buttons { display: flex; gap: 20px; }
+        button {
+            padding: 20px 40px;
+            font-size: 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .alpha { background: #007aff; color: white; }
+        .beta { background: #ff3b30; color: white; }
+        button:active { opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+    <!-- Данные игрока из Telegram -->
+    <div class="score" id="playerName">Загрузка...</div>
+    <div class="score" id="scoreDisplay">Очки: 0</div>
+
+    <div class="buttons">
+        <button class="alpha" onclick="makeChoice('alpha')">Альфа</button>
+        <button class="beta" onclick="makeChoice('beta')">Бета</button>
+    </div>
+
+    <script>
+        // Инициализация Telegram Mini App
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // Развернуть на весь экран
+
+        // Получаем имя пользователя
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('playerName').innerText = `Игрок: ${user.first_name}`;
+        } else {
+            document.getElementById('playerName').innerText = 'Гость';
+        }
+
+        // Твоя логика (пока без сервера, просто для демо)
+        let myScore = 0;
+        
+        function makeChoice(choice) {
+            // В реальности здесь ты отправляешь choice на сервер,
+            // ждешь выбор второго игрока и получаешь результат.
+            // А пока просто имитация для теста:
+            
+            let opponentChoice = Math.random() > 0.5 ? 'alpha' : 'beta';
+            let resultText = '';
+
+            if (choice === 'alpha' && opponentChoice === 'beta') {
+                myScore += 3;
+                resultText = 'Ты выбрал Альфу, он Бету. Ты получаешь +3!';
+            } else if (choice === 'alpha' && opponentChoice === 'alpha') {
+                myScore += 0;
+                resultText = 'Оба Альфа. По 0 очков. Можно в союзники.';
+            } else if (choice === 'beta' && opponentChoice === 'alpha') {
+                myScore += -1;
+                resultText = 'Ты выбрал Бету, он Альфу. Ты получаешь -1.';
+            } else if (choice === 'beta' && opponentChoice === 'beta') {
+                myScore += 1;
+                resultText = 'Оба Бета. По +1 очку.';
+            }
+
+            document.getElementById('scoreDisplay').innerText = `Очки: ${myScore}`;
+            tg.showAlert(resultText); // Всплывающее окно в ТГ
+            
+            // Проверка на конец игры
+            if (myScore >= 7) {
+                tg.showAlert('Ты победил! (Набрал 7 очков)');
+                myScore = 0; // Сброс для новой игры
+            } else if (myScore <= -3) {
+                tg.showAlert('Ты проиграл... (Набрал -3)');
+                myScore = 0; // Сброс
+            }
+            document.getElementById('scoreDisplay').innerText = `Очки: ${myScore}`;
+        }
+    </script>
+</body>
+</html>
