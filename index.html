@@ -9,19 +9,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap');
 
         :root {
-            --bg: #0a0a0a;
-            --text: #ffffff;
-            --accent-alpha: #00FF41;
-            --accent-beta: #FF003C;
-            --border: #333;
-            --gold: #FFD700;
+            --bg: #0a0a0a; --text: #ffffff; --accent-alpha: #00FF41; 
+            --accent-beta: #FF003C; --border: #333; --gold: #FFD700;
         }
 
         * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         body {
-            margin: 0; padding: 20px;
-            font-family: 'Space Grotesk', sans-serif;
+            margin: 0; padding: 20px; font-family: 'Space Grotesk', sans-serif;
             background-color: var(--bg); color: var(--text);
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
             background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
@@ -44,7 +39,6 @@
 
         .btn-play { border: none; background: var(--text); color: var(--bg); font-size: 24px; justify-content: center; margin-top: 15px; padding: 20px; }
 
-        /* Профиль */
         .profile-header {
             width: 100%; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 15px;
@@ -54,7 +48,7 @@
         .inmate-box {
             width: 100%; border: 2px solid var(--accent-alpha); padding: 20px; 
             display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; position: relative; overflow: hidden;
-            cursor: pointer; transition: background 0.2s;
+            cursor: pointer;
         }
         .inmate-box:active { background: rgba(0, 255, 65, 0.1); }
         .inmate-box::after {
@@ -78,7 +72,6 @@
 
         .nav-back { background: none; border: none; color: #888; font-size: 14px; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-bottom: 20px; text-align: left; }
 
-        /* Игровой экран */
         .case-box {
             width: 100%; border: 2px dashed #555; padding: 20px; margin-bottom: 20px; 
             background: rgba(0,0,0,0.5); min-height: 150px; display: flex; flex-direction: column; justify-content: center;
@@ -109,12 +102,18 @@
         .role-btn:active { background: rgba(255, 215, 0, 0.3); }
         
         .role-active { color: var(--gold); font-weight: 900; text-align: center; margin-bottom: 10px; display: none;}
+        
+        /* Плашка подсказки адвоката */
+        .lawyer-hint { 
+            display: none; background: #007aff; color: white; padding: 10px; 
+            text-align: center; font-weight: 700; margin-bottom: 10px; font-size: 14px;
+            border-radius: 5px; animation: pulse 1s infinite;
+        }
 
         .list-item { width: 100%; border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; }
         .text-green { color: var(--accent-alpha); }
         .text-red { color: var(--accent-beta); }
         
-        /* Досье */
         .dossier-section { width: 100%; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px;}
         .dossier-label { font-size: 10px; color: var(--accent-alpha); text-transform: uppercase; font-weight: 700; margin-bottom: 5px;}
         .dossier-text { font-size: 13px; color: #ddd; line-height: 1.4; }
@@ -179,17 +178,14 @@
             <div class="dossier-label">СТАТЬЯ</div>
             <div class="dossier-text" id="dossier-crime">...</div>
         </div>
-        
         <div class="dossier-section">
             <div class="dossier-label">ДО ТЮРЬМЫ</div>
             <div class="dossier-text" id="dossier-before">...</div>
         </div>
-
         <div class="dossier-section">
             <div class="dossier-label">СЕМЬЯ / РОДСТВЕННИКИ</div>
             <div class="dossier-text" id="dossier-family">...</div>
         </div>
-
         <div class="dossier-section">
             <div class="dossier-label">НАПАРНИК</div>
             <div class="dossier-text" id="dossier-partner">...</div>
@@ -242,6 +238,9 @@
 
         <div class="timer-display" id="timer-choose">90</div>
         
+        <!-- Плашка адвоката -->
+        <div id="lawyer-hint" class="lawyer-hint">⚖️ АДВОКАТ: БОТ ВЫБРАЛ <span id="bot-choice-hint"></span></div>
+
         <div class="case-box" style="min-height: 80px; margin-bottom: 10px;">
             <div class="case-text" style="font-size: 12px; color: #888;" id="case-brief">Вспомните детали дела...</div>
         </div>
@@ -292,7 +291,6 @@
             showScreen('main-menu');
         }
 
-        // --- БАЗА ДЕЛ ---
         const cases = [
             { title: "КРАЖА БЮДЖЕТА", text: "Вы украли 50 млн на ремонт детсадов. У тебя двое детей, у напарника больная мать. Сдашь его — тебе иммунитет." },
             { title: "НОЧНАЯ ГОНКА", text: "Ваш автомобиль сбил пешехода. За рулем был друг, но вы оба пьяны. Сдашь его — выйдешь сухим." },
@@ -306,47 +304,20 @@
             { title: "ФИНАНСОВАЯ АФЕРА", text: "Вы обманули 100 пенсионеров. Сдашь напарника — вернешь часть денег и получишь меньше." }
         ];
 
-        // --- ПУЛ РОЛЕЙ ---
         const allRoles = [
             { id: 'rat', title: "КРЫСА", desc: "Если сдашь, твой срок сокращается (минимум 0).", color: "var(--accent-alpha)" },
             { id: 'mute', title: "МОЛЧУН", desc: "Если промолчишь, твой срок 2 года вместо 3.", color: "var(--accent-beta)" },
-            { id: 'lawyer', title: "АДВОКАТ", desc: "Показывает выбор напарника ДО твоего выбора (если бот).", color: "#007aff" },
+            { id: 'lawyer', title: "АДВОКАТ", desc: "Показывает выбор напарника ДО твоего выбора.", color: "#007aff" },
             { id: 'snitch', title: "СТУКАЧ", desc: "Если напарник сдаст тебя, вы оба получите по 5 лет.", color: "#ff9500" },
             { id: 'boss', title: "АВТОРИТЕТ", desc: "Если проиграешь раунд, опыт не сгорает (дела не прибавляются).", color: "#af52de" }
         ];
 
-        // --- УРОВНИ И ЛОР (ИСТОРИИ) ---
         const levels = [
-            { 
-                level: 1, maxExp: 7, name: "ГЕНРИ ХИЛЛ", crime: "ОГРАБЛЕНИЕ БАНКА",
-                before: "Работал охранником в банке. Знал все слабые места, но денег вечно не хватало.",
-                family: "Жена Карен и двое детей. Карен устала от долгов и требует развода, если он снова сядет.",
-                partner: "Джимми Конвей. Друг детства. Они вместе выросли в бедном районе. Джимми всегда прикрывал его."
-            },
-            { 
-                level: 2, maxExp: 12, name: "ДЖО ПЕШИ", crime: "ВЫМОГАТЕЛЬСТВО",
-                before: "Владел сетью баров. Использовал их как прикрытие для нелегального бизнеса.",
-                family: "Мать-итальянка, которая до сих пор готовит ему пасту по воскресеньям. Отец умер в тюрьме.",
-                partner: "Томми 'Два Пальца'. Психопат, но очень преданный. Вместе они держали половину города."
-            },
-            { 
-                level: 3, maxExp: 17, name: "АЛЬ КАПОНЕ", crime: "КОНТРАБАНДА",
-                before: "Начинал вышибалой в борделе, а стал главой мафиозного клана. Контролировал весь алкоголь.",
-                family: "Жена Мэй и сын. Сын не знает, чем на самом деле занимается отец. Жена подозревает, но боится спрашивать.",
-                partner: "Фрэнк Нитти. Гений тактики. Они вместе пролили реки крови, но Фрэнк стал слишком амбициозным."
-            },
-            { 
-                level: 4, maxExp: 22, name: "ФРЭНК ЛУКАС", crime: "НАРКОТИКИ",
-                before: "Бывший водитель грузовика. Понял, что перевозить героин выгоднее, чем мебель.",
-                family: "Восемь братьев и сестер. Он был единственным кормильцем. Мать умерла, так и не дождавшись его.",
-                partner: "Ники Барнс. Они доверяли друг другу больше, чем родным. Но Ники в последнее время странно себя ведет."
-            },
-            { 
-                level: 5, maxExp: 25, name: "ПАБЛО ЭСКОБАР", crime: "ВСЕ СТАТЬИ",
-                before: "Начинал с кражи надгробий, а стал самым опасным наркобароном в истории.",
-                family: "Жена и пятеро детей. Он построил им целую крепость, но боится, что враги доберутся и туда.",
-                partner: "Гонсало Родригес. Его двоюродный брат. Служил ему верой и правдой, пока полиция не предложила ему сделку."
-            }
+            { level: 1, maxExp: 7, name: "ГЕНРИ ХИЛЛ", crime: "ОГРАБЛЕНИЕ БАНКА", before: "Работал охранником в банке. Знал все слабые места, но денег вечно не хватало.", family: "Жена Карен и двое детей. Карен устала от долгов и требует развода, если он снова сядет.", partner: "Джимми Конвей. Друг детства. Они вместе выросли в бедном районе. Джимми всегда прикрывал его." },
+            { level: 2, maxExp: 12, name: "ДЖО ПЕШИ", crime: "ВЫМОГАТЕЛЬСТВО", before: "Владел сетью баров. Использовал их как прикрытие для нелегального бизнеса.", family: "Мать-итальянка, которая до сих пор готовит ему пасту по воскресеньям. Отец умер в тюрьме.", partner: "Томми 'Два Пальца'. Психопат, но очень преданный. Вместе они держали половину города." },
+            { level: 3, maxExp: 17, name: "АЛЬ КАПОНЕ", crime: "КОНТРАБАНДА", before: "Начинал вышибалой в борделе, а стал главой мафиозного клана. Контролировал весь алкоголь.", family: "Жена Мэй и сын. Сын не знает, чем на самом деле занимается отец. Жена подозревает, но боится спрашивать.", partner: "Фрэнк Нитти. Гений тактики. Они вместе пролили реки крови, но Фрэнк стал слишком амбициозным." },
+            { level: 4, maxExp: 22, name: "ФРЭНК ЛУКАС", crime: "НАРКОТИКИ", before: "Бывший водитель грузовика. Понял, что перевозить героин выгоднее, чем мебель.", family: "Восемь братьев и сестер. Он был единственным кормильцем. Мать умерла, так и не дождавшись его.", partner: "Ники Барнс. Они доверяли друг другу больше, чем родным. Но Ники в последнее время странно себя ведет." },
+            { level: 5, maxExp: 25, name: "ПАБЛО ЭСКОБАР", crime: "ВСЕ СТАТЬИ", before: "Начинал с кражи надгробий, а стал самым опасным наркобароном в истории.", family: "Жена и пятеро детей. Он построил им целую крепость, но боится, что враги доберутся и туда.", partner: "Гонсало Родригес. Его двоюродный брат. Служил ему верой и правдой, пока полиция не предложила ему сделку." }
         ];
 
         let totalExp = parseInt(localStorage.getItem('prisonExp')) || 0;
@@ -435,15 +406,14 @@
             showScreen('inventory-screen');
         }
 
-        // --- ИГРОВАЯ ЛОГИКА ---
         let currentMode = 'bot';
-        let currentCase = null;
         let activeRole = null;
         let timerRead, timerChoose;
         let timeLeftRead = 25, timeLeftChoose = 90;
         let round = 1;
         let p1Choice = null, p2Choice = null;
         let p1SelectedAlready = false;
+        let preGeneratedBotChoice = null; // Для Адвоката
 
         function startGame(mode) {
             currentMode = mode;
@@ -465,9 +435,9 @@
                 return;
             }
 
-            currentCase = cases[Math.floor(Math.random() * cases.length)];
+            let randomCase = cases[Math.floor(Math.random() * cases.length)];
             document.getElementById('case-title-read').innerText = `ДЕЛО №${Math.floor(Math.random()*900)+100}`;
-            document.getElementById('case-text-read').innerText = currentCase.text;
+            document.getElementById('case-text-read').innerText = randomCase.text;
             document.getElementById('case-brief').innerText = "Вспомните детали дела и примите решение.";
 
             document.getElementById('target-label').innerText = `РАУНД ${round} ИЗ 2`;
@@ -476,7 +446,9 @@
             document.getElementById('choice-buttons').style.opacity = '1';
             document.getElementById('choice-buttons').style.pointerEvents = 'auto';
             document.getElementById('game-status').innerText = "ПРИМИТЕ РЕШЕНИЕ";
+            document.getElementById('lawyer-hint').style.display = 'none';
             p1SelectedAlready = false;
+            preGeneratedBotChoice = null;
 
             document.getElementById('active-role-display').style.display = 'none';
             document.getElementById('use-role-btn').style.display = 'none';
@@ -501,7 +473,6 @@
 
         function useRole() {
             if (inventory.length === 0) return;
-            
             let roleToUse = inventory.shift();
             localStorage.setItem('roleInventory', JSON.stringify(inventory));
             updateLevelUI();
@@ -523,6 +494,17 @@
             document.getElementById('timer-choose').innerText = timeLeftChoose;
             document.getElementById('timer-choose').className = 'timer-display';
             
+            // Если адвокат активен, генерируем выбор бота ЗАРАНЕЕ и показываем
+            if (activeRole && activeRole.id === 'lawyer' && currentMode === 'bot') {
+                preGeneratedBotChoice = Math.random() > 0.5 ? 'betray' : 'silent';
+                let hintText = preGeneratedBotChoice === 'betray' ? "СДАТЬ" : "МОЛЧАТЬ";
+                document.getElementById('bot-choice-hint').innerText = hintText;
+                document.getElementById('lawyer-hint').style.display = 'block';
+                // Красим в зависимости от выбора
+                document.getElementById('lawyer-hint').style.background = preGeneratedBotChoice === 'betray' ? 'var(--accent-beta)' : 'var(--accent-alpha)';
+                document.getElementById('lawyer-hint').style.color = preGeneratedBotChoice === 'betray' ? 'white' : 'black';
+            }
+
             clearInterval(timerChoose);
             timerChoose = setInterval(() => {
                 timeLeftChoose--;
@@ -541,12 +523,6 @@
         function makeChoice(choice) {
             clearInterval(timerChoose);
             
-            if (activeRole && activeRole.id === 'lawyer' && currentMode === 'bot') {
-                p2Choice = Math.random() > 0.5 ? 'betray' : 'silent';
-                let p2Text = p2Choice === 'betray' ? "СДАТЬ" : "МОЛЧАТЬ";
-                tg.showAlert(`⚖️ АДВОКАТ: Напарник планирует ${p2Text}!`);
-            }
-
             if (currentMode === 'local' && !p1SelectedAlready) {
                 p1Choice = choice;
                 p1SelectedAlready = true;
@@ -558,7 +534,10 @@
                 p2Choice = choice;
             } else {
                 p1Choice = choice;
-                if (!p2Choice) {
+                // Бот делает выбор ТОЛЬКО СЕЙЧАС (или берет заранее заготовленный для адвоката)
+                if (preGeneratedBotChoice) {
+                    p2Choice = preGeneratedBotChoice;
+                } else {
                     p2Choice = Math.random() > 0.5 ? 'betray' : 'silent';
                 }
             }
