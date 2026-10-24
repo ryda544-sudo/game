@@ -7,322 +7,471 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap');
-        :root { --bg: #080808; --text: #fff; --accent: #00FF41; --danger: #FF003C; --border: #222; --gold: #FFD700; --card: #141414; }
-        * { box-sizing: border-box; user-select: none; }
-        body { margin: 0; padding: 20px; font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .screen { display: none; width: 100%; max-width: 400px; flex-direction: column; }
+
+        :root {
+            --bg: #0a0a0a; --text: #ffffff; --accent: #00FF41; 
+            --danger: #FF003C; --border: #222; --gold: #FFD700;
+            --card-bg: #141414;
+        }
+
+        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; padding: 0; font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg); color: var(--text);
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+            background-image: radial-gradient(circle at 50% 0%, #1c1c1c 0%, var(--bg) 80%);
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 100%; max-width: 400px; height: 100vh;
+            display: flex; flex-direction: column; position: relative;
+        }
+
+        .screen { display: none; width: 100%; flex: 1; flex-direction: column; padding: 20px; overflow-y: auto; padding-bottom: 80px;}
         .screen.active { display: flex; }
-        .btn { background: var(--card); color: var(--text); border: 2px solid var(--border); padding: 15px; font-size: 15px; font-weight: 700; text-transform: uppercase; cursor: pointer; width: 100%; border-radius: 8px; margin-bottom: 10px; font-family: 'Space Grotesk'; display: flex; justify-content: space-between; }
+        
+        /* НИЖНЕЕ МЕНЮ */
+        .bottom-nav {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 65px;
+            background: var(--card-bg); border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center; z-index: 100;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; color: #888;
+            font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer;
+        }
+        .nav-item.active { color: var(--accent); }
+        .nav-item i { font-size: 20px; margin-bottom: 3px; font-style: normal;}
+
+        /* КНОПКИ */
+        .btn {
+            background: var(--card-bg); color: var(--text); border: 2px solid var(--border);
+            padding: 15px; font-size: 15px; font-weight: 700; text-transform: uppercase;
+            cursor: pointer; width: 100%; border-radius: 8px; margin-bottom: 10px; 
+            font-family: 'Space Grotesk', sans-serif; display: flex; justify-content: space-between; align-items: center;
+        }
         .btn:active { border-color: var(--accent); color: var(--accent); }
         .btn-play { background: var(--accent); color: #000; justify-content: center; font-size: 20px; border: none; }
-        .card { background: var(--card); border: 2px solid var(--gold); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 20px; cursor: pointer; }
-        .name { font-size: 24px; font-weight: 900; color: var(--gold); }
-        .label { font-size: 11px; color: #888; margin-top: 5px; }
-        .progress { width: 100%; height: 12px; background: #000; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 20px; overflow: hidden; }
-        .fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
-        .title { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 20px; }
-        .title span { color: var(--accent); }
-        .box { background: var(--card); border-left: 4px solid var(--danger); padding: 20px; margin-bottom: 20px; font-size: 15px; line-height: 1.6; }
+
+        /* КАРТОЧКА */
+        .header { width: 100%; display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 12px; color: #888; font-weight: 700; text-transform: uppercase; }
+        .inmate-card { background: var(--card-bg); border: 2px solid var(--gold); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; cursor: pointer; }
+        .inmate-card:active { transform: scale(0.98); }
+        .inmate-svg { width: 90px; height: 90px; margin-bottom: 10px; }
+        .inmate-name { font-size: 22px; font-weight: 900; color: var(--gold); text-transform: uppercase;}
+        .inmate-label { font-size: 11px; color: #888; margin-top: 5px; }
+
+        .progress-bar { width: 100%; height: 10px; background: #000; border-radius: 5px; margin-bottom: 20px; overflow: hidden; border: 1px solid var(--border); }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
+
+        .brutal-title { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 20px; text-transform: uppercase; line-height: 1.1;}
+        .brutal-title span { color: var(--accent); }
+
+        .case-box { background: var(--card-bg); border-left: 4px solid var(--danger); padding: 20px; margin-bottom: 20px; font-size: 15px; line-height: 1.6; color: #ddd; }
         .timer { font-size: 52px; font-weight: 900; text-align: center; color: var(--gold); margin-bottom: 15px; }
-        .choices { display: flex; gap: 15px; }
-        .choice { flex: 1; padding: 22px 10px; font-size: 16px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; }
+        
+        .choices { display: flex; gap: 15px; margin-top: auto; }
+        .choice-btn { flex: 1; padding: 22px 10px; font-size: 16px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-family: 'Space Grotesk', sans-serif;}
         .c-alpha { background: var(--accent); color: #000; }
         .c-beta { background: var(--danger); color: #fff; }
-        .back { background: none; border: none; color: #888; font-size: 13px; font-weight: 700; text-align: left; margin-bottom: 20px; cursor: pointer; }
-        .list { display: flex; justify-content: space-between; background: var(--card); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border); }
+
+        .dossier-section { width: 100%; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .dossier-label { font-size: 12px; color: var(--accent); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+        .dossier-text { font-size: 14px; color: #ccc; line-height: 1.4; }
+
+        .nav-back { background: none; border: none; color: #888; font-size: 14px; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-bottom: 20px; text-align: left; font-family: 'Space Grotesk', sans-serif;}
+
+        /* СПИСКИ */
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border); }
+        .list-item button { background: var(--accent); border: none; color: #000; padding: 5px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+
+        /* ПОИСК */
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-input { flex: 1; background: var(--card-bg); border: 2px solid var(--border); color: white; padding: 12px; border-radius: 8px; font-family: 'Space Grotesk'; font-size: 14px; }
+        .search-btn { background: var(--accent); border: none; color: #000; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- ИНСТРУКЦИЯ -->
-    <div id="intro" class="screen active">
-        <div class="title">ДИЛЕММА<br><span>ЗАКЛЮЧЕННОГО</span></div>
-        <div class="box">Тебя взяли. Следователь дает выбор: СДАТЬ напарника и выйти сухим, или МОЛЧАТЬ и сесть на 3 года.</div>
-        <button class="btn btn-play" onclick="go('main-menu')">Я ГОТОВ</button>
+<div class="app-container">
+
+    <!-- ВСТУПЛЕНИЕ -->
+    <div id="intro" class="screen active" style="justify-content: center; text-align: center;">
+        <div class="brutal-title" style="font-size: 40px;">ДИЛЕММА<br><span>ЗАКЛЮЧЕННОГО</span></div>
+        <div class="case-box" style="text-align: left; border-color: var(--gold);">
+            <b>СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...</b><br><br>
+            Ты смотришь на следователя через стекло. Он кладет перед тобой папку с делом. У тебя есть выбор: сдать напарника и выйти сухим, или молчать и сесть на 3 года. Но помни — он думает точно так же.
+        </div>
+        <button class="btn btn-play" onclick="showScreen('main-menu')">ВОЙТИ В ИГРУ</button>
     </div>
 
-    <!-- ГЛАВНОЕ МЕНЮ -->
+    <!-- ГЛАВНАЯ -->
     <div id="main-menu" class="screen">
-        <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-size:12px; color:#888;">
-            <div id="p-name">ИГРОК</div>
-            <div>ДЕЛА: <span id="exp-count" style="color:var(--accent);">0</span></div>
+        <div class="header">
+            <div id="player-name">ЗАКЛЮЧЕННЫЙ</div>
+            <div>ДЕЛА: <span id="exp-counter" style="color: var(--accent);">0</span></div>
         </div>
-        <div class="card" onclick="openDossier()">
-            <div id="avatar" style="font-size:50px;">👤</div>
-            <div class="name" id="lvl-name">ГЕНРИ ХИЛЛ</div>
-            <div class="label">ОПАСНЫЙ ПРЕСТУПНИК</div>
+
+        <div class="inmate-card" onclick="openDossier()">
+            <svg class="inmate-svg" id="avatar-svg" viewBox="0 0 100 100">
+                <path d="M20 40 Q50 10 80 40 L80 50 Q50 20 20 50 Z" fill="#333"/>
+                <circle cx="50" cy="50" r="20" fill="#222"/>
+                <rect x="40" y="45" width="20" height="5" fill="#00FF41"/>
+                <path d="M30 70 Q50 90 70 70 L80 80 Q50 100 20 80 Z" fill="#222"/>
+            </svg>
+            <div class="inmate-name" id="level-name">ГЕНРИ ХИЛЛ</div>
+            <div class="inmate-label">ОПАСНЫЙ ПРЕСТУПНИК</div>
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px; color:#aaa;">
-            <span>УРОВЕНЬ <span id="lvl-num">1</span></span>
-            <span id="exp-text">0 / 7</span>
-        </div>
-        <div class="progress"><div class="fill" id="exp-bar"></div></div>
+
+        <div class="progress-bar"><div class="progress-fill" id="exp-bar"></div></div>
         
-        <button class="btn btn-play" onclick="go('mode-select')">В СУД</button>
-        <button class="btn" onclick="go('rating')">🏆 РЕЙТИНГ</button>
-        <button class="btn" onclick="go('friends')">👥 ДРУЗЬЯ</button>
-        <button class="btn" onclick="go('clans')">🛡️ КЛАНЫ</button>
+        <button class="btn btn-play" onclick="showScreen('mode-select')">В СУД</button>
     </div>
 
-    <!-- ВЫБОР РЕЖИМА -->
+    <!-- РЕЖИМЫ -->
     <div id="mode-select" class="screen">
-        <button class="back" onclick="go('main-menu')">← НАЗАД</button>
-        <div class="title">РЕЖИМ</div>
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title">РЕЖИМ</div>
         <button class="btn" onclick="startGame('bot')">🤖 С БОТОМ</button>
-        <button class="btn" onclick="startGame('online')">🌐 ОНЛАЙН (ПОИСК)</button>
+        <button class="btn" onclick="startGame('local')">📱 ИГРАТЬ С ДРУГОМ</button>
         <button class="btn" onclick="startGame('infinite')">∞ БЕЗ ЛИМИТА</button>
-    </div>
-
-    <!-- ЧТЕНИЕ ДЕЛА -->
-    <div id="case-screen" class="screen">
-        <div class="timer" id="t-read">25</div>
-        <div class="box" id="case-text">Текст дела...</div>
-        <button class="btn btn-play" onclick="startChoicePhase()">Я ПРОЧИТАЛ</button>
-    </div>
-
-    <!-- СУД -->
-    <div id="game-screen" class="screen">
-        <div class="timer" id="t-choose">90</div>
-        <div class="box" style="text-align:center; border:none; color:#888;">Примите решение</div>
-        <div class="choices">
-            <button class="choice c-alpha" onclick="makeChoice('betray')">СДАТЬ<br><span style="font-size:10px;">(0 лет)</span></button>
-            <button class="choice c-beta" onclick="makeChoice('silent')">МОЛЧАТЬ<br><span style="font-size:10px;">(3 года)</span></button>
-        </div>
-    </div>
-
-    <!-- РЕЗУЛЬТАТ -->
-    <div id="result-screen" class="screen">
-        <div class="title">ПРИГОВОР</div>
-        <div class="box" id="result-text">...</div>
-        <button class="btn btn-play" onclick="nextRound()">ДАЛЕЕ</button>
-    </div>
-
-    <!-- ДОСЬЕ -->
-    <div id="dossier" class="screen">
-        <button class="back" onclick="go('main-menu')">← НАЗАД</button>
-        <div class="title" id="doss-name">ИМЯ</div>
-        <div class="box" style="border-color:var(--gold);"><b style="color:var(--gold)">ПРОШЛОЕ:</b><br><span id="doss-before">...</span></div>
-        <div class="box" style="border-color:var(--accent);"><b style="color:var(--accent)">СЕМЬЯ:</b><br><span id="doss-family">...</span></div>
-        <div class="box" style="border-color:var(--danger);"><b style="color:var(--danger)">НАПАРНИК:</b><br><span id="doss-partner">...</span></div>
-    </div>
-
-    <!-- РЕЙТИНГ -->
-    <div id="rating" class="screen">
-        <button class="back" onclick="go('main-menu')">← НАЗАД</button>
-        <div class="title">ТОП ИГРОКОВ</div>
-        <div class="list"><span>1. ХАКЕР_01</span> <span>25 ДЕЛ</span></div>
-        <div class="list"><span>2. ВЫ</span> <span id="my-rating">0 ДЕЛ</span></div>
     </div>
 
     <!-- ДРУЗЬЯ -->
     <div id="friends" class="screen">
-        <button class="back" onclick="go('main-menu')">← НАЗАД</button>
-        <div class="title">ДРУЗЬЯ</div>
-        <div id="friends-list"></div>
-        <button class="btn btn-play" onclick="addFriend()" style="margin-top:20px;">НАЙТИ ДРУГА</button>
+        <div class="brutal-title">ДРУЗЬЯ</div>
+        <div class="search-box">
+            <input type="text" id="friend-search" class="search-input" placeholder="Поиск друга...">
+            <button class="search-btn" onclick="searchFriends()">🔍</button>
+        </div>
+        <div id="friends-list" style="width: 100%;"></div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="btn" style="justify-content: center; border-color: var(--gold); color: var(--gold);" onclick="inviteFriend()">ОТПРАВИТЬ ПРИГЛАШЕНИЕ</button>
+        </div>
+    </div>
+
+    <!-- РЕЙТИНГ -->
+    <div id="rating" class="screen">
+        <div class="brutal-title">РЕЙТИНГ</div>
+        <div id="rating-list" style="width: 100%;">
+            <div style="text-align: center; color: #888; margin-top: 50px;">Пока нет игроков. Добавляй друзей!</div>
+        </div>
     </div>
 
     <!-- КЛАНЫ -->
     <div id="clans" class="screen">
-        <button class="back" onclick="go('main-menu')">← НАЗАД</button>
-        <div class="title">КЛАНЫ</div>
-        <div id="clan-info" style="display:none;">
-            <div class="box" style="border-color:var(--gold); text-align:center;">
-                <div style="font-size:24px; font-weight:900; color:var(--gold);" id="my-clan-name">КЛАН</div>
-                <div style="font-size:12px; color:#888;">Вы лидер</div>
-            </div>
-            <button class="btn" style="color:var(--danger); border-color:var(--danger); justify-content:center;" onclick="leaveClan()">ПОКИНУТЬ</button>
-        </div>
-        <div id="clan-actions">
+        <div class="brutal-title">КЛАНЫ</div>
+        <div id="clan-create" style="margin-bottom: 20px;">
+            <input type="text" id="clan-name-input" class="search-input" placeholder="Название клана..." style="width: 100%; margin-bottom: 10px;">
             <button class="btn btn-play" onclick="createClan()">СОЗДАТЬ КЛАН</button>
+        </div>
+        <div id="my-clan-info" style="display: none; width: 100%;">
+            <div class="case-box" style="border-color: var(--gold);">
+                <div style="font-size: 20px; font-weight: 900; color: var(--gold);" id="display-clan-name">КЛАН</div>
+                <div style="font-size: 12px; color: #888;">Лидер: ВЫ</div>
+            </div>
+            <button class="btn" style="color: var(--danger); border-color: var(--danger); justify-content: center;" onclick="leaveClan()">ПОКИНУТЬ КЛАН</button>
         </div>
     </div>
 
-    <script>
-        // ИНИЦИАЛИЗАЦИЯ
-        const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
-        if(tg.initDataUnsafe?.user) document.getElementById('p-name').innerText = tg.initDataUnsafe.user.first_name.toUpperCase();
+    <!-- ДОСЬЕ -->
+    <div id="dossier" class="screen">
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title" id="dossier-name">ИМЯ</div>
+        <div class="dossier-section"><div class="dossier-label">ПРОШЛОЕ</div><div class="dossier-text" id="dossier-before">...</div></div>
+        <div class="dossier-section"><div class="dossier-label">СЕМЬЯ</div><div class="dossier-text" id="dossier-family">...</div></div>
+        <div class="dossier-section"><div class="dossier-label">НАПАРНИК</div><div class="dossier-text" id="dossier-partner">...</div></div>
+    </div>
 
-        // ДАННЫЕ
-        const cases = [
-            "Вы украли 50 млн на ремонт детсадов. У тебя двое детей, у напарника больная мать.",
-            "Ваш автомобиль сбил пешехода. За рулем был друг, но вы оба пьяны.",
-            "Вы запустили пирамиду. Люди потеряли квартиры. Сдать напарника — шанс выйти под залог.",
-            "Охранник получил травмы. Следователь предлагает сделку: сдай напарника и камни — тебя отпустят."
-        ];
+    <!-- ЧТЕНИЕ ДЕЛА -->
+    <div id="case-screen" class="screen">
+        <div class="timer" id="timer-read">20</div>
+        <div class="case-box" id="case-text">Текст дела...</div>
+        <button class="btn btn-play" onclick="startChoosingPhase()">Я ПРОЧИТАЛ</button>
+    </div>
 
-        const levels = [
-            { name: "ГЕНРИ ХИЛЛ", before: "Охранник банка. Знал все слабые места.", family: "Жена и двое детей.", partner: "Джимми Конвей, друг детства." },
-            { name: "ДЖО ПЕШИ", before: "Владелец баров, прикрытие для бизнеса.", family: "Мать-итальянка, отец умер в тюрьме.", partner: "Томми 'Два Пальца', психопат." },
-            { name: "АЛЬ КАПОНЕ", before: "Глава мафии, контролировал алкоголь.", family: "Жена Мэй и сын.", partner: "Фрэнк Нитти, гений тактики." },
-            { name: "ФРЭНК ЛУКАС", before: "Водитель грузовика, создал наркоимперию.", family: "8 братьев и сестер.", partner: "Ники Барнс, доверял как себе." },
-            { name: "ПАБЛО ЭСКОБАР", before: "Самый опасный наркобарон в истории.", family: "Жена и пятеро детей.", partner: "Гонсало Родригес, двоюродный брат." }
-        ];
+    <!-- СУД -->
+    <div id="game-screen" class="screen">
+        <div class="header"><div>СУД</div><div id="round-text">1/2</div></div>
+        <div class="timer" id="timer-choose">90</div>
+        <div class="case-box" style="font-size: 12px; border: none; background: transparent; text-align: center; color: #888;">Примите решение</div>
+        <div class="choices">
+            <button class="choice-btn c-alpha" onclick="makeChoice('betray')">СДАТЬ<br><span style="font-size: 12px;">(0 лет)</span></button>
+            <button class="choice-btn c-beta" onclick="makeChoice('silent')">МОЛЧАТЬ<br><span style="font-size: 12px;">(3 года)</span></button>
+        </div>
+    </div>
 
-        const avatars = ['👤', '🕴️', '🤵', '🕶️', '👑']; // Простые иконки для стабильности
+    <!-- ПЕРЕДАЙ ТЕЛЕФОН -->
+    <div id="pass-screen" class="screen">
+        <div class="brutal-title" style="margin-top: 50px;">ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span></div>
+        <div class="case-box" style="text-align: center;">Передайте телефон Игроку 2.</div>
+        <button class="btn btn-play" onclick="showScreen('game-screen')">Я ГОТОВ</button>
+    </div>
 
-        let exp = parseInt(localStorage.getItem('exp')) || 0;
-        let friends = JSON.parse(localStorage.getItem('friends')) || [];
-        let clan = localStorage.getItem('clan') || null;
+    <!-- РЕЗУЛЬТАТ -->
+    <div id="result-screen" class="screen">
+        <div class="brutal-title" style="margin-top: 50px;">ПРИГОВОР</div>
+        <div class="case-box" style="border-color: var(--accent);" id="result-text"></div>
+        <button class="btn btn-play" onclick="nextRound()">ДАЛЕЕ</button>
+    </div>
 
-        // НАВИГАЦИЯ
-        function go(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+    <!-- НИЖНЕЕ МЕНЮ (всегда видно) -->
+    <div class="bottom-nav" id="bottom-nav" style="display: none;">
+        <div class="nav-item" onclick="showScreen('main-menu')"><i>🏠</i>Главная</div>
+        <div class="nav-item" onclick="showScreen('rating')"><i>🏆</i>Рейтинг</div>
+        <div class="nav-item" onclick="showScreen('friends')"><i>👥</i>Друзья</div>
+        <div class="nav-item" onclick="showScreen('clans')"><i>🛡️</i>Кланы</div>
+    </div>
+
+</div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.ready(); tg.expand();
+    
+    const user = tg.initDataUnsafe?.user;
+    if(user) document.getElementById('player-name').innerText = user.first_name.toUpperCase();
+
+    // ДАННЫЕ
+    const cases = [
+        "Вы украли 50 млн на ремонт детсадов. У тебя двое детей, у напарника больная мать.",
+        "Ваш автомобиль сбил пешехода. За рулем был друг, но вы оба пьяны.",
+        "Вы запустили пирамиду. Люди потеряли квартиры.",
+        "Охранник получил травмы. Следователь предлагает сделку.",
+        "Вы подделали документы на продажу чужой квартиры.",
+        "Вы угнали дорогой спорткар и разбили его.",
+        "Вы обманули 100 пенсионеров на 10 млн.",
+        "Вы сожгли конкурентный бизнес. Погиб сторож.",
+        "Вы взломали базу данных банка и перевели деньги на оффшоры.",
+        "Вы перевозили запрещенные вещества через границу."
+    ];
+
+    const levels = [
+        { name: "ГЕНРИ ХИЛЛ", before: "Охранник банка.", family: "Жена и двое детей.", partner: "Джимми Конвей." },
+        { name: "ДЖО ПЕШИ", before: "Владелец баров.", family: "Мать-итальянка.", partner: "Томми." },
+        { name: "АЛЬ КАПОНЕ", before: "Глава мафии.", family: "Жена Мэй.", partner: "Фрэнк Нитти." },
+        { name: "ФРЭНК ЛУКАС", before: "Водитель грузовика.", family: "8 братьев.", partner: "Ники Барнс." },
+        { name: "ПАБЛО ЭСКОБАР", before: "Наркобарон.", family: "Жена и 5 детей.", partner: "Гонсало." }
+    ];
+
+    let totalExp = parseInt(localStorage.getItem('prisonExp')) || 0;
+    let friends = JSON.parse(localStorage.getItem('myFriends')) || [];
+    let clan = localStorage.getItem('myClan') || null;
+
+    let round = 1;
+    let p1Choice = null, p2Choice = null, p1Selected = false;
+    let timer1, timer2;
+    let currentMode = 'bot';
+
+    // НАВИГАЦИЯ
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        
+        // Показываем нижнее меню везде, кроме самой игры
+        if(id === 'case-screen' || id === 'game-screen' || id === 'result-screen' || id === 'intro' || id === 'pass-screen') {
+            document.getElementById('bottom-nav').style.display = 'none';
+        } else {
+            document.getElementById('bottom-nav').style.display = 'flex';
         }
 
-        // ОБНОВЛЕНИЕ UI
-        function updateUI() {
-            let lvl = 0;
-            if(exp >= 7) lvl = 1; if(exp >= 12) lvl = 2; if(exp >= 17) lvl = 3; if(exp >= 22) lvl = 4; if(exp >= 25) lvl = 5;
-            
-            document.getElementById('lvl-name').innerText = levels[Math.min(lvl, 4)].name;
-            document.getElementById('avatar').innerText = avatars[Math.min(lvl, 4)];
-            document.getElementById('exp-count').innerText = exp;
-            document.getElementById('my-rating').innerText = exp + " ДЕЛ";
-            document.getElementById('lvl-num').innerText = lvl + 1;
+        // Обновляем активную иконку в меню
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        if(id === 'main-menu') document.querySelectorAll('.nav-item')[0].classList.add('active');
+        if(id === 'rating') document.querySelectorAll('.nav-item')[1].classList.add('active');
+        if(id === 'friends') document.querySelectorAll('.nav-item')[2].classList.add('active');
+        if(id === 'clans') document.querySelectorAll('.nav-item')[3].classList.add('active');
+    }
 
-            let prev = lvl > 0 ? [7, 12, 17, 22][lvl-1] : 0;
-            let curr = lvl < 5 ? [7, 12, 17, 22, 25][lvl] : 25;
-            let done = exp - prev;
-            let need = curr - prev;
-            if(need <= 0) { done = exp; need = 25; }
-            
-            document.getElementById('exp-text').innerText = `${done} / ${need}`;
-            document.getElementById('exp-bar').style.width = (done / need * 100) + '%';
+    // ОБНОВЛЕНИЕ UI
+    function updateUI() {
+        let lvl = 0;
+        if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4; if(totalExp >= 25) lvl = 5;
+        
+        document.getElementById('level-name').innerText = levels[Math.min(lvl, 4)].name;
+        document.getElementById('exp-counter').innerText = totalExp;
 
-            // Друзья
-            let fHtml = friends.length ? '' : '<div style="color:#888; text-align:center;">Пусто</div>';
-            friends.forEach(f => fHtml += `<div class="list"><span>@${f}</span> <span>В СЕТИ</span></div>`);
-            document.getElementById('friends-list').innerHTML = fHtml;
+        let colors = ['#00FF41', '#FF003C', '#FFD700', '#007aff', '#af52de'];
+        document.getElementById('avatar-svg').innerHTML = `
+            <path d="M20 40 Q50 10 80 40 L80 50 Q50 20 20 50 Z" fill="#333"/>
+            <circle cx="50" cy="50" r="20" fill="#222"/>
+            <rect x="40" y="45" width="20" height="5" fill="${colors[Math.min(lvl, 4)]}"/>
+            <path d="M30 70 Q50 90 70 70 L80 80 Q50 100 20 80 Z" fill="#222"/>
+        `;
 
-            // Клан
-            if(clan) {
-                document.getElementById('clan-info').style.display = 'block';
-                document.getElementById('clan-actions').style.display = 'none';
-                document.getElementById('my-clan-name').innerText = clan;
-            } else {
-                document.getElementById('clan-info').style.display = 'none';
-                document.getElementById('clan-actions').style.display = 'block';
-            }
+        let p = (totalExp % 7) / 7 * 100;
+        if(lvl >= 5) p = 100;
+        document.getElementById('exp-bar').style.width = p + '%';
+
+        // Друзья
+        let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:20px;">Список друзей пуст</div>';
+        friends.forEach(f => {
+            fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--accent); font-size:12px;">В ИГРЕ</span></div>`;
+        });
+        document.getElementById('friends-list').innerHTML = fHtml;
+
+        // Клан
+        if(clan) {
+            document.getElementById('clan-create').style.display = 'none';
+            document.getElementById('my-clan-info').style.display = 'block';
+            document.getElementById('display-clan-name').innerText = clan;
+        } else {
+            document.getElementById('clan-create').style.display = 'block';
+            document.getElementById('my-clan-info').style.display = 'none';
         }
+    }
 
-        // ДРУЗЬЯ И КЛАНЫ
-        function addFriend() {
-            let name = "player_" + Math.floor(Math.random() * 9000 + 1000);
-            friends.push(name);
-            localStorage.setItem('friends', JSON.stringify(friends));
+    // ДОСЬЕ
+    function openDossier() {
+        let lvl = totalExp >= 25 ? 4 : (totalExp >= 22 ? 3 : (totalExp >= 17 ? 2 : (totalExp >= 12 ? 1 : (totalExp >= 7 ? 0 : 0))));
+        if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4;
+        
+        let d = levels[lvl];
+        document.getElementById('dossier-name').innerText = d.name;
+        document.getElementById('dossier-before').innerText = d.before;
+        document.getElementById('dossier-family').innerText = d.family;
+        document.getElementById('dossier-partner').innerText = d.partner;
+        showScreen('dossier');
+    }
+
+    // ДРУЗЬЯ И КЛАНЫ
+    function searchFriends() {
+        let query = document.getElementById('friend-search').value.trim();
+        if(!query) return tg.showAlert("Введите имя друга!");
+        
+        // В реальном Telegram Mini App мы не можем вытащить всех контактов без специального запроса.
+        // Поэтому мы просто добавляем введенного пользователя в список друзей.
+        if(!friends.includes(query)) {
+            friends.push(query);
+            localStorage.setItem('myFriends', JSON.stringify(friends));
             updateUI();
-            tg.showAlert(`Друг @${name} добавлен!`);
+            tg.showAlert(`@${query} добавлен в друзья!`);
+        } else {
+            tg.showAlert("Этот игрок уже у вас в друзьях.");
         }
+        document.getElementById('friend-search').value = '';
+    }
 
-        function createClan() {
-            clan = "КЛАН_" + Math.floor(Math.random() * 900 + 100);
-            localStorage.setItem('clan', clan);
-            updateUI();
-            tg.showAlert(`Клан "${clan}" создан!`);
-        }
+    function inviteFriend() {
+        const url = `https://t.me/share/url?url=https://t.me/your_bot_name&text=Играй со мной в Дилемму Заключенного!`;
+        tg.openTelegramLink(url);
+    }
 
-        function leaveClan() {
-            clan = null;
-            localStorage.removeItem('clan');
-            updateUI();
-            tg.showAlert('Вы покинули клан.');
-        }
-
-        // ДОСЬЕ
-        function openDossier() {
-            let lvl = exp >= 25 ? 4 : (exp >= 22 ? 3 : (exp >= 17 ? 2 : (exp >= 12 ? 1 : (exp >= 7 ? 0 : 0))));
-            // Простая логика уровней для досье
-            if(exp >= 7) lvl = 1; if(exp >= 12) lvl = 2; if(exp >= 17) lvl = 3; if(exp >= 22) lvl = 4;
-            
-            let d = levels[lvl];
-            document.getElementById('doss-name').innerText = d.name;
-            document.getElementById('doss-before').innerText = d.before;
-            document.getElementById('doss-family').innerText = d.family;
-            document.getElementById('doss-partner').innerText = d.partner;
-            go('dossier');
-        }
-
-        // ИГРА
-        let mode = 'bot';
-        let round = 1;
-        let t1, t2;
-        let p1, p2;
-
-        function startGame(m) {
-            mode = m;
-            round = 1;
-            if(m === 'online') {
-                tg.showAlert("ПОИСК СОПЕРНИКА...");
-                setTimeout(() => { tg.showAlert("НАЙДЕН: KILLER_99"); mode = 'bot'; nextRound(); }, 1000);
-                return;
-            }
-            nextRound();
-        }
-
-        function nextRound() {
-            if(round > (mode === 'infinite' ? 99 : 2)) { go('main-menu'); return; }
-            document.getElementById('case-text').innerText = cases[Math.floor(Math.random() * cases.length)];
-            go('case-screen');
-            let time = 20;
-            document.getElementById('t-read').innerText = time;
-            clearInterval(t1);
-            t1 = setInterval(() => {
-                time--; document.getElementById('t-read').innerText = time;
-                if(time <= 0) { clearInterval(t1); startChoicePhase(); }
-            }, 1000);
-        }
-
-        function startChoicePhase() {
-            clearInterval(t1);
-            go('game-screen');
-            let time = 90;
-            document.getElementById('t-choose').innerText = time;
-            clearInterval(t2);
-            t2 = setInterval(() => {
-                time--; document.getElementById('t-choose').innerText = time;
-                if(time <= 0) { clearInterval(t2); makeChoice('betray'); }
-            }, 1000);
-        }
-
-        function makeChoice(choice) {
-            clearInterval(t2); // ОСТАНАВЛИВАЕМ ТАЙМЕР
-            
-            p1 = choice;
-            p2 = Math.random() > 0.5 ? 'betray' : 'silent'; // Бот делает выбор
-
-            // ЛОГИКА ПРИГОВОРА
-            let y1 = 0, y2 = 0;
-            if(p1 === 'betray' && p2 === 'silent') { y1 = 0; y2 = 7; }
-            if(p1 === 'silent' && p2 === 'betray') { y1 = 7; y2 = 0; }
-            if(p1 === 'betray' && p2 === 'betray') { y1 = 7; y2 = 7; }
-            if(p1 === 'silent' && p2 === 'silent') { y1 = 3; y2 = 3; }
-
-            let text = `Твой срок: ${y1} лет.<br>Срок напарника: ${y2} лет.<br><br>`;
-
-            if(y1 < y2) {
-                text += `<span style="color:var(--accent); font-size:20px; font-weight:bold;">ТЫ ВЫШЕЛ НА СВОБОДУ!</span>`;
-                if(mode === 'bot' || mode === 'infinite') exp++;
-            } else if(y1 > y2) {
-                text += `<span style="color:var(--danger); font-size:20px; font-weight:bold;">ВЕЧЕР В ХАТУ...</span>`;
-                if(mode === 'bot' || mode === 'infinite') exp--;
-            } else {
-                text += `<span style="color:#888; font-size:20px;">НИЧЬЯ.</span>`;
-            }
-
-            if(exp < 0) exp = 0;
-            if(exp > 25) exp = 25;
-            localStorage.setItem('exp', exp);
-            
-            document.getElementById('result-text').innerHTML = text;
-            go('result-screen');
-            updateUI();
-            round++;
-        }
-
+    function createClan() {
+        let name = document.getElementById('clan-name-input').value.trim();
+        if(!name) return tg.showAlert("Введите название клана!");
+        
+        clan = name;
+        localStorage.setItem('myClan', clan);
         updateUI();
-    </script>
+        tg.showAlert(`Клан "${name}" успешно создан!`);
+    }
+
+    function leaveClan() {
+        clan = null;
+        localStorage.removeItem('myClan');
+        updateUI();
+        tg.showAlert('Вы покинули клан.');
+    }
+
+    // ИГРА
+    function startGame(mode) {
+        currentMode = mode;
+        round = 1;
+        nextRound();
+    }
+
+    function nextRound() {
+        if(round > (currentMode === 'infinite' ? 99 : 2)) {
+            showScreen('main-menu'); return;
+        }
+        
+        document.getElementById('case-text').innerText = cases[Math.floor(Math.random() * cases.length)];
+        document.getElementById('round-text').innerText = currentMode === 'infinite' ? '∞' : `${round}/2`;
+        
+        p1Selected = false; 
+        p2Choice = null;
+        showScreen('case-screen');
+
+        let time = 20;
+        document.getElementById('timer-read').innerText = time;
+        clearInterval(timer1);
+        timer1 = setInterval(() => {
+            time--; 
+            document.getElementById('timer-read').innerText = time;
+            if(time <= 0) { clearInterval(timer1); startChoosingPhase(); }
+        }, 1000);
+    }
+
+    function startChoosingPhase() {
+        clearInterval(timer1);
+        showScreen('game-screen');
+        
+        let time = 90;
+        document.getElementById('timer-choose').innerText = time;
+        clearInterval(timer2);
+        timer2 = setInterval(() => {
+            time--; 
+            document.getElementById('timer-choose').innerText = time;
+            if(time <= 0) { clearInterval(timer2); makeChoice('betray'); }
+        }, 1000);
+    }
+
+    // ЗДЕСЬ БЫЛА ОШИБКА, ИСПРАВЛЕНО
+    function makeChoice(choice) {
+        clearInterval(timer2); // Таймер стопается
+        
+        if(currentMode === 'local') {
+            if(!p1Selected) {
+                p1Choice = choice;
+                p1Selected = true;
+                showScreen('pass-screen');
+                return;
+            } else {
+                p2Choice = choice;
+            }
+        } else {
+            p1Choice = choice;
+            // Бот делает выбор
+            p2Choice = Math.random() > 0.5 ? 'betray' : 'silent';
+        }
+
+        calculate();
+    }
+
+    function calculate() {
+        let p1Y = 0, p2Y = 0;
+        if(p1Choice === 'betray' && p2Choice === 'silent') { p1Y = 0; p2Y = 7; }
+        if(p1Choice === 'silent' && p2Choice === 'betray') { p1Y = 7; p2Y = 0; }
+        if(p1Choice === 'betray' && p2Choice === 'betray') { p1Y = 7; p2Y = 7; }
+        if(p1Choice === 'silent' && p2Choice === 'silent') { p1Y = 3; p2Y = 3; }
+
+        let text = `Твой срок: ${p1Y} лет.<br>Срок напарника: ${p2Y} лет.<br><br>`;
+
+        if(p1Y < p2Y) {
+            text += "<span style='color:var(--accent); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span>";
+            if(currentMode !== 'local') totalExp++;
+        } else if(p1Y > p2Y) {
+            text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span>";
+            if(currentMode !== 'local') totalExp--;
+        } else {
+            text += "<span style='color:#888; font-size:20px;'>НИЧЬЯ.</span>";
+        }
+
+        if(totalExp < 0) totalExp = 0;
+        if(totalExp > 25) totalExp = 25;
+        localStorage.setItem('prisonExp', totalExp);
+        updateUI();
+
+        document.getElementById('result-text').innerHTML = text;
+        showScreen('result-screen');
+        round++;
+    }
+
+    // ЗАПУСК
+    updateUI();
+</script>
 </body>
 </html>
