@@ -56,6 +56,10 @@
         .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-input { flex: 1; background: var(--card); border: 2px solid var(--border); color: white; padding: 12px; border-radius: 8px; font-family: 'Space Grotesk'; font-size: 14px; }
         .search-btn { background: var(--accent); border: none; color: #000; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        /* УЛИКИ */
+        .evidence-box { background: rgba(0, 255, 65, 0.1); border: 1px solid var(--accent); padding: 10px; margin-bottom: 10px; border-radius: 8px; font-size: 13px; }
+        .evidence-title { color: var(--accent); font-weight: 900; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -65,7 +69,7 @@
         <div class="brutal-title" style="font-size: 40px;">ДИЛЕММА<br><span>ЗАКЛЮЧЕННОГО</span></div>
         <div class="case-box" style="text-align: left; border-color: var(--gold);">
             <b>СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...</b><br><br>
-            Ты часть мафии. Тебя взяли. Следователь дает выбор: сдать напарника и выйти сухим, или молчать и получить срок. Но в конце каждого уровня тебе придется выбирать — предать ли Главу мафии, рискуя своей семьей, или прикрыть его.
+            Ты часть мафии. Тебя взяли. Следователь дает выбор: сдать напарника и выйти сухим, или молчать и получить срок. Но помни: у каждого есть семья, и твои решения имеют последствия.
         </div>
         <button class="btn btn-play" onclick="showScreen('main-menu')">ВОЙТИ В ИГРУ</button>
     </div>
@@ -92,7 +96,7 @@
         <button class="btn" onclick="showScreen('rules')" style="border-color: var(--gold); color: var(--gold);">📜 ПРАВИЛА ИГРЫ</button>
         
         <div class="case-box" style="margin-top: 10px; font-size: 13px; border-color: #555;">
-            <b>ТЕОРИЯ ИГР:</b> Дилемма заключенного — фундаментальная проблема теории игр. Она показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим. В этой игре «Сдать» не всегда лучший выбор, так как твой напарник может поступить так же.
+            <b>ДЕТЕКТИВ:</b> У тебя есть улики на напарника. Сдашь — выйдешь, но рискуешь, что он тоже сдаст. Промолчишь — получишь срок, но мафия оценит верность.
         </div>
     </div>
 
@@ -100,12 +104,12 @@
         <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
         <div class="brutal-title">ПРАВИЛА</div>
         <div class="case-box" style="border-color: var(--accent); font-size: 14px;">
-            1. Матч длится 2 раунда. Победа в раунде дает +1 XP.<br><br>
-            2. <b>Сдать + Молчать:</b> Ты 0, он 10.<br>
-            3. <b>Молчать + Сдать:</b> Ты 10, он 0.<br>
-            4. <b>Сдать + Сдать:</b> По 6 лет.<br>
-            5. <b>Молчать + Молчать:</b> По 3 года.<br><br>
-            В финале сдашь босса — мафия мстит. Промолчишь — поможет.
+            1. Один матч = одно дело.<br><br>
+            2. <b>Сдать + Молчать:</b> Ты 0, он 10 (+1 XP).<br>
+            3. <b>Молчать + Сдать:</b> Ты 10, он 0 (-3 XP).<br>
+            4. <b>Сдать + Сдать:</b> По 6 лет (-1 XP).<br>
+            5. <b>Молчать + Молчать:</b> По 3 года (+0.5 XP).<br><br>
+            Внимание: Если у напарника есть семья, и ты его сдашь, ты получишь штраф к опыту. Если промолчишь — бонус.
         </div>
     </div>
 
@@ -166,12 +170,12 @@
     </div>
 
     <div id="game-screen" class="screen">
-        <div class="header"><div>СУД</div><div id="round-text">1/2</div></div>
+        <div class="header"><div>СУД</div><div>1/1</div></div>
         <div class="timer" id="timer-choose">90</div>
         <div class="case-box" style="font-size: 12px; border: none; background: transparent; text-align: center; color: #888;">Примите решение</div>
         <div class="choices">
-            <button class="choice-btn c-alpha" onclick="makeChoice('betray')">СДАТЬ<br><span style="font-size: 12px;">(0 / 6)</span></button>
-            <button class="choice-btn c-beta" onclick="makeChoice('silent')">МОЛЧАТЬ<br><span style="font-size: 12px;">(3 / 10)</span></button>
+            <button class="choice-btn c-alpha" onclick="makeChoice('betray')">СДАТЬ<br><span style="font-size: 12px;">(Риск)</span></button>
+            <button class="choice-btn c-beta" onclick="makeChoice('silent')">МОЛЧАТЬ<br><span style="font-size: 12px;">(Верность)</span></button>
         </div>
     </div>
 
@@ -209,48 +213,55 @@
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
+    // ДЕТЕКТИВНЫЕ ДЕЛА С УЛИКАМИ
     const allCases = [
-        { t: "Ты и твой напарник Джимми вломились в центральный банк. Сработала тихая сигнализация. У тебя двое детей, и если ты сядешь, они останутся без отца. Сдай его, и ты выйдешь сухим.", p: "Джимми Конвей. Друг детства. Он пошел на это ради больной матери." },
-        { t: "Вы с Джимми угнали спорткар и разбили его. Владелец — сын прокурора. Следователь обещает отпустить тебя, если ты скажешь, что Джимми заставил тебя.", p: "Джимми Конвей. Он умоляет тебя не сдавать, ведь у него нет денег на адвоката." },
-        { t: "Вы с Джимми ограбили ювелирку. Охранник получил травмы. Сдай Джимми, и тебе скостят срок до условного.", p: "Джимми Конвей. Он в панике и хочет сдать тебя первым." },
-        { t: "Вы с Джимми перевозили краденое через границу. Вас взяли. Сдай Джимми и место тайника, и тебя отпустят.", p: "Джимми Конвей. Он доверяет тебе, но не знает, что ты уже думаешь о сделке." },
-        { t: "Вы с Джимми подделали документы на продажу квартиры. Следователь обещает условный срок за его сдачу.", p: "Джимми Конвей. Он хочет провернуть еще одно дело, чтобы отдать долг." },
-        { t: "Вы с Джимми устроили поджог. Погиб сторож. Сдай его первым, и тебе скостят срок.", p: "Джимми Конвей. Он не знает, что ты готов сдать его ради семьи." },
-        { t: "ФИНАЛ: Следователь предлагает сдать твоего Босса — Генри Хилла. Но если ты сдашь, его люди придут за семьей. Если промолчишь — он тебя прикроет.", p: "ГЕНРИ ХИЛЛ (Твой Босс). Угрожает семье, если сдашь. Если промолчишь — наградит." },
+        // 1 ур (Генри)
+        { t: "Ты и Джимми вломились в банк. Сработала сигнализация. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе отпечатки Джимми. Если сдашь его, он сядет, а ты выйдешь.", fam: "У Джимми больная мать." },
+        { t: "Вы угнали спорткар. Владелец — сын прокурора. В машине нашли твою куртку.", p: "Джимми Конвей.", ev: "Твоя куртка в машине. Джимми может подтвердить, что ты был за рулем.", fam: "У тебя двое детей." },
+        { t: "Ограбление ювелирки. Охранник ранен. На записи камер видно двоих.", p: "Джимми Конвей.", ev: "Запись размыта, но Джимми в кадре. Сдай его — тебе скостят срок.", fam: "Джимми недавно женился." },
+        { t: "Контрабанда через границу. Таможня нашла груз.", p: "Джимми Конвей.", ev: "Джимми оставил свой телефон в машине с уликами.", fam: "У Джимми маленький ребенок." },
+        { t: "Подделка документов на квартиру. Нотариус дал показания.", p: "Джимми Конвей.", ev: "Нотариус видел Джимми. Он может дать показания против него.", fam: "Твоя жена беременна вторым." },
+        { t: "Поджог конкурента. Погиб сторож. Следователь нашел канистру.", p: "Джимми Конвей.", ev: "На канистре отпечатки Джимми.", fam: "Джимми должен денег опасным людям." },
+        { t: "ФИНАЛ: Следователь предлагает сдать Босса — Генри Хилла. У него есть компромат на тебя.", p: "ГЕНРИ ХИЛЛ.", ev: "У следователя есть доказательства твоей причастности. Если сдашь Босса — выйдешь. Но его люди знают, где твоя семья.", fam: "Твоя семья под защитой мафии." },
 
-        { t: "Ты и Томми вымогали деньги у бизнесмена. Он написал заявление. Сдай Томми, и тебя отпустят, но твоя семья останется без денег.", p: "Томми 'Два Пальца'. Психопат, но преданный." },
-        { t: "Вы с Томми сожгли конкурентный бар. Следователь предлагает сделку: сдай его, и ты получишь иммунитет.", p: "Томми 'Два Пальца'. Он думает, что ты его не сдашь." },
-        { t: "Вы с Томми крышевали бордель. Полиция взяла вас. Сдай его, и тебя переведут в свидетели.", p: "Томми 'Два Пальца'. Он знает слишком много о твоей семье." },
-        { t: "Вы с Томми подставили политика. Он подал в суд. Сдай Томми, и ты выйдешь сухим, но мафия запомнит это.", p: "Томми 'Два Пальца'. Он хочет сбежать из страны." },
-        { t: "ФИНАЛ: Сдай Джо Пеши, и получишь иммунитет. Но он знает, где живет твоя мать. Промолчишь — он оплатит лучшего адвоката.", p: "ДЖО ПЕШИ (Твой Босс). Давит на мать, если сдашь." },
+        // 2 ур (Джо)
+        { t: "Вымогательство у бизнесмена. Он написал заявление.", p: "Томми 'Два Пальца'.", ev: "Бизнесмен опознал Томми. Сдай его — тебя отпустят.", fam: "У Томми есть брат-полицейский." },
+        { t: "Сожгли конкурентный бар. Полиция нашла записи.", p: "Томми 'Два Пальца'.", ev: "Томми звонил заказчику с твоего телефона.", fam: "Томми ухаживает за твоей сестрой." },
+        { t: "Крышевали бордель. Полиция взяла вас.", p: "Томми 'Два Пальца'.", ev: "Томми хранил деньги в твоем сейфе.", fam: "У Томми двое детей." },
+        { t: "Подставили политика. Он подал в суд.", p: "Томми 'Два Пальца'.", ev: "Томми оставил улики в машине.", fam: "Томми шантажирует тебя." },
+        { t: "ФИНАЛ: Сдай Джо Пеши. Но он знает, где живет твоя мать.", p: "ДЖО ПЕШИ.", ev: "У следователя есть ордер на арест Джо. Если сдашь — получишь иммунитет.", fam: "Твоя мать больна. Джо оплачивает лечение." },
 
-        { t: "Ты и Фрэнк перевозили контрабанду. Вас взяли на таможне. Сдай Фрэнка, и тебя отпустят, но бизнес заберут.", p: "Фрэнк Нитти. Гений тактики. Он стал слишком амбициозным." },
-        { t: "Вы с Фрэнком устроили подпольное казино. Сдай его, и ты получишь условный срок. Но семья останется ни с чем.", p: "Фрэнк Нитти. Он хочет забрать твой бизнес." },
-        { t: "Вы с Фрэнком подкупили судью. Следователь предлагает сделку: сдай его, и ты выйдешь сухим.", p: "Фрэнк Нитти. Он знает, что ты колеблешься." },
-        { t: "ФИНАЛ: Сдай Аль Капоне, станешь свободным. Но его киллеры у твоего дома. Промолчишь — он вытащит тебя под залог.", p: "АЛЬ КАПОНЕ (Твой Босс). Угрожает семье, если сдашь." },
+        // 3 ур (Аль)
+        { t: "Контрабанда. Таможня нашла груз.", p: "Фрэнк Нитти.", ev: "Фрэнк оставил накладные с твоей подписью.", fam: "У Фрэнка есть жена и любовница." },
+        { t: "Подпольное казино. Полиция накрыла.", p: "Фрэнк Нитти.", ev: "Фрэнк сливал информацию конкурентам.", fam: "Фрэнк предал тебя первым." },
+        { t: "Подкупили судью. Следователь нашел переводы.", p: "Фрэнк Нитти.", ev: "Переводы шли на счет Фрэнка.", fam: "У Фрэнка рак. Он не доживет до суда." },
+        { t: "ФИНАЛ: Сдай Аль Капоне. Его киллеры у твоего дома.", p: "АЛЬ КАПОНЕ.", ev: "У следователя есть доказательства. Если сдашь — тебя спрячут.", fam: "Твой сын в школе. Киллеры знают адрес." },
 
-        { t: "Ты и Ники перевозили героин. Вас взяли. Сдай Ники, и тебя отпустят, но семья будет под угрозой.", p: "Ники Барнс. Он доверял тебе больше, чем родным." },
-        { t: "Вы с Ники обманули поставщика. Он подал в суд. Сдай Ники, и ты выйдешь сухим.", p: "Ники Барнс. Он хочет уйти из бизнеса." },
-        { t: "ФИНАЛ: Сдай Фрэнка Лукаса, и ты выйдешь. Но он обещал убить тебя. Промолчишь — он даст денег на семью.", p: "ФРЭНК ЛУКАС (Твой Босс). Угрожает тебе лично." },
+        // 4 ур (Фрэнк)
+        { t: "Перевозили героин. Вас взяли.", p: "Ники Барнс.", ev: "Ники оставил наркотики в твоей машине.", fam: "Ники хочет уйти из бизнеса." },
+        { t: "Обманули поставщика. Он подал в суд.", p: "Ники Барнс.", ev: "Поставщик опознал Ники.", fam: "У Ники больная дочь." },
+        { t: "ФИНАЛ: Сдай Фрэнка Лукаса. Но он обещал убить тебя.", p: "ФРЭНК ЛУКАС.", ev: "У следователя есть компромат на Фрэнка. Но Фрэнк знает твой адрес.", fam: "Твоя семья в опасности." },
 
-        { t: "ФИНАЛ: Сдай Пабло Эскобара, и ты свободен. Но семья в опасности. Промолчишь — он вытащит тебя из тюрьмы.", p: "ПАБЛО ЭСКОБАР (Твой Босс). Контролирует всё." }
+        // 5 ур (Пабло)
+        { t: "ФИНАЛ: Сдай Пабло Эскобара. Но он контролирует всё.", p: "ПАБЛО ЭСКОБАР.", ev: "У следователя есть доказательства. Но Пабло может уничтожить твою семью.", fam: "Твоя семья под охраной Пабло." }
     ];
 
     const levels = [
-        { name: "ГЕНРИ ХИЛЛ", before: "Охранник банка. Пошел на дело ради семьи.", family: "Жена Карен и двое детей.", partner: "Джимми Конвей." },
-        { name: "ДЖО ПЕШИ", before: "Владелец баров. Прикрытие для бизнеса.", family: "Мать-итальянка. Она больна.", partner: "Томми 'Два Пальца'." },
-        { name: "АЛЬ КАПОНЕ", before: "Глава мафии. Контролировал город.", family: "Жена Мэй и сын.", partner: "Фрэнк Нитти." },
-        { name: "ФРЭНК ЛУКАС", before: "Водитель грузовика. Создал наркоимперию.", family: "8 братьев и сестер.", partner: "Ники Барнс." },
-        { name: "ПАБЛО ЭСКОБАР", before: "Самый опасный наркобарон.", family: "Жена и пятеро детей.", partner: "Гонсало Родригес." }
+        { name: "ГЕНРИ ХИЛЛ", before: "Охранник банка.", family: "Жена Карен и двое детей.", partner: "Джимми Конвей." },
+        { name: "ДЖО ПЕШИ", before: "Владелец баров.", family: "Мать-итальянка.", partner: "Томми 'Два Пальца'." },
+        { name: "АЛЬ КАПОНЕ", before: "Глава мафии.", family: "Жена Мэй и сын.", partner: "Фрэнк Нитти." },
+        { name: "ФРЭНК ЛУКАС", before: "Водитель грузовика.", family: "8 братьев и сестер.", partner: "Ники Барнс." },
+        { name: "ПАБЛО ЭСКОБАР", before: "Наркобарон.", family: "Жена и пятеро детей.", partner: "Гонсало Родригес." }
     ];
 
     const levelCases = [[0,1,2,3,4,5,6], [7,8,9,10,11], [12,13,14,15], [16,17,18], [19]];
 
-    let totalExp = parseInt(localStorage.getItem('prisonExp')) || 0;
+    let totalExp = parseFloat(localStorage.getItem('prisonExp')) || 0;
     let friends = JSON.parse(localStorage.getItem('myFriends')) || [];
     let clan = localStorage.getItem('myClan') || null;
-    let round = 1, p1Choice = null, p2Choice = null, p1Selected = false, timer1, timer2, currentMode = 'bot';
+    let p1Choice = null, p2Choice = null, p1Selected = false, timer1, timer2, currentMode = 'bot';
     let fakeThreat = false;
+    let currentCaseData = null;
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -271,7 +282,7 @@
         let lvl = 0;
         if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4; if(totalExp >= 25) lvl = 5;
         document.getElementById('level-name').innerText = levels[Math.min(lvl, 4)].name;
-        document.getElementById('exp-counter').innerText = totalExp;
+        document.getElementById('exp-counter').innerText = totalExp.toFixed(1);
         document.getElementById('level-num').innerText = lvl + 1;
         document.getElementById('avatar-container').innerHTML = avatars[Math.min(lvl, 4)];
 
@@ -279,7 +290,7 @@
         let curr = lvl < 5 ? [7, 12, 17, 22, 25][lvl] : 25;
         let done = totalExp - prev, need = curr - prev;
         if(need <= 0) { done = totalExp; need = 25; }
-        document.getElementById('exp-text').innerText = `XP: ${done} / ${need}`;
+        document.getElementById('exp-text').innerText = `XP: ${done.toFixed(1)} / ${need}`;
         document.getElementById('exp-bar').style.width = (done / need * 100) + '%';
 
         let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:20px;">Список пуст</div>';
@@ -318,36 +329,39 @@
 
     function startGame(mode) {
         currentMode = mode;
-        round = 1;
         if(mode === 'online') { tg.showAlert("ПОИСК..."); setTimeout(() => { tg.showAlert("НАЙДЕН: KILLER_99"); currentMode = 'bot'; nextRound(); }, 1000); return; }
         nextRound();
     }
 
     function nextRound() {
-        if(round > 2) { showScreen('main-menu'); return; }
-        
         let lvl = 0;
         if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4;
         let casesForLevel = levelCases[lvl];
         let caseIndex = casesForLevel[Math.floor(Math.random() * casesForLevel.length)];
-        let c = allCases[caseIndex];
+        currentCaseData = allCases[caseIndex];
 
         fakeThreat = false;
-        if (c.t.includes("ФИНАЛ")) {
+        if (currentCaseData.t.includes("ФИНАЛ")) {
             fakeThreat = Math.random() > 0.5;
-            if (fakeThreat) {
-                c.t += " <br><br><span style='color:#FFD700;'>Следователь шепчет: 'Он блефует. Если сдашь его, мы тебя прикроем'.</span>";
-            } else {
-                c.t += " <br><br><span style='color:var(--danger);'>Следователь шепчет: 'Он не блефует. Твоя семья в реальной опасности'.</span>";
-            }
         }
 
-        document.getElementById('case-text').innerHTML = `<b>${c.t}</b><br><br><span style="color:var(--gold);">Напарник:</span> ${c.p}`;
-        document.getElementById('round-text').innerText = `${round}/2`;
+        let hint = fakeThreat ? "<span style='color:#FFD700;'>Следователь шепчет: 'Он блефует. Сдай его, и мы тебя прикроем'.</span>" : "<span style='color:var(--danger);'>Следователь шепчет: 'Он не блефует. Твоя семья в реальной опасности'.</span>";
+        
+        document.getElementById('case-text').innerHTML = `
+            <b>${currentCaseData.t}</b><br><br>
+            <span style="color:var(--gold);">Напарник:</span> ${currentCaseData.p}<br><br>
+            <div class="evidence-box">
+                <div class="evidence-title">УЛИКИ:</div>
+                ${currentCaseData.ev}
+            </div>
+            <span style="color:#888; font-size:13px;">Семья напарника: ${currentCaseData.fam}</span>
+            ${currentCaseData.t.includes("ФИНАЛ") ? '<br><br>' + hint : ''}
+        `;
+        
         p1Selected = false; p2Choice = null;
         showScreen('case-screen');
         
-        let time = 25;
+        let time = 30; // Больше времени на чтение
         document.getElementById('timer-read').innerText = time;
         clearInterval(timer1);
         timer1 = setInterval(() => { time--; document.getElementById('timer-read').innerText = time; if(time <= 0) { clearInterval(timer1); startChoosingPhase(); } }, 1000);
@@ -369,7 +383,12 @@
             else { p2Choice = choice; }
         } else {
             p1Choice = choice;
-            p2Choice = Math.random() > 0.5 ? 'betray' : 'silent';
+            // Умный бот: если улики против него, он сдает с вероятностью 70%
+            let botBetrayChance = 0.5;
+            if (currentCaseData.ev && (currentCaseData.ev.includes('отпечатки') || currentCaseData.ev.includes('улики'))) {
+                botBetrayChance = 0.7;
+            }
+            p2Choice = Math.random() < botBetrayChance ? 'betray' : 'silent';
         }
         calculate();
     }
@@ -381,8 +400,9 @@
         if(p1Choice === 'betray' && p2Choice === 'betray') { p1Y = 6; p2Y = 6; }
         if(p1Choice === 'silent' && p2Choice === 'silent') { p1Y = 3; p2Y = 3; }
 
-        let isFinal = document.getElementById('case-text').innerHTML.includes('ФИНАЛ');
+        let isFinal = currentCaseData.t.includes('ФИНАЛ');
         let isLoseAll = false;
+        let extraText = "";
 
         if (isFinal) {
             if (p1Choice === 'betray') {
@@ -397,19 +417,30 @@
             }
         }
 
+        // Влияние семьи на опыт
+        if (p1Choice === 'betray' && currentCaseData.fam && !currentCaseData.fam.includes('нет')) {
+            extraText += "<br><span style='color:var(--danger);'>Ты предал напарника, зная о его семье. Репутация упала (-0.5 XP).</span>";
+            if(!isLoseAll) totalExp -= 0.5;
+        } else if (p1Choice === 'silent' && currentCaseData.fam && !currentCaseData.fam.includes('нет')) {
+            extraText += "<br><span style='color:var(--accent);'>Ты защитил семью напарника. Мафия ценит верность (+0.5 XP).</span>";
+            if(!isLoseAll) totalExp += 0.5;
+        }
+
         let text = `Твой срок: ${p1Y} лет.<br>Срок напарника: ${p2Y} лет.<br><br>`;
 
         if (isLoseAll) {
             text = `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>МАФИЯ КАЗНИЛА ТВОЮ СЕМЬЮ...</span><br><br>Ты сдал босса, но это была не пустая угроза. Ты потерял всё. Опыт сброшен.<br><br>`;
         } else if(p1Y < p2Y) {
             text += "<span style='color:var(--accent); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
-            if(currentMode !== 'local') totalExp++;
+            totalExp += 1;
         } else if(p1Y > p2Y) {
             text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span><br><span style='font-size:12px;'>-1 XP</span>";
-            if(currentMode !== 'local') totalExp--;
+            totalExp -= 1;
         } else {
             text += "<span style='color:#888; font-size:20px;'>НИЧЬЯ.</span>";
         }
+        
+        text += extraText;
 
         if(totalExp < 0) totalExp = 0;
         if(totalExp > 25) totalExp = 25;
@@ -417,7 +448,10 @@
         updateUI();
         document.getElementById('result-text').innerHTML = text;
         showScreen('result-screen');
-        round++;
+    }
+
+    function nextRound() {
+        showScreen('main-menu');
     }
 
     updateUI();
