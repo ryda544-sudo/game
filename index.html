@@ -40,7 +40,6 @@
 
         .header { width: 100%; display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; font-size: 12px; color: #888; font-weight: 700; text-transform: uppercase; }
 
-        /* Карточка заключенного */
         .inmate-card {
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
             border: 2px solid var(--gold); border-radius: 16px;
@@ -102,7 +101,7 @@
     <div id="intro" class="screen active">
         <div class="brutal-title" id="txt-intro-title">ДИЛЕММА<br><span>ЗАКЛЮЧЕННОГО</span></div>
         <div class="case-box" id="txt-intro-text">
-            Тебя взяли. Следователь дает выбор: СДАТЬ напарника и выйти сухим, или МОЛЧАТЬ и сесть на 3 года. Но помни, твой напарник думает точно так же.
+            Тебя взяли. Следователь дает выбор: СДАТЬ напарника и выйти сухим, или МОЛЧАТЬ и сесть на 3 года.
         </div>
         <button class="btn btn-play" onclick="showScreen('main-menu')" id="txt-btn-ready">Я ГОТОВ</button>
     </div>
@@ -147,7 +146,6 @@
         <div class="list-item"><span>2. ВЫ</span> <span id="my-rating">0 ДЕЛ</span></div>
         <div class="list-item"><span>3. БОТ_АНДРЕЙ</span> <span>12 ДЕЛ</span></div>
         <div class="list-item"><span>4. КАРТЕЛЬ</span> <span>8 ДЕЛ</span></div>
-        <div class="list-item"><span>5. НОВИЧОК</span> <span>1 ДЕЛО</span></div>
     </div>
 
     <!-- КЛАНЫ -->
@@ -161,7 +159,6 @@
         </div>
         <div class="list-item"><span>ВЫ</span> <span>ЛИДЕР</span></div>
         <div class="list-item"><span>ДЖИММИ</span> <span>УЧАСТНИК</span></div>
-        <div class="list-item"><span>ТОММИ</span> <span>УЧАСТНИК</span></div>
     </div>
 
     <!-- ДРУЗЬЯ -->
@@ -170,7 +167,6 @@
         <div class="brutal-title" id="txt-friends-title">ДРУЗЬЯ ПО ХАТЕ</div>
         <div class="list-item"><span>@vasyan</span> <span>В СЕТИ</span></div>
         <div class="list-item"><span>@miha_killer</span> <span>НЕ В СЕТИ</span></div>
-        <div class="list-item"><span>@boss</span> <span>В СЕТИ</span></div>
     </div>
 
     <div id="settings" class="screen">
@@ -268,42 +264,7 @@
             "Вы ворвались в дом богача, но сработала сигнализация. Сдашь друга — скажешь, что он заставил.",
             "Вы сбывали краденые драгоценности через ломбард. Сдашь скупщика — получишь иммунитет.",
             "Напарник попросил тебя перевезти сумку, а там оказались наркотики. Сдашь его — тебя отпустят.",
-            "Вы вместе уклонялись от налогов на 30 млн. Сдашь бухгалтера — тебе дадут штраф вместо срока.",
-            "Вы украли картину из музея. Сдашь напарника и место тайника — тебя не посадят.",
-            "Вы устроили подпольный казино. Сдашь организатора — тебя отпустят как рядового крупье.",
-            "Вы сбили человека на самокате и скрылись. Сдашь друга, который был с тобой — тебя не найдут.",
-            "Вы продавали поддельные лекарства. Умер ребенок. Сдашь поставщика — дадут минимальный срок.",
-            "Вы шантажировали политика. Он подал в суд. Сдашь напарника, который сливал фото — выйдешь сухим.",
-            "Вы вымогали деньги у бизнесмена. Сдашь друга — тебя переведут в свидетели.",
-            "Вы ограбили инкассатора. Сдашь того, кто дал наводку — тебя отпустят под залог.",
-            "Вы устроили теракт в заброшенном здании (никто не пострадал). Сдашь сообщника — тебя оправдают.",
-            "Вы торговали органами. Сдашь клинику и напарника — тебе дадут условный срок.",
-            "Вы подделали результаты выборов. Сдашь начальника штаба — тебя оставят на свободе.",
-            "Вы занимались кибербуллингом, который довел человека до суицида. Сдашь организатора — тебя помилуют.",
-            "Вы создали фейковый благотворительный фонд. Сдашь соучастника — вернешь деньги и избежишь тюрьмы.",
-            "Вы незаконно вырубили лес на 10 млн. Сдашь лесника, который прикрывал — тебя отпустят.",
-            "Вы устроили фиктивное банкротство. Сдашь оценщика — получишь сделку со следствием.",
-            "Вы крали элитный алкоголь со склада. Сдашь напарника — тебя сделают свидетелем.",
-            "Вы торговали контрабандными сигаретами. Сдашь фуру — тебя простят.",
-            "Вы подделали диплом врача. Сдашь того, кто печатал — тебе дадут штраф.",
-            "Вы устроили массовую драку в клубе. Сдашь зачинщика — тебя отпустят.",
-            "Вы воровали данные с банковских карт. Сдашь скупщика — тебя не посадят.",
-            "Вы подожгли машину соседа. Сдашь напарника — тебе дадут исправительные работы.",
-            "Вы продавали поддельные кроссовки. Сдашь поставщика — тебя признают потерпевшим.",
-            "Вы ограбили ювелирный магазин. Сдашь напарника и место — тебя оправдают.",
-            "Вы похитили человека ради выкупа. Сдашь напарника — тебя отпустят, так как ты его спас.",
-            "Вы подделали страховку на машину. Сдашь агента — тебе дадут условный срок.",
-            "Вы занимались нелегальной перевозкой мигрантов. Сдашь перевозчика — тебя отпустят.",
-            "Вы продавали запрещенные вещества в школе. Сдашь директора — тебе скостят срок.",
-            "Вы взломали сервер Пентагона (ради шутки). Сдашь друга-хакера — тебя наймут на работу.",
-            "Вы устроили финансовую пирамиду на крипте. Сдашь маркетолога — тебе оставят часть денег.",
-            "Вы продавали квартиры умерших людей. Сдашь риелтора — тебя не посадят.",
-            "Вы подделали техосмотр. Из-за этого погиб человек. Сдашь мастера — тебя оправдают.",
-            "Вы украли редкую породу собаки. Сдашь заводчика — тебя простят.",
-            "Вы торговали должностями. Сдашь посредника — тебя переведут в свидетели.",
-            "Вы травили бездомных собак. Сдашь заказчика — тебя оштрафуют.",
-            "Вы подставили невиновного, чтобы спасти себя. Сдашь настоящего преступника — тебя отпустят.",
-            "Вы украли драгоценности у известной актрисы. Сдашь охрану, которая помогла — выйдешь сухим."
+            "Вы вместе уклонялись от налогов на 30 млн. Сдашь бухгалтера — тебе дадут штраф вместо срока."
         ];
 
         // --- ЛОКАЛИЗАЦИЯ ---
@@ -343,343 +304,4 @@
                 btn_ready: "我准备好了", cases: "案件:", dangerous: "危险罪犯", level: "等级", btn_play: "上法庭", btn_roles: "🎭 角色", btn_settings: "⚙️ 设置", btn_back: "← 返回",
                 btn_rating: "🏆 排行榜", btn_clans: "🛡️ 部落", btn_friends: "👥 朋友", rating_title: "顶级玩家", clans_title: "我的部落", friends_title: "狱友",
                 settings_title: "设置", lang: "语言", doss_before: "绰号与过去", doss_family: "亲属", doss_partner: "搭档", mode_title: "模式", mode_bot: "🤖 对战电脑", mode_online: "🌐 在线匹配", mode_local: "📱 同一部手机", mode_inf: "∞ 无尽模式",
-                inv_title: "我的角色", active_role: "当前角色:", btn_use_role: "🎭 使用角色", btn_read: "我读完了 (跳过)", court: "法庭", lawyer: "⚖️ 律师：搭档选择了", make_choice: "做出决定", choice_betray: "背叛", choice_silent: "沉默", years_0: "(0 年)", years_3: "(3 年)",
-                pass_title: "传递<br><span>手机</span>", pass_text: "玩家 1 已选择。请将手机交给玩家 2。", verdict: "判决", btn_next: "下一个",
-                win: "你自由了！<br>(烧毁1个案件)", lose: "欢迎来到监狱...<br>(增加1个案件)", draw: "平局。法官累了。", your_time: "你的刑期: {0} 年。<br>搭档刑期: {1} 年。<br><br>",
-                search: "正在寻找对手...", found: "找到对手: {0}", empty: "空..."
-            }
-        };
-
-        let currentLang = localStorage.getItem('lang') || 'ru';
-        document.getElementById('lang-select').value = currentLang;
-
-        function applyLanguage() {
-            let t = translations[currentLang];
-            document.getElementById('txt-intro-title').innerHTML = t.intro_title;
-            document.getElementById('txt-intro-text').innerHTML = t.intro_text;
-            document.getElementById('txt-btn-ready').innerText = t.btn_ready;
-            document.getElementById('txt-cases').innerText = t.cases;
-            document.getElementById('txt-dangerous').innerText = t.dangerous;
-            document.getElementById('txt-level').innerText = t.level;
-            document.getElementById('txt-btn-play').innerText = t.btn_play;
-            document.getElementById('txt-btn-roles').innerText = t.btn_roles;
-            document.getElementById('txt-btn-settings').innerText = t.btn_settings;
-            document.getElementById('txt-btn-rating').innerText = t.btn_rating;
-            document.getElementById('txt-btn-clans').innerText = t.btn_clans;
-            document.getElementById('txt-btn-friends').innerText = t.btn_friends;
-            document.getElementById('txt-rating-title').innerText = t.rating_title;
-            document.getElementById('txt-clans-title').innerText = t.clans_title;
-            document.getElementById('txt-friends-title').innerText = t.friends_title;
-            document.getElementById('txt-settings-title').innerText = t.settings_title;
-            document.getElementById('txt-lang').innerText = t.lang;
-            document.getElementById('txt-doss-before').innerText = t.doss_before;
-            document.getElementById('txt-doss-family').innerText = t.doss_family;
-            document.getElementById('txt-doss-partner').innerText = t.doss_partner;
-            document.getElementById('txt-mode-title').innerText = t.mode_title;
-            document.getElementById('txt-mode-bot').innerText = t.mode_bot;
-            document.getElementById('txt-mode-online').innerText = t.mode_online;
-            document.getElementById('txt-mode-local').innerText = t.mode_local;
-            document.getElementById('txt-mode-inf').innerText = t.mode_inf;
-            document.getElementById('txt-inv-title').innerText = t.inv_title;
-            document.getElementById('txt-active-role').innerText = t.active_role;
-            document.getElementById('txt-btn-use-role').innerText = t.btn_use_role;
-            document.getElementById('txt-btn-read').innerText = t.btn_read;
-            document.getElementById('txt-court').innerText = t.court;
-            document.getElementById('txt-lawyer').innerText = t.lawyer;
-            document.getElementById('txt-make-choice').innerText = t.make_choice;
-            document.getElementById('txt-choice-betray').innerText = t.choice_betray;
-            document.getElementById('txt-choice-silent').innerText = t.choice_silent;
-            document.getElementById('txt-years-0').innerText = t.years_0;
-            document.getElementById('txt-years-3').innerText = t.years_3;
-            document.getElementById('txt-pass-title').innerHTML = t.pass_title;
-            document.getElementById('txt-pass-text').innerText = t.pass_text;
-            document.getElementById('txt-verdict').innerText = t.verdict;
-            document.getElementById('txt-btn-next').innerText = t.btn_next;
-            
-            // Кнопки назад
-            document.querySelectorAll('.nav-back').forEach(btn => btn.innerText = t.btn_back);
-            
-            updateUI();
-        }
-
-        function changeLanguage() {
-            currentLang = document.getElementById('lang-select').value;
-            localStorage.setItem('lang', currentLang);
-            applyLanguage();
-        }
-
-        // --- УРОВНИ И АВАТАРКИ ---
-        const levels = [
-            { name: "ГЕНРИ ХИЛЛ", before: "Бывший охранник банка. Знал все слабые места, но денег вечно не хватало. Пошел на дело с лучшим другом.", family: "Жена Карен и двое детей. Карен устала от долгов и требует развода, если он снова сядет.", partner: "Джимми Конвей. Друг детства. Они вместе выросли в бедном районе. Джимми всегда прикрывал его." },
-            { name: "ДЖО ПЕШИ", before: "Владел сетью баров. Использовал их как прикрытие для нелегального бизнеса. Любил роскошь и дорогие костюмы.", family: "Мать-итальянка, которая до сих пор готовит ему пасту по воскресеньям. Отец умер в тюрьме.", partner: "Томми 'Два Пальца'. Психопат, но очень преданный. Вместе они держали половину города." },
-            { name: "АЛЬ КАПОНЕ", before: "Начинал вышибалой в борделе, а стал главой мафиозного клана. Контролировал весь нелегальный алкоголь в городе.", family: "Жена Мэй и сын. Сын не знает, чем на самом деле занимается отец. Жена подозревает, но боится спрашивать.", partner: "Фрэнк Нитти. Гений тактики. Они вместе пролили реки крови, но Фрэнк стал слишком амбициозным." },
-            { name: "ФРЭНК ЛУКАС", before: "Бывший водитель грузовика. Понял, что перевозить героин выгоднее, чем мебель. Создал целую империю.", family: "Восемь братьев и сестер. Он был единственным кормильцем. Мать умерла, так и не дождавшись его.", partner: "Ники Барнс. Они доверяли друг другу больше, чем родным. Но Ники в последнее время странно себя ведет." },
-            { name: "ПАБЛО ЭСКОБАР", before: "Начинал с кражи надгробий, а стал самым опасным наркобароном в истории. Его боялись все.", family: "Жена и пятеро детей. Он построил им целую крепость, но боится, что враги доберутся и туда.", partner: "Гонсало Родригес. Его двоюродный брат. Служил ему верой и правдой, пока полиция не предложила ему сделку." }
-        ];
-
-        // Крутые аватарки в стиле векторной графики
-        const avatars = [
-            // 1. Генри (кепка, борода)
-            `<svg viewBox="0 0 100 100" style="width:100%;height:100%;">
-                <circle cx="50" cy="50" r="50" fill="#1a1a1a"/>
-                <path d="M20 45 Q50 15 80 45 L80 50 Q50 25 20 50 Z" fill="#333"/>
-                <rect x="25" y="40" width="50" height="8" fill="#00FF41"/>
-                <circle cx="50" cy="65" r="18" fill="#222"/>
-                <path d="M35 70 Q50 85 65 70 Z" fill="#555"/>
-            </svg>`,
-            // 2. Джо (шляпа, очки)
-            `<svg viewBox="0 0 100 100" style="width:100%;height:100%;">
-                <circle cx="50" cy="50" r="50" fill="#1a1a1a"/>
-                <path d="M15 40 L85 40 L75 25 L25 25 Z" fill="#444"/>
-                <rect x="15" y="40" width="70" height="5" fill="#222"/>
-                <circle cx="50" cy="65" r="18" fill="#222"/>
-                <rect x="35" y="60" width="30" height="8" fill="#000" rx="4"/>
-                <rect x="40" y="62" width="8" height="4" fill="#FFD700"/>
-                <rect x="52" y="62" width="8" height="4" fill="#FFD700"/>
-            </svg>`,
-            // 3. Аль Капоне (сигара, шрам)
-            `<svg viewBox="0 0 100 100" style="width:100%;height:100%;">
-                <circle cx="50" cy="50" r="50" fill="#1a1a1a"/>
-                <path d="M25 40 Q50 20 75 40 L75 55 Q50 40 25 55 Z" fill="#222"/>
-                <circle cx="50" cy="65" r="18" fill="#222"/>
-                <path d="M40 60 L45 65" stroke="#fff" stroke-width="2"/>
-                <rect x="55" y="70" width="25" height="5" fill="#fff" transform="rotate(15 55 70)"/>
-                <circle cx="80" cy="72" r="3" fill="#FF003C"/>
-            </svg>`,
-            // 4. Фрэнк (маска, злые глаза)
-            `<svg viewBox="0 0 100 100" style="width:100%;height:100%;">
-                <circle cx="50" cy="50" r="50" fill="#1a1a1a"/>
-                <rect x="20" y="35" width="60" height="30" fill="#000" rx="8"/>
-                <path d="M30 45 L40 50 L30 55 Z" fill="#FF003C"/>
-                <path d="M70 45 L60 50 L70 55 Z" fill="#FF003C"/>
-                <rect x="45" y="70" width="10" height="15" fill="#222"/>
-            </svg>`,
-            // 5. Пабло (очки, усы, пузо)
-            `<svg viewBox="0 0 100 100" style="width:100%;height:100%;">
-                <circle cx="50" cy="50" r="50" fill="#1a1a1a"/>
-                <circle cx="50" cy="60" r="22" fill="#222"/>
-                <circle cx="38" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/>
-                <circle cx="62" cy="55" r="7" fill="none" stroke="#00FF41" stroke-width="2"/>
-                <path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/>
-                <path d="M25 80 Q50 100 75 80" fill="#333"/>
-            </svg>`
-        ];
-
-        // --- ИНИЦИАЛИЗАЦИЯ ПЕРЕМЕННЫХ ---
-        let totalExp = parseInt(localStorage.getItem('prisonExp')) || 0;
-        let inventory = JSON.parse(localStorage.getItem('roleInventory')) || [];
-        let activeRole = null, round = 1, maxRounds = 2;
-        let p1Choice = null, p2Choice = null, p1Selected = false;
-        let timer1, timer2, botPreChoice = null;
-        let currentMode = 'bot';
-
-        function updateUI() {
-            let lvl = 0;
-            if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4; if(totalExp >= 25) lvl = 5;
-            
-            let data = levels[Math.min(lvl, levels.length-1)];
-            document.getElementById('level-name').innerText = data.name;
-            document.getElementById('exp-counter').innerText = totalExp;
-            document.getElementById('inv-count').innerText = `(${inventory.length})`;
-            document.getElementById('level-num').innerText = lvl + 1;
-            document.getElementById('my-rating').innerText = totalExp + " ДЕЛ";
-            
-            document.getElementById('avatar-container').innerHTML = avatars[Math.min(lvl, 4)];
-
-            let prevTarget = lvl > 0 ? [7, 12, 17, 22][lvl-1] : 0;
-            let currentTarget = lvl < 5 ? [7, 12, 17, 22, 25][lvl] : 25;
-            let done = totalExp - prevTarget;
-            let need = currentTarget - prevTarget;
-            if(need <= 0) { done = totalExp; need = 25; }
-
-            document.getElementById('exp-detail').innerText = `${done} / ${need}`;
-            
-            let percent = (done / need) * 100;
-            if(percent > 100) percent = 100;
-            if(percent < 0) percent = 0;
-            document.getElementById('exp-bar').style.width = percent + '%';
-        }
-
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-
-        function openDossier() {
-            let exp = totalExp;
-            let lvl = 0;
-            if(exp >= 7) lvl = 1; if(exp >= 12) lvl = 2; if(exp >= 17) lvl = 3; if(exp >= 22) lvl = 4; if(exp >= 25) lvl = 5;
-            let d = levels[Math.min(lvl, 4)];
-            document.getElementById('dossier-name').innerText = d.name;
-            document.getElementById('dossier-before').innerText = d.before;
-            document.getElementById('dossier-family').innerText = d.family;
-            document.getElementById('dossier-partner').innerText = d.partner;
-            showScreen('dossier');
-        }
-
-        function showInventory() {
-            let html = '';
-            const rolesList = [
-                { id: 'lawyer', title: "АДВОКАТ / LAWYER", desc: "Показывает выбор врага / Shows enemy choice" },
-                { id: 'mute', title: "МОЛЧУН / MUTE", desc: "Срок за молчание - 2 года / Silent - 2 years" },
-                { id: 'rat', title: "КРЫСА / RAT", desc: "Срок при сдаче сокращается / Reduced betray sentence" }
-            ];
-            inventory.forEach(rId => {
-                let r = rolesList.find(x => x.id === rId);
-                if(r) html += `<div class="case-box" style="border-color: var(--gold);"><b style="color: var(--gold)">${r.title}</b><br><span style="font-size:12px; color:#aaa;">${r.desc}</span></div>`;
-            });
-            if(inventory.length === 0) html = `<div style="color:#888; text-align:center; padding: 20px;">${translations[currentLang].empty}</div>`;
-            document.getElementById('inventory-list').innerHTML = html;
-            showScreen('inventory');
-        }
-
-        function startGame(mode) {
-            currentMode = mode;
-            if (mode === 'online') {
-                tg.showAlert(translations[currentLang].search);
-                setTimeout(() => {
-                    tg.showAlert(translations[currentLang].found.replace('{0}', 'KILLER_99'));
-                    currentMode = 'bot'; // Пока играем с ботом
-                    round = 1; activeRole = null; maxRounds = 2;
-                    nextRound();
-                }, 1500);
-                return;
-            }
-            round = 1; activeRole = null; 
-            maxRounds = (mode === 'infinite') ? 999 : 2;
-            nextRound();
-        }
-
-        function nextRound() {
-            if (round > maxRounds) {
-                showScreen('main-menu'); return;
-            }
-            let c = casesData[Math.floor(Math.random() * casesData.length)];
-            document.getElementById('case-text').innerText = c;
-            document.getElementById('round-text').innerText = currentMode === 'infinite' ? '∞' : `${round}/${maxRounds}`;
-            
-            document.getElementById('lawyer-hint').style.display = 'none';
-            document.getElementById('active-role').style.display = 'none';
-            document.getElementById('use-role-btn').style.display = 'none';
-            if (inventory.length > 0 && !activeRole) document.getElementById('use-role-btn').style.display = 'block';
-
-            p1Selected = false; botPreChoice = null;
-            showScreen('case-screen');
-
-            let time = 25;
-            document.getElementById('timer-read').innerText = time;
-            clearInterval(timer1);
-            timer1 = setInterval(() => {
-                time--; document.getElementById('timer-read').innerText = time;
-                if (time <= 0) { clearInterval(timer1); startChoosingPhase(); }
-            }, 1000);
-        }
-
-        function useRole() {
-            if (inventory.length === 0) return;
-            activeRole = inventory.shift(); // Берем первую роль
-            localStorage.setItem('roleInventory', JSON.stringify(inventory));
-            updateUI();
-            document.getElementById('use-role-btn').style.display = 'none';
-            document.getElementById('active-role').style.display = 'block';
-            document.getElementById('role-name').innerText = activeRole.toUpperCase();
-            tg.showAlert(`🎭 ${activeRole.toUpperCase()}`);
-        }
-
-        function startChoosingPhase() {
-            clearInterval(timer1);
-            showScreen('game-screen');
-            
-            if (activeRole === 'lawyer' && currentMode === 'bot') {
-                botPreChoice = Math.random() > 0.5 ? 'betray' : 'silent';
-                let txt = botPreChoice === 'betray' ? translations[currentLang].choice_betray : translations[currentLang].choice_silent;
-                document.getElementById('bot-choice-hint').innerText = txt;
-                document.getElementById('lawyer-hint').style.display = 'block';
-            }
-
-            let time = 90;
-            document.getElementById('timer-choose').innerText = time;
-            clearInterval(timer2);
-            timer2 = setInterval(() => {
-                time--; document.getElementById('timer-choose').innerText = time;
-                if(time < 10) document.getElementById('timer-choose').classList.add('red');
-                if (time <= 0) { clearInterval(timer2); makeChoice('betray'); }
-            }, 1000);
-        }
-
-        function makeChoice(choice) {
-            clearInterval(timer2);
-
-            if (currentMode === 'local') {
-                if (!p1Selected) {
-                    p1Choice = choice;
-                    p1Selected = true;
-                    showScreen('pass-screen');
-                    return;
-                } else {
-                    p2Choice = choice;
-                }
-            } else {
-                p1Choice = choice;
-                p2Choice = botPreChoice || (Math.random() > 0.5 ? 'betray' : 'silent');
-            }
-
-            calculate();
-        }
-
-        function calculate() {
-            let p1Y = 0, p2Y = 0;
-            if (p1Choice === 'betray' && p2Choice === 'silent') { p1Y = 0; p2Y = 7; }
-            if (p1Choice === 'silent' && p2Choice === 'betray') { p1Y = 7; p2Y = 0; }
-            if (p1Choice === 'betray' && p2Choice === 'betray') { p1Y = 7; p2Y = 7; }
-            if (p1Choice === 'silent' && p2Choice === 'silent') { p1Y = 3; p2Y = 3; }
-            
-            if(activeRole === 'mute' && p1Choice === 'silent') p1Y = 2;
-
-            let t = translations[currentLang];
-            let text = t.your_time.replace('{0}', p1Y).replace('{1}', p2Y);
-            
-            let isWin = p1Y < p2Y;
-            let isLose = p1Y > p2Y;
-
-            // ОПЫТ ДАЕТСЯ ТОЛЬКО В БОТЕ И ОНЛАЙНЕ
-            if (isWin) {
-                text += `<span style='color:var(--accent); font-size:20px; font-weight:bold;'>${t.win}</span>`;
-                if (currentMode === 'bot' || currentMode === 'infinite') { // онлайн тоже сюда идет пока
-                    totalExp++; if(totalExp > 25) totalExp = 25;
-                    if(totalExp % 7 === 0 && inventory.length < 5) {
-                        const rolesList = ['lawyer', 'mute', 'rat'];
-                        let r = rolesList[Math.floor(Math.random()*rolesList.length)];
-                        inventory.push(r);
-                        tg.showAlert(`🔥 NEW LEVEL! ROLE: ${r}`);
-                    }
-                }
-            } else if (isLose) {
-                text += `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>${t.lose}</span>`;
-                if (currentMode === 'bot' || currentMode === 'infinite') {
-                    totalExp--; if(totalExp < 0) totalExp = 0;
-                }
-            } else {
-                text += `<span style='color:#888; font-size:20px;'>${t.draw}</span>`;
-            }
-
-            localStorage.setItem('prisonExp', totalExp);
-            localStorage.setItem('roleInventory', JSON.stringify(inventory));
-            updateUI();
-
-            document.getElementById('result-text').innerHTML = text;
-            showScreen('result-screen');
-            round++;
-        }
-
-        // --- ЗАПУСК ---
-        applyLanguage();
-        
-        if (!localStorage.getItem('introSeen')) {
-            showScreen('intro'); localStorage.setItem('introSeen', 'true');
-        } else {
-            showScreen('main-menu');
-        }
-    </script>
-</body>
-</html>
+                inv_title: "我的角色", active_role: "当前角色:", btn_use_role: "🎭 使用角色", btn_read: "我读完了 (跳过)", court: "法庭", lawyer: "⚖️ 律师：搭档选择了", make_choice: "做出决定", choice_betray: "背叛", choice_silent: "沉默", years_0: "(0 年)", years_3: "(3 年
