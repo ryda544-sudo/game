@@ -3,190 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Alpha Beta Game</title>
+    <title>Дилемма Заключенного</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap');
+
         :root {
-            --bg: var(--tg-theme-bg-color, #17212b);
-            --text: var(--tg-theme-text-color, #ffffff);
-            --hint: var(--tg-theme-hint-color, #7f91a4);
-            --btn: var(--tg-theme-button-color, #5288c1);
-            --btn-text: var(--tg-theme-button-text-color, #ffffff);
-            --secondary-bg: var(--tg-theme-secondary-bg-color, #232e3c);
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --accent-alpha: #00FF41; /* Сдать */
+            --accent-beta: #FF003C;  /* Молчать */
+            --border: #333;
         }
 
-        * { box-sizing: border-box; user-select: none; }
-        
+        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
         body {
-            margin: 0;
-            padding: 20px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
+            margin: 0; padding: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg); color: var(--text);
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        .screen { display: none; width: 100%; max-width: 400px; flex-direction: column; align-items: center; animation: fadeIn 0.3s ease; }
+        .screen { display: none; width: 100%; max-width: 400px; flex-direction: column; animation: fadeIn 0.2s ease; }
         .screen.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- ГЛАВНОЕ МЕНЮ --- */
-        .greeting { font-size: 24px; font-weight: bold; margin-bottom: 40px; margin-top: 20px; text-align: center; }
+        .menu-grid { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         
-        .main-buttons { display: flex; flex-direction: column; gap: 15px; width: 100%; }
         .btn {
-            background: var(--btn); color: var(--btn-text); border: none; padding: 15px; 
-            border-radius: 12px; font-size: 18px; font-weight: 600; cursor: pointer;
-            transition: transform 0.1s; text-align: center;
+            background: transparent; color: var(--text); border: 2px solid var(--border);
+            padding: 15px 20px; font-size: 16px; font-weight: 700; text-transform: uppercase;
+            font-family: 'Space Grotesk', sans-serif; cursor: pointer;
+            width: 100%; transition: all 0.1s; text-align: left; display: flex; justify-content: space-between; align-items: center;
         }
-        .btn:active { transform: scale(0.96); }
-        .btn-secondary { background: var(--secondary-bg); color: var(--text); }
-        
-        .play-btn-container { margin-top: auto; padding-bottom: 20px; width: 100%; display: flex; justify-content: center; }
-        .play-btn { 
-            background: #28a745; font-size: 22px; padding: 18px 50px; border-radius: 30px; 
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4); color: white;
+        .btn:active { background: var(--text); color: var(--bg); }
+
+        .btn-play { border: none; background: var(--text); color: var(--bg); font-size: 24px; justify-content: center; margin-top: 15px; padding: 20px; }
+
+        /* Профиль */
+        .profile-header {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 15px;
+            font-size: 12px; color: #888; text-transform: uppercase; font-weight: 700;
         }
 
-        /* --- ИГРОВОЙ ЭКРАН --- */
-        .game-header { width: 100%; display: flex; justify-content: space-between; font-size: 14px; color: var(--hint); margin-bottom: 30px; }
-        .score-board { display: flex; justify-content: space-around; width: 100%; margin-bottom: 40px; }
-        .score-box { background: var(--secondary-bg); padding: 20px; border-radius: 15px; width: 45%; text-align: center; }
-        .score-box .label { font-size: 14px; color: var(--hint); margin-bottom: 5px; }
-        .score-box .value { font-size: 36px; font-weight: bold; }
-        .score-green { color: #28a745; }
-        .score-red { color: #dc3545; }
+        .inmate-box {
+            width: 100%; border: 2px solid var(--accent-alpha); padding: 20px; 
+            display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; position: relative; overflow: hidden;
+        }
+        .inmate-box::after {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,255,65,0.1) 20px, rgba(0,255,65,0.1) 25px);
+            pointer-events: none;
+        }
+        .inmate-svg { width: 80px; height: 80px; fill: var(--accent-alpha); margin-bottom: 10px; z-index: 1;}
+        .inmate-name { font-size: 18px; font-weight: 900; text-transform: uppercase; z-index: 1; color: var(--accent-alpha);}
+        .inmate-crime { font-size: 12px; color: #888; text-transform: uppercase; z-index: 1; margin-top: 5px;}
 
-        .choice-buttons { display: flex; gap: 15px; width: 100%; margin-top: auto; padding-bottom: 40px; }
-        .choice-btn { flex: 1; padding: 30px 10px; border-radius: 20px; font-size: 20px; font-weight: bold; border: none; color: white; }
-        .choice-alpha { background: #007aff; box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3); }
-        .choice-beta { background: #ff3b30; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3); }
+        .progress-container { width: 100%; margin-bottom: 20px; }
+        .progress-text { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 5px; text-transform: uppercase;}
+        .progress-bar { width: 100%; height: 10px; background: var(--border); border: 1px solid #555; }
+        .progress-fill { height: 100%; background: var(--accent-alpha); width: 0%; transition: width 0.3s; }
 
-        /* --- СПИСКИ И НАСТРОЙКИ --- */
-        .list-item { width: 100%; background: var(--secondary-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .back-btn { position: absolute; top: 20px; left: 20px; background: none; border: none; color: var(--hint); font-size: 16px; cursor: pointer; }
-        .title-screen { font-size: 22px; font-weight: bold; margin-bottom: 20px; margin-top: 40px; }
+        .brutal-title { font-size: 36px; font-weight: 900; line-height: 1.1; text-transform: uppercase; margin-bottom: 20px; letter-spacing: -1px; }
+        .brutal-title .highlight { color: var(--accent-alpha); }
+
+        .nav-back { background: none; border: none; color: #888; font-size: 14px; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-bottom: 20px; text-align: left; }
+
+        /* Игровой экран */
+        .case-box {
+            width: 100%; border: 2px dashed #555; padding: 20px; margin-bottom: 20px; 
+            background: rgba(0,0,0,0.5); min-height: 150px; display: flex; flex-direction: column; justify-content: center;
+        }
+        .case-title { color: var(--accent-beta); font-weight: 900; font-size: 18px; margin-bottom: 10px; text-transform: uppercase; }
+        .case-text { font-size: 14px; line-height: 1.5; color: #ddd; }
+
+        .timer-display { font-size: 48px; font-weight: 900; text-align: center; margin-bottom: 20px; font-variant-numeric: tabular-nums; }
+        .timer-display.red { color: var(--accent-beta); animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        .choices { display: flex; gap: 10px; width: 100%; margin-top: auto; }
+        .choice-btn {
+            flex: 1; padding: 20px 10px; font-size: 16px; font-weight: 900; 
+            border: none; color: var(--bg); font-family: 'Space Grotesk', sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-transform: uppercase;
+        }
+        .choice-btn span { font-size: 10px; font-weight: 700; margin-top: 5px; }
+        .c-alpha { background: var(--accent-alpha); }
+        .c-beta { background: var(--accent-beta); color: white; }
+
+        .disabled-btn { opacity: 0.3; pointer-events: none; }
+
+        .list-item { width: 100%; border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; }
+        .text-green { color: var(--accent-alpha); }
+        .text-red { color: var(--accent-beta); }
     </style>
 </head>
 <body>
 
     <!-- ЭКРАН 1: ГЛАВНОЕ МЕНЮ -->
     <div id="main-menu" class="screen active">
-        <div class="greeting" id="greeting-text">Привет, Игрок!</div>
-        
-        <div class="main-buttons">
-            <button class="btn btn-secondary" onclick="showScreen('leaderboard')">🏆 Рейтинг</button>
-            <button class="btn btn-secondary" onclick="showScreen('friends')">👥 Друзья</button>
-            <button class="btn btn-secondary" onclick="showScreen('clan')">🛡️ Клан</button>
-            <button class="btn btn-secondary" onclick="showScreen('settings')">⚙️ Настройки</button>
+        <div class="profile-header">
+            <div id="player-id">ЗАКЛЮЧЕННЫЙ</div>
+            <div>ДЕЛА: <span id="exp-counter">0</span></div>
         </div>
 
-        <div class="play-btn-container">
-            <button class="btn play-btn" onclick="showScreen('mode-select')">ИГРАТЬ</button>
+        <div class="inmate-box">
+            <svg class="inmate-svg" viewBox="0 0 24 24"><path d="M12 2C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-3.31 0-10 1.67-10 5v3h20v-3c0-3.33-6.69-5-10-5z"/></svg>
+            <div class="inmate-name" id="level-name">ГЕНРИ ХИЛЛ</div>
+            <div class="inmate-crime" id="level-crime">ОГРАБЛЕНИЕ БАНКА</div>
         </div>
+
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>УРОВЕНЬ <span id="level-num">1</span></span>
+                <span id="exp-text">0 / 7 ДЕЛ</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="exp-bar"></div></div>
+        </div>
+        
+        <div class="menu-grid">
+            <button class="btn" onclick="showScreen('leaderboard')">🏆 Рейтинг <span>→</span></button>
+            <button class="btn" onclick="showScreen('friends')">👥 Друзья <span>→</span></button>
+            <button class="btn" onclick="showScreen('clan')">🛡️ Клан <span>→</span></button>
+            <button class="btn" onclick="showScreen('settings')">⚙️ Настройки <span>→</span></button>
+        </div>
+        <button class="btn btn-play" onclick="showScreen('mode-select')">В СУД</button>
     </div>
 
     <!-- ЭКРАН 2: ВЫБОР РЕЖИМА -->
     <div id="mode-select" class="screen">
-        <button class="back-btn" onclick="showScreen('main-menu')">← Назад</button>
-        <div class="title-screen">Выбор режима</div>
-        
-        <div class="main-buttons">
-            <button class="btn" onclick="startGame('bot')">🤖 С ботом</button>
-            <button class="btn" onclick="startGame('local')">📱 Локально (с другом)</button>
-            <button class="btn" onclick="startOnline()">🌐 Онлайн (поиск)</button>
-            <button class="btn btn-secondary" onclick="startGame('infinite')">∞ Бесконечный</button>
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title" style="font-size: 28px;">РЕЖИМ</div>
+        <div class="menu-grid">
+            <button class="btn" onclick="startGame('bot')">🤖 С БОТОМ</button>
+            <button class="btn" onclick="startGame('local')">📱 ЛОКАЛЬНО (С ДРУГОМ)</button>
+            <button class="btn" onclick="startOnline()">🌐 ОНЛАЙН (ПОИСК)</button>
+            <button class="btn" onclick="startGame('infinite')">∞ БЕЗ ЛИМИТА</button>
         </div>
     </div>
 
-    <!-- ЭКРАН 3: ИГРА -->
+    <!-- ЭКРАН 3: ЧТЕНИЕ ДЕЛА -->
+    <div id="case-screen" class="screen">
+        <div class="profile-header" style="justify-content: center; border: none; color: var(--accent-beta);">
+            ОЗНАКОМЛЕНИЕ С ДЕЛОМ
+        </div>
+        <div class="timer-display red" id="timer-read">25</div>
+        <div class="case-box">
+            <div class="case-title" id="case-title-read">ДЕЛО №1</div>
+            <div class="case-text" id="case-text-read">Текст дела...</div>
+        </div>
+    </div>
+
+    <!-- ЭКРАН 4: ВЫБОР (СУД) -->
     <div id="game-screen" class="screen">
-        <div class="game-header">
-            <span id="mode-label">Режим</span>
-            <span id="target-label">Цель: +7 / -3</span>
+        <div style="width: 100%; display: flex; justify-content: space-between; font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 15px;">
+            <span id="mode-label">СУД</span>
+            <span id="target-label">РАУНД 1 ИЗ 2</span>
         </div>
 
-        <div class="score-board">
-            <div class="score-box">
-                <div class="label" id="p1-name">Вы</div>
-                <div class="value" id="p1-score">0</div>
-            </div>
-            <div class="score-box">
-                <div class="label" id="p2-name">Соперник</div>
-                <div class="value" id="p2-score">0</div>
-            </div>
+        <div class="timer-display" id="timer-choose">90</div>
+        
+        <div class="case-box" style="min-height: 80px; margin-bottom: 10px;">
+            <div class="case-text" style="font-size: 12px; color: #888;" id="case-brief">Краткое описание...</div>
         </div>
 
-        <div style="text-align: center; margin-bottom: 20px; color: var(--hint); font-size: 14px;" id="game-status">
-            Выберите свою сторону
+        <div id="game-status" style="text-align: center; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; font-size: 14px;">
+            ПРИМИТЕ РЕШЕНИЕ
         </div>
 
-        <div class="choice-buttons" id="choice-buttons">
-            <button class="choice-btn choice-alpha" onclick="makeChoice('alpha')">АЛЬФА</button>
-            <button class="choice-btn choice-beta" onclick="makeChoice('beta')">БЕТА</button>
+        <div class="choices" id="choice-buttons">
+            <button class="choice-btn c-alpha" onclick="makeChoice('betray')">
+                СДАТЬ НАПАРНИКА <span>(0 ЛЕТ)</span>
+            </button>
+            <button class="choice-btn c-beta" onclick="makeChoice('silent')">
+                МОЛЧАТЬ <span>(3 ГОДА)</span>
+            </button>
         </div>
     </div>
 
-    <!-- ЭКРАН 4: РЕЙТИНГ -->
-    <div id="leaderboard" class="screen">
-        <button class="back-btn" onclick="showScreen('main-menu')">← Назад</button>
-        <div class="title-screen">Топ игроков</div>
-        <div id="leaderboard-list"></div>
+    <!-- ЭКРАН 5: РЕЗУЛЬТАТ РАУНДА -->
+    <div id="result-screen" class="screen">
+        <div class="brutal-title" style="font-size: 28px; margin-top: 50px;">ПРИГОВОР</div>
+        <div class="case-box" style="border-color: var(--accent-alpha);">
+            <div class="case-text" id="result-text" style="font-size: 16px; line-height: 1.8;">...</div>
+        </div>
+        <button class="btn btn-play" onclick="nextRound()">ДАЛЕЕ</button>
     </div>
 
-    <!-- ЭКРАН 5: ДРУЗЬЯ -->
-    <div id="friends" class="screen">
-        <button class="back-btn" onclick="showScreen('main-menu')">← Назад</button>
-        <div class="title-screen">Друзья</div>
-        <div class="list-item">
-            <span>Иван Иванов</span>
-            <span class="score-green">+12</span>
-        </div>
-        <div class="list-item">
-            <span>Мария С.</span>
-            <span class="score-red">-2</span>
-        </div>
-        <div style="color: var(--hint); text-align: center; margin-top: 20px;">Пока это демо-версия списка</div>
-    </div>
-
-    <!-- ЭКРАН 6: КЛАН -->
-    <div id="clan" class="screen">
-        <button class="back-btn" onclick="showScreen('main-menu')">← Назад</button>
-        <div class="title-screen">Мой Клан</div>
-        <div class="score-box" style="width: 100%; margin-bottom: 20px;">
-            <div class="label">Название клана</div>
-            <div class="value" style="font-size: 24px;">Альфа-Стая</div>
-            <div class="label" style="margin-top: 10px;">Рейтинг клана: 1540</div>
-        </div>
-        <div class="list-item"><span>Вы</span> <span>Лидер</span></div>
-        <div class="list-item"><span>Друг 1</span> <span>Участник</span></div>
-    </div>
-
-    <!-- ЭКРАН 7: НАСТРОЙКИ -->
-    <div id="settings" class="screen">
-        <button class="back-btn" onclick="showScreen('main-menu')">← Назад</button>
-        <div class="title-screen">Настройки</div>
-        <div class="list-item"><span>Звуки</span> <span>Вкл</span></div>
-        <div class="list-item"><span>Вибрация</span> <span>Вкл</span></div>
-        <div style="color: var(--hint); text-align: center; margin-top: 20px;">Версия 1.0.0</div>
-    </div>
+    <!-- ОСТАЛЬНЫЕ ЭКРАНЫ (Заглушки) -->
+    <div id="leaderboard" class="screen"><button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button><div class="brutal-title" style="font-size: 28px;">ТОП</div></div>
+    <div id="friends" class="screen"><button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button><div class="brutal-title" style="font-size: 28px;">ДРУЗЬЯ</div></div>
+    <div id="clan" class="screen"><button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button><div class="brutal-title" style="font-size: 28px;">КЛАН</div></div>
+    <div id="settings" class="screen"><button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button><div class="brutal-title" style="font-size: 28px;">НАСТРОЙКИ</div></div>
 
     <script>
-        // Инициализация Telegram
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-
-        // Получаем имя игрока
         const user = tg.initDataUnsafe?.user;
-        const playerName = user ? user.first_name : 'Игрок';
-        document.getElementById('greeting-text').innerText = `Привет, ${playerName}!`;
+        document.getElementById('player-id').innerText = user ? `ИГРОК: ${user.first_name}` : 'ЗАКЛЮЧЕННЫЙ';
 
-        // Переключение экранов
+        // --- БАЗА ДЕЛ (СЮЖЕТЫ) ---
+        const cases = [
+            { title: "ДЕЛО О КРАЖЕ БЮДЖЕТА", text: "Ты и твой напарник — бухгалтеры в мэрии. Вы украли 50 миллионов рублей, выделенных на ремонт детских садов. Следователь нашел неопровержимые улики. У тебя есть жена и двое детей, у напарника — больная мать. Если ты сдашь его, тебе дадут иммунитет. Если промолчишь — посадят обоих." },
+            { title: "ДЕЛО О ГОНКЕ", text: "Ночная гонка закончилась тем, что ваш автомобиль сбил пешехода. За рулем был твой лучший друг, но вы оба были пьяны. Камеры зафиксировали машину, но лица не видно. Если ты сдашь друга, ты выйдешь сухим из воды. Если промолчите — вину поделят на двоих (по 7 лет каждому)." },
+            { title: "ДЕЛО О МАХИНАЦИЯХ С КРИПТОВАЛЮТОЙ", text: "Вы с напарником запустили финансовую пирамиду. Люди потеряли квартиры. Прокуратура вышла на ваш след. Сдать напарника — шанс выйти под залог и сохранить часть активов. Молчать — значит сесть на долгие годы за мошенничество в особо крупном размере." },
+            { title: "ДЕЛО О НАПАДЕНИИ", text: "Вы с напарником ограбили ювелирный магазин. Охранник получил тяжелые травмы. Следователь предлагает сделку: если ты сдашь напарника и покажешь, где спрятаны камни, тебя отпустят прямо в зале суда. Напарник уверен, что ты его не сдашь." },
+            { title: "ДЕЛО ОБ ОРГАНИЗОВАННОЙ ГРУППЕ", text: "Ты и напарник перевозили запрещенные вещества через границу. Вас взяли на таможне. Если ты сдашь всю цепочку поставок и напарника — тебя переведут в свидетели. Если будешь молчать, получишь максимальный срок как член ОПГ." },
+            { title: "ДЕЛО О ПОДЖОГЕ", text: "Вы с напарником сожгли конкурентный бизнес. Погиб сторож. Следователь говорит, что на записях видно двоих. Если ты сдашь напарника первым, тебе скостят срок до условного. Если оба будете молчать — обоим дадут по 7 лет строгого режима." }
+        ];
+
+        // --- СИСТЕМА УРОВНЕЙ (МАКСИМУМ ДЕЛ) ---
+        const levels = [
+            { level: 1, maxExp: 7,  name: "ГЕНРИ ХИЛЛ",     crime: "ОГРАБЛЕНИЕ БАНКА" },
+            { level: 2, maxExp: 12, name: "ДЖО ПЕШИ",       crime: "ВЫМОГАТЕЛЬСТВО" },
+            { level: 3, maxExp: 17, name: "АЛЬ КАПОНЕ",     crime: "КОНТРАБАНДА" },
+            { level: 4, maxExp: 22, name: "ФРЭНК ЛУКАС",    crime: "НАРКОТИКИ" },
+            { level: 5, maxExp: 25, name: "ПАБЛО ЭСКОБАР",  crime: "ВСЕ СТАТЬИ" }
+        ];
+
+        let totalExp = parseInt(localStorage.getItem('prisonExp')) || 0;
+        
+        function updateLevelUI() {
+            let currentLvlData = levels[0];
+            for (let i = levels.length - 1; i >= 0; i--) {
+                if (totalExp >= (i > 0 ? levels[i-1].maxExp : 0)) { currentLvlData = levels[i]; break; }
+            }
+
+            document.getElementById('level-name').innerText = currentLvlData.name;
+            document.getElementById('level-crime').innerText = currentLvlData.crime;
+            document.getElementById('exp-counter').innerText = totalExp;
+            document.getElementById('level-num').innerText = currentLvlData.level;
+
+            let prevTarget = currentLvlData.level > 1 ? levels[currentLvlData.level - 2].maxExp : 0;
+            let currentTarget = currentLvlData.maxExp;
+            
+            let progressPercent = ((totalExp - prevTarget) / (currentTarget - prevTarget)) * 100;
+            if (progressPercent > 100) progressPercent = 100;
+            if (progressPercent < 0) progressPercent = 0;
+
+            document.getElementById('exp-text').innerText = `${totalExp} / ${currentTarget} ДЕЛ`;
+            document.getElementById('exp-bar').style.width = `${progressPercent}%`;
+        }
+
+        function changeExp(amount) {
+            let oldLvl = document.getElementById('level-num').innerText;
+            totalExp += amount;
+            
+            // Проверка на максимум
+            let max = levels[levels.length - 1].maxExp;
+            if (totalExp > max) totalExp = max;
+            if (totalExp < 0) totalExp = 0;
+
+            localStorage.setItem('prisonExp', totalExp);
+            updateLevelUI();
+            
+            let newLvl = document.getElementById('level-num').innerText;
+            if (oldLvl !== newLvl && totalExp >= 7) {
+                setTimeout(() => tg.showAlert(`🔥 НОВЫЙ УРОВЕНЬ!\nТеперь вы: ${document.getElementById('level-name').innerText}`), 1000);
+            }
+        }
+        updateLevelUI();
+
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
@@ -194,129 +277,130 @@
 
         // --- ЛОГИКА ИГРЫ ---
         let currentMode = 'bot';
-        let score1 = 0, score2 = 0;
-        let isGameOver = false;
+        let currentCase = null;
+        let timerRead, timerChoose;
+        let timeLeftRead = 25, timeLeftChoose = 90;
+        let round = 1;
+        let p1Choice = null, p2Choice = null;
 
         function startGame(mode) {
             currentMode = mode;
-            score1 = 0; score2 = 0;
-            isGameOver = false;
-            
-            document.getElementById('p1-name').innerText = mode === 'local' ? 'Игрок 1' : playerName;
-            document.getElementById('p2-name').innerText = mode === 'local' ? 'Игрок 2' : 'Бот';
-            
-            let targetText = 'Цель: +7 / -3';
-            if (mode === 'infinite') targetText = 'Бесконечный режим';
-            
-            document.getElementById('target-label').innerText = targetText;
-            document.getElementById('mode-label').innerText = 
-                mode === 'bot' ? 'Режим: С ботом' : 
-                mode === 'local' ? 'Режим: Локально' : 
-                mode === 'infinite' ? 'Режим: Бесконечный' : 'Режим: Онлайн';
-
-            updateScoreDisplay();
-            document.getElementById('game-status').innerText = 'Выберите свою сторону';
-            document.getElementById('choice-buttons').style.opacity = '1';
-            document.getElementById('choice-buttons').style.pointerEvents = 'auto';
-
-            showScreen('game-screen');
+            round = 1;
+            nextRound();
         }
 
         function startOnline() {
-            tg.showAlert("Поиск соперника...\n(Пока что мы найдем вам бота для теста)");
-            setTimeout(() => {
-                startGame('bot');
-            }, 1500);
+            tg.showAlert("ПОИСК СОУЧАСТНИКА...");
+            setTimeout(() => { startGame('bot'); }, 1500);
         }
 
-        function updateScoreDisplay() {
-            let p1El = document.getElementById('p1-score');
-            let p2El = document.getElementById('p2-score');
-            
-            p1El.innerText = score1;
-            p2El.innerText = score2;
-
-            p1El.className = score1 >= 0 ? 'value score-green' : 'value score-red';
-            p2El.className = score2 >= 0 ? 'value score-green' : 'value score-red';
-        }
-
-        function checkGameOver() {
-            if (currentMode === 'infinite') return false; // В бесконечном не заканчиваем
-
-            if (score1 >= 7 || score1 <= -3 || score2 >= 7 || score2 <= -3) {
-                isGameOver = true;
-                
-                // Блокируем кнопки
-                document.getElementById('choice-buttons').style.opacity = '0.5';
-                document.getElementById('choice-buttons').style.pointerEvents = 'none';
-                
-                let msg = "";
-                if (score1 >= 7) msg = "🏆 ВЫ ПОБЕДИЛИ! Набрано 7 очков.";
-                else if (score1 <= -3) msg = "💀 ВЫ ПРОИГРАЛИ. Набрано -3 очка.";
-                else if (score2 >= 7) msg = "Бот победил.";
-                else if (score2 <= -3) msg = "Бот проиграл.";
-
-                setTimeout(() => {
-                    tg.showAlert(msg);
-                    setTimeout(() => showScreen('main-menu'), 1000);
-                }, 500);
-                return true;
+        function nextRound() {
+            if (round > 2) {
+                showScreen('main-menu');
+                return;
             }
-            return false;
+
+            // Выбираем случайное дело
+            currentCase = cases[Math.floor(Math.random() * cases.length)];
+            document.getElementById('case-title-read').innerText = `ДЕЛО №${Math.floor(Math.random()*900)+100}`;
+            document.getElementById('case-text-read').innerText = currentCase.text;
+            document.getElementById('case-brief').innerText = "Вспомните детали дела и примите решение.";
+
+            document.getElementById('target-label').innerText = `РАУНД ${round} ИЗ 2`;
+            document.getElementById('mode-label').innerText = currentMode === 'bot' ? 'С БОТОМ' : 'ЛОКАЛЬНО';
+
+            // Сброс кнопок
+            document.getElementById('choice-buttons').classList.remove('disabled-btn');
+            document.getElementById('game-status').innerText = "ПРИМИТЕ РЕШЕНИЕ";
+            
+            // Запуск таймера чтения
+            showScreen('case-screen');
+            timeLeftRead = 25;
+            document.getElementById('timer-read').innerText = timeLeftRead;
+            clearInterval(timerRead);
+            timerRead = setInterval(() => {
+                timeLeftRead--;
+                document.getElementById('timer-read').innerText = timeLeftRead;
+                if (timeLeftRead <= 0) {
+                    clearInterval(timerRead);
+                    startChoosingPhase();
+                }
+            }, 1000);
         }
 
-        function makeChoice(playerChoice) {
-            if (isGameOver) return;
-
-            let choice1, choice2;
+        function startChoosingPhase() {
+            showScreen('game-screen');
+            timeLeftChoose = 90;
+            document.getElementById('timer-choose').innerText = timeLeftChoose;
+            document.getElementById('timer-choose').className = 'timer-display';
             
-            if (currentMode === 'local') {
-                // Локальный режим: Игрок 1 ходит, потом Игрок 2. Пока для простоты 
-                // сделаем так: Игрок 1 жмет, потом он же жмет за Игрока 2.
-                // Для простоты сделаем вид, что второй игрок передает телефон.
-                // В реальном коде тут нужен экран "Передайте телефон Игроку 2".
-                // Сделаем просто: оба выбирают случайно для демо.
-                
-                // Упрощение: Игрок 1 нажал. Ждем второго нажатия.
-                // Чтобы не усложнять код, сделаем оба выбора случайными для второго.
-                choice1 = playerChoice;
-                choice2 = Math.random() > 0.5 ? 'alpha' : 'beta'; // Заглушка для Игрока 2
+            p1Choice = null;
+            p2Choice = null;
+
+            clearInterval(timerChoose);
+            timerChoose = setInterval(() => {
+                timeLeftChoose--;
+                document.getElementById('timer-choose').innerText = timeLeftChoose;
+                if (timeLeftChoose <= 10) {
+                    document.getElementById('timer-choose').className = 'timer-display red';
+                }
+                if (timeLeftChoose <= 0) {
+                    clearInterval(timerChoose);
+                    tg.showAlert("ВРЕМЯ ВЫШЛО! Судья выносит приговор автоматически (Оба сдают).");
+                    makeChoice('betray');
+                }
+            }, 1000);
+        }
+
+        function makeChoice(choice) {
+            clearInterval(timerChoose);
+            p1Choice = choice;
+
+            // Бот или Второй игрок
+            if (currentMode === 'bot') {
+                // Бот с вероятностью 50% сдает
+                p2Choice = Math.random() > 0.5 ? 'betray' : 'silent';
             } else {
-                // Против бота
-                choice1 = playerChoice;
-                // Умный бот: 50/50
-                choice2 = Math.random() > 0.5 ? 'alpha' : 'beta';
+                // Локально (для простоты второй игрок тоже рандом, так как экран один)
+                p2Choice = Math.random() > 0.5 ? 'betray' : 'silent';
             }
 
-            calculateResult(choice1, choice2);
+            calculateResult();
         }
 
-        function calculateResult(c1, c2) {
-            let res1 = 0, res2 = 0;
+        function calculateResult() {
+            let p1Years = 0, p2Years = 0;
             let text = "";
 
-            if (c1 === 'alpha' && c2 === 'beta') {
-                res1 = 3; res2 = -1;
-                text = "Вы Альфа, соперник Бета. Вы +3, он -1.";
-            } else if (c1 === 'alpha' && c2 === 'alpha') {
-                res1 = 0; res2 = 0;
-                text = "Оба Альфа. По 0 очков. (Можно в союзники)";
-            } else if (c1 === 'beta' && c2 === 'alpha') {
-                res1 = -1; res2 = 3;
-                text = "Вы Бета, соперник Альфа. Вы -1, он +3.";
-            } else if (c1 === 'beta' && c2 === 'beta') {
-                res1 = 1; res2 = 1;
-                text = "Оба Бета. По +1 очку.";
+            // МАТРИЦА ПРИГОВОРОВ
+            if (p1Choice === 'betray' && p2Choice === 'silent') {
+                p1Years = 0; p2Years = 7;
+                text = "Ты сдал напарника. <b>Ты свободен!</b> Напарник получил 7 лет.";
+            } else if (p1Choice === 'silent' && p2Choice === 'betray') {
+                p1Years = 7; p2Years = 0;
+                text = "Напарник сдал тебя. <b>Ты получил 7 лет.</b> Он вышел на свободу.";
+            } else if (p1Choice === 'betray' && p2Choice === 'betray') {
+                p1Years = 7; p2Years = 7;
+                text = "Вы оба сдали друг друга. <b>Каждый получил по 7 лет.</b>";
+            } else if (p1Choice === 'silent' && p2Choice === 'silent') {
+                p1Years = 3; p2Years = 3;
+                text = "Вы оба молчали. Судья смягчился. <b>Каждый получил по 3 года.</b>";
             }
 
-            score1 += res1;
-            score2 += res2;
+            // ОПРЕДЕЛЕНИЕ ПОБЕДИТЕЛЯ
+            if (p1Years < p2Years) {
+                text += "<br><br><span class='text-green'>ТЫ ВЫИГРАЛ РАУНД! (Сгорело 1 дело)</span>";
+                changeExp(1);
+            } else if (p1Years > p2Years) {
+                text += "<br><br><span class='text-red'>ТЫ ПРОИГРАЛ РАУНД! (+1 дело в срок)</span>";
+                changeExp(-1);
+            } else {
+                text += "<br><br><span style='color:#888'>НИЧЬЯ. Сроки равны, дела не меняются.</span>";
+            }
 
-            updateScoreDisplay();
-            document.getElementById('game-status').innerText = text;
-
-            // Проверка на конец игры
-            checkGameOver();
+            document.getElementById('result-text').innerHTML = text;
+            showScreen('result-screen');
+            round++;
         }
     </script>
 </body>
