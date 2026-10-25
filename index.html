@@ -74,10 +74,11 @@
         
         .prize-box { background: linear-gradient(45deg, #1a3a2a, #0a0a0a); border: 2px solid var(--pub-gold); padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center;}
         
-        /* БЛОК СЮЖЕТА В МЕНЮ */
         .story-continue-box { background: linear-gradient(135deg, #1a3a2a 0%, #0a0a0a 100%); border: 2px solid var(--pub-gold); border-radius: 12px; padding: 20px; margin-bottom: 15px; display: none; }
         .story-continue-title { color: var(--pub-gold); font-weight: 900; font-size: 18px; font-family: 'Playfair Display', serif; margin-bottom: 10px; }
         .story-continue-text { font-size: 14px; color: #ddd; line-height: 1.6; }
+
+        .rating-badge { background: var(--pub-gold); color: #000; padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: 900; }
     </style>
 </head>
 <body>
@@ -92,11 +93,10 @@
         <button class="btn btn-play" onclick="showScreen('choose-name')">НАЧАТЬ</button>
     </div>
 
-    <!-- ВЫБОР ИМЕНИ -->
     <div id="choose-name" class="screen">
         <div class="brutal-title">КАК ТЕБЯ ЗОВУТ?</div>
         <div class="case-box" style="font-size: 13px; margin-bottom: 20px;">
-            Каждого из них привлекли быстрые деньги,дорогая жизнь,чувство безнаказанности. Кем ты станешь?
+            Каждый из них мечтал о другой жизни. Но Лондон не прощает ошибок. Кем ты станешь?
         </div>
         <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Работал охранником, но хотел большего. У него есть жена и двое детей.</span></button>
         <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Бывший военный. Воевал, но нашел себя в криминале. У него есть больная мать.</span></button>
@@ -109,7 +109,6 @@
             <div>ОПЫТ: <span id="exp-counter" style="color: var(--pub-gold);">0</span></div>
         </div>
 
-        <!-- СЮЖЕТНЫЙ БЛОК ПРОДОЛЖЕНИЯ -->
         <div id="story-continue" class="story-continue-box">
             <div class="story-continue-title" id="story-continue-title">ГЛАВА 2</div>
             <div class="story-continue-text" id="story-continue-text">...</div>
@@ -127,7 +126,12 @@
             </div>
             <div class="progress-bar"><div class="progress-fill" id="exp-bar"></div></div>
         </div>
-        <button class="btn btn-play" onclick="showScreen('mode-select')">В СУД</button>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <button class="btn btn-play" style="flex: 1; margin-right: 10px;" onclick="showScreen('mode-select')">В СУД</button>
+            <div class="rating-badge" id="rating-badge">🏆 <span id="rating-score">0</span></div>
+        </div>
+        
         <button class="btn" onclick="showScreen('rules')" style="border-color: var(--pub-gold); color: var(--pub-gold);">📜 ПРАВИЛА ИГРЫ</button>
         
         <div class="pub-bg" style="margin-top: 10px;">
@@ -148,8 +152,8 @@
             • Если ты СДАШЬ, а он МОЛЧИТ: ты выйдешь (0 лет), он сядет на 10 лет.<br>
             • Если ты МОЛЧИШЬ, а он СДАСТ: ты сядешь на 10 лет, он выйдет.<br>
             • Если вы оба СДАДИТЕ: вы оба сядете на 6 лет.<br>
-            • Если вы оба МОЛЧИТЕ: вы оба сядете на 3 года.<br><br>
-            <b>ВАЖНО:</b> Если ты сдашь напарника, у которого есть семья, ты потеряешь опыт (мафия не любит крыс). Если промолчишь — получишь бонус.
+            • Если вы оба МОЛЧИТЕ: вы оба сядете на 3 года, но мафия вас вытащит! Вы идете дальше.<br><br>
+            <b>ВАЖНО:</b> Если ты сдашь напарника, у которого есть семья, ты потеряешь опыт. Если промолчишь — получишь бонус.
         </div>
     </div>
 
@@ -158,6 +162,7 @@
         <div class="brutal-title">ВЫБОР РЕЖИМА</div>
         <button class="btn" onclick="startGame('story')">📖 СЮЖЕТ</button>
         <button class="btn" onclick="startGame('rating')">🏆 РЕЙТИНГОВАЯ ИГРА</button>
+        <button class="btn" onclick="startGame('online')">🌐 ОНЛАЙН (ПОИСК)</button>
         <button class="btn" onclick="startGame('local')">📱 ИГРАТЬ С ДРУГОМ</button>
         <button class="btn" onclick="startGame('bot')">🤖 С БОТОМ</button>
     </div>
@@ -269,16 +274,34 @@
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
-    // СЮЖЕТНЫЕ ДЕЛА (с историей)
+    // СЮЖЕТНЫЕ ДЕЛА (по мотивам фильмов)
     const storyCases = [
-        { t: "ГЛАВА 1: Тебя зовут в банду. Первое дело — ограбление банка на Паддингтон-стрит. Вы с Джимми вскрыли сейф, но сработала сигнализация. Полиция приехала через 5 минут. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе четкие отпечатки Джимми. Следователь обещает тебе иммунитет, если ты подтвердишь, что он был за рулем.", fam: "У Джимми больная мать, Элизабет, которая живет в доме престарелых. Он единственный, кто оплачивает ее лечение." },
-        { t: "ГЛАВА 2: Ты вышел из тюрьмы (или отсиделся). Джимми пропал. Ты узнаешь, что он сдал тебя и скрылся. Тебя снова берут на дело — угон 'Ягуара' у сына прокурора. Но на этот раз твой напарник — Томми, правая рука босса. Он знает, что ты был в тюрьме.", p: "Томми 'Два Ствола'.", ev: "Томми оставил свои отпечатки на руле. Полиция нашла твою куртку на заднем сиденье.", fam: "У Томми больная мать. Он не хочет садиться, чтобы не оставить ее одну." },
-        { t: "ГЛАВА 3: Томми тоже пропал. Ходят слухи, что его убили люди босса. Тебя берут на ограбление ювелирки 'Тиффани'. Твой новый напарник — Ленни, старый друг. Он клянется, что не сдаст тебя.", p: "Ленни 'Молот'.", ev: "На записи камер видно двоих. Ленни был в кадре, но лицо размыто. Следователь предлагает сделку.", fam: "Ленни недавно женился. Его жена беременна. Он хочет выйти из игры." },
+        { t: "ГЛАВА 1: Ограбление казино 'Белладжио'. Тебя зовут в банду. Первое дело — вскрыть сейф в казино. Вы с Джимми вскрыли сейф, но сработала сигнализация. Полиция приехала через 5 минут. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе четкие отпечатки Джимми. Следователь обещает тебе иммунитет, если ты подтвердишь, что он был за рулем.", fam: "У Джимми больная мать, Элизабет, которая живет в доме престарелых. Он единственный, кто оплачивает ее лечение." },
+        { t: "ГЛАВА 2: Ты вышел из тюрьмы. Джимми пропал. Тебя снова берут на дело — угон 'Ягуара' у сына прокурора. Но на этот раз твой напарник — Томми, правая рука босса. Он знает, что ты был в тюрьме.", p: "Томми 'Два Ствола'.", ev: "Томми оставил свои отпечатки на руле. Полиция нашла твою куртку на заднем сиденье.", fam: "У Томми больная мать. Он не хочет садиться, чтобы не оставить ее одну." },
+        { t: "ГЛАВА 3: Томми пропал. Тебя берут на ограбление ювелирки 'Тиффани'. Твой новый напарник — Ленни, старый друг. Он клянется, что не сдаст тебя.", p: "Ленни 'Молот'.", ev: "На записи камер видно двоих. Ленни был в кадре, но лицо размыто. Следователь предлагает сделку.", fam: "Ленни недавно женился. Его жена беременна. Он хочет выйти из игры." },
         { t: "ГЛАВА 4: Ленни сдал тебя, но ты вышел под залог. Тебя снова зовут на дело — контрабанда виски. Твой напарник — Эрни, человек с принципами. Он не любит предателей.", p: "Эрни 'Тихий'.", ev: "Эрни оставил свой телефон в машине. Там переписка, где он берет всю вину на себя.", fam: "У Эрни маленький сын. Он хочет уйти из бизнеса и открыть паб." },
         { t: "ГЛАВА 5: Эрни мертв. Ты остался один. Босс Томми вызывает тебя. Он знает, что ты сдавал его людей. Он предлагает тебе последнее дело — поджог паба 'Красный лев'.", p: "ТОММИ (Босс).", ev: "На канистре отпечатки Томми. Но также там есть следы перчаток, которые могут принадлежать тебе.", fam: "Твоя семья под защитой мафии. Но если ты сдашь босса — их не станет." }
     ];
 
-    // ПРОДОЛЖЕНИЯ ИСТОРИИ (После каждого уровня)
+    // РЕЙТИНГОВЫЕ ДЕЛА (бесконечные)
+    const ratingCases = [
+        { t: "Ты и твой напарник ограбили банк. Вас взяли. Следователь нашел отпечатки.", p: "Джимми.", ev: "Отпечатки Джимми на сейфе.", fam: "У Джимми больная мать." },
+        { t: "Угон спорткара. В машине нашли твою куртку.", p: "Томми.", ev: "Твоя куртка в машине.", fam: "У тебя двое детей." },
+        { t: "Ограбление ювелирки. Охранник ранен.", p: "Ленни.", ev: "Запись камер.", fam: "Ленни недавно женился." },
+        { t: "Контрабанда виски. Таможня нашла груз.", p: "Эрни.", ev: "Телефон Эрни в машине.", fam: "У Эрни маленький сын." },
+        { t: "Поджог паба. Погиб сторож.", p: "Томми.", ev: "Канистра с бензином.", fam: "Томми должен денег." },
+        { t: "Вымогательство. Бизнесмен написал заявление.", p: "Джимми.", ev: "Бизнесмен опознал Джимми.", fam: "У Джимми есть брат-полицейский." },
+        { t: "Сожгли конкурентный бар.", p: "Томми.", ev: "Записи с камер.", fam: "Томми ухаживает за твоей сестрой." },
+        { t: "Крышевали бордель. Полиция взяла.", p: "Ленни.", ev: "Деньги в сейфе.", fam: "У Ленни двое детей." },
+        { t: "Подставили политика.", p: "Эрни.", ev: "Улики в машине.", fam: "Эрни шантажирует тебя." },
+        { t: "Сдай Босса. Но он знает, где твоя мать.", p: "БОСС.", ev: "Ордер на арест.", fam: "Твоя мать больна. Босс оплачивает лечение." },
+        { t: "Подпольное казино. Полиция накрыла.", p: "Джимми.", ev: "Фрэнк сливал информацию.", fam: "Фрэнк предал тебя первым." },
+        { t: "Подкупили судью. Нашли переводы.", p: "Томми.", ev: "Переводы на счет Томми.", fam: "У Томми рак." },
+        { t: "Перевозили героин. Вас взяли.", p: "Ленни.", ev: "Наркотики в машине.", fam: "Ленни хочет уйти из бизнеса." },
+        { t: "Обманули поставщика.", p: "Эрни.", ev: "Поставщик опознал Эрни.", fam: "У Эрни больная дочь." },
+        { t: "Сдай Босса. Но он обещал убить тебя.", p: "БОСС.", ev: "Компромат на Босса.", fam: "Твоя семья в опасности." }
+    ];
+
     const storyContinuations = [
         { title: "ГЛАВА 1 ЗАВЕРШЕНА", text: "Ты вышел из зала суда. Джимми сдал тебя, и теперь его ищут. Ты понимаешь, что в этом городе никому нельзя верить. Тебя снова зовут на дело." },
         { title: "ГЛАВА 2 ЗАВЕРШЕНА", text: "Томми оказался крысой. Он сдал тебя боссу, и теперь ты под колпаком. Но ты выжил. Ты знаешь, что следующий напарник — Ленни, и он тоже может предать." },
@@ -296,13 +319,13 @@
     ];
 
     let totalExp = parseFloat(localStorage.getItem('prisonExp')) || 0;
+    let ratingScore = parseInt(localStorage.getItem('ratingScore')) || 0;
     let friends = JSON.parse(localStorage.getItem('myFriends')) || [];
     let clan = localStorage.getItem('myClan') || null;
     let p1Choice = null, p2Choice = null, p1Selected = false, timer1, timer2, currentMode = 'bot';
     let fakeThreat = false;
     let currentCaseData = null;
     let currentStoryIndex = 0;
-    let storyProgress = parseInt(localStorage.getItem('storyProgress')) || 0;
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -354,6 +377,8 @@
         if(need <= 0) { done = totalExp; need = 25; }
         document.getElementById('exp-text').innerText = `XP: ${done.toFixed(1)} / ${need}`;
         document.getElementById('exp-bar').style.width = (done / need * 100) + '%';
+        
+        document.getElementById('rating-score').innerText = ratingScore;
 
         let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:20px;">Список пуст</div>';
         friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--pub-gold); font-size:12px;">В ИГРЕ</span></div>`);
@@ -410,6 +435,8 @@
                 return;
             }
             currentCaseData = storyCases[currentStoryIndex];
+        } else if (currentMode === 'rating') {
+            currentCaseData = ratingCases[Math.floor(Math.random() * ratingCases.length)];
         } else {
             let lvl = 0;
             if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4;
@@ -419,7 +446,7 @@
         }
 
         fakeThreat = false;
-        if (currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5")) {
+        if (currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5") || currentCaseData.t.includes("БОСС")) {
             fakeThreat = Math.random() > 0.5;
         }
 
@@ -436,7 +463,7 @@
                 <div class="family-title">ИНФО О СЕМЬЕ:</div>
                 <div class="family-text">${currentCaseData.fam}</div>
             </div>
-            ${(currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5")) ? '<br>' + hint : ''}
+            ${(currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5") || currentCaseData.t.includes("БОСС")) ? '<br>' + hint : ''}
         `;
         
         p1Selected = false; p2Choice = null;
@@ -480,9 +507,10 @@
         if(p1Choice === 'betray' && p2Choice === 'betray') { p1Y = 6; p2Y = 6; }
         if(p1Choice === 'silent' && p2Choice === 'silent') { p1Y = 3; p2Y = 3; }
 
-        let isFinal = currentCaseData.t.includes('ФИНАЛ') || currentCaseData.t.includes('ГЛАВА 5');
+        let isFinal = currentCaseData.t.includes('ФИНАЛ') || currentCaseData.t.includes('ГЛАВА 5') || currentCaseData.t.includes('БОСС');
         let isLoseAll = false;
         let extraText = "";
+        let isWin = false;
 
         if (isFinal) {
             if (p1Choice === 'betray') {
@@ -491,9 +519,19 @@
                     totalExp = 0;
                 } else {
                     p1Y = 0; p2Y = 10;
+                    isWin = true;
                 }
             } else {
                 p1Y = Math.max(1, p1Y - 2);
+                isWin = true;
+            }
+        } else {
+            if (p1Choice === 'silent' && p2Choice === 'silent') {
+                isWin = true;
+            } else if (p1Choice === 'betray' && p2Choice === 'silent') {
+                isWin = true;
+            } else {
+                isWin = false;
             }
         }
 
@@ -509,14 +547,20 @@
 
         if (isLoseAll) {
             text = `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>МАФИЯ КАЗНИЛА ТВОЮ СЕМЬЮ...</span><br><br>Ты сдал босса, но это была не пустая угроза. Ты потерял всё. Опыт сброшен.<br><br>`;
-        } else if(p1Y < p2Y) {
-            text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
+        } else if (isWin) {
+            if (p1Choice === 'silent' && p2Choice === 'silent') {
+                text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ВЫ ОБА МОЛЧАЛИ! МАФИЯ ВЫТАЩИЛА ВАС.</span><br><span style='font-size:12px;'>+1 XP</span>";
+            } else if (p1Choice === 'betray' && p2Choice === 'silent') {
+                text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ТЫ СДАЛ ЕГО И ВЫШЕЛ!</span><br><span style='font-size:12px;'>+1 XP</span>";
+            } else if (isFinal) {
+                text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
+            }
             totalExp += 1;
-        } else if(p1Y > p2Y) {
+            if(currentMode === 'rating') { ratingScore++; localStorage.setItem('ratingScore', ratingScore); }
+        } else {
             text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span><br><span style='font-size:12px;'>-1 XP</span>";
             totalExp -= 1;
-        } else {
-            text += "<span style='color:#888; font-size:20px;'>НИЧЬЯ.</span>";
+            if(currentMode === 'rating') { ratingScore = Math.max(0, ratingScore - 1); localStorage.setItem('ratingScore', ratingScore); }
         }
         
         text += extraText;
