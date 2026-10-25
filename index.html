@@ -107,13 +107,15 @@
     </div>
 
     <div id="choose-name" class="screen">
-        <div class="brutal-title">КАК ТЕБЯ ЗОВУТ?</div>
+        <div class="brutal-title">ВЫБЕРИ СВОЮ ИСТОРИЮ</div>
         <div class="case-box" style="font-size: 13px; margin-bottom: 20px;">
-            Каждый из них мечтал о другой жизни. Но Лондон не прощает ошибок. Кем ты станешь?
+            У каждого своя причина. Но Лондон не прощает ошибок. Кем ты станешь?
         </div>
-        <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Работал охранником, но хотел большего. У него есть жена и двое детей.</span></button>
-        <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Бывший военный. Воевал, но нашел себя в криминале. У него есть больная мать.</span></button>
-        <button class="btn" onclick="selectName('Ленни Молот')">Ленни «Молот»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Вырос в бедном районе. Всегда прикрывал друзей. У него есть младшая сестра.</span></button>
+        <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Бывший охранник. Ипотека, двое детей. Идет на ограбления ради семьи.</span></button>
+        <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Ветеран. Больная мать. Пошел на ферму с травкой ради лечения.</span></button>
+        <button class="btn" onclick="selectName('Ленни Молот')">Ленни «Молот»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Из бедного района. Долг сестры. Вымогает и угоняет ради нее.</span></button>
+        <button class="btn" onclick="selectName('Диего Дрифт')">Диего «Дрифт»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Гонщик из Бразилии. Долг за адвоката. Делает всё, что связано с машинами.</span></button>
+        <button class="btn" onclick="selectName('Майкл Прокурорский')">Майкл «Прокурорский»<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Сын прокурора. Пошел против отца. Мошенничества и подделки — его стихия.</span></button>
     </div>
 
     <div id="main-menu" class="screen">
@@ -127,7 +129,7 @@
         </div>
 
         <div id="story-continue" class="story-continue-box">
-            <div class="story-continue-title" id="story-continue-title">ГЛАВА 2</div>
+            <div class="story-continue-title" id="story-continue-title">СЛЕДУЮЩЕЕ ДЕЛО</div>
             <div class="story-continue-text" id="story-continue-text">...</div>
         </div>
 
@@ -320,42 +322,43 @@
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
+    // СЮЖЕТНЫЕ ДЕЛА (5 глав по 5-6 дел)
     const storyCases = [
-        // Глава 1 (Казино)
-        { t: "ГЛАВА 1: Ограбление казино 'Белладжио'. Ты задолжал ростовщикам 300 тысяч. Джимми пришёл с планом: сейф с 2 миллионами. Вы собрали команду из 11 человек. Маркус вскрыл сейф, но оставил отпечатки. Следователь шепчет: 'Сдай его, и ты свободен'.", p: "Джимми Конвей (правая рука).", ev: "Отпечатки Маркуса (взломщика) на сейфе.", fam: "У Маркуса больная мать, он единственный кормилец.", kush: 2000000, btn1: "Свалить на Маркуса", btn2: "Взять вину на себя" },
-        { t: "ГЛАВА 1: Вы на крыше. В фургоне осталась твоя куртка. Джимми в панике. Если скинешь куртку — найдут во дворе. Если оставишь — найдут в машине и посадят Джимми.", p: "Джимми Конвей.", ev: "Твоя куртка в фургоне.", fam: "У Джимми больная мать.", kush: 500000, btn1: "Скинуть куртку", btn2: "Оставить в фургоне" },
-        { t: "ГЛАВА 1: Охранник видел вас. Джимми хочет его запугать. Но если запугаешь — он пойдёт в полицию. Если договоришься — потребует долю, но промолчит.", p: "Джимми Конвей.", ev: "Показания охранника.", fam: "Охранник — отец троих детей.", kush: 300000, btn1: "Запугать свидетеля", btn2: "Договориться с ним" },
-        { t: "ГЛАВА 1: Угнанный фургон. Сальваторе предлагает сжечь. Если сжечь — привлечёте внимание. Если спрятать — есть шанс, что найдут.", p: "Сальваторе (водитель).", ev: "Твои отпечатки в фургоне.", fam: "У Сальваторе жена и двое детей.", kush: 200000, btn1: "Сжечь фургон", btn2: "Спрятать фургон" },
-        { t: "ГЛАВА 1: Следователь нашел твою куртку. Джимми готов дать показания против тебя.", p: "Джимми Конвей.", ev: "Твоя куртка в машине. Джимми готов говорить.", fam: "У Джимми больная мать.", kush: 0, btn1: "Сдать Джимми", btn2: "Молчать" },
-        { t: "ГЛАВА 1 (ФИНАЛ): Вас взяли на выходе. Следователь предлагает сделку.", p: "Джимми Конвей.", ev: "Все улики против вас.", fam: "У Джимми больная мать.", kush: 0, btn1: "Сдать Джимми", btn2: "Молчать" },
+        // Глава 1 (Казино) - 6 дел
+        { t: "ДЕЛО 1 (ГЛАВА 1): Ограбление казино 'Белладжио'. Ты задолжал банку 300 тысяч. Джимми пришёл с планом: сейф с 2 миллионами. Вы собрали команду из 11 человек. Маркус вскрыл сейф, но оставил отпечатки. Следователь шепчет: 'Сдай его, и ты свободен'.", p: "Джимми Конвей (правая рука).", ev: "Отпечатки Маркуса (взломщика) на сейфе.", fam: "У Маркуса больная мать, он единственный кормилец.", kush: 2000000, btn1: "Свалить на Маркуса", btn2: "Взять вину на себя", isKush: false, reward: 15000 },
+        { t: "ДЕЛО 2 (ГЛАВА 1): Вы на крыше. В фургоне осталась твоя куртка. Джимми в панике. Если скинешь куртку — найдут во дворе. Если оставишь — найдут в машине и посадят Джимми.", p: "Джимми Конвей.", ev: "Твоя куртка в фургоне.", fam: "У Джимми больная мать.", kush: 0, btn1: "Скинуть куртку", btn2: "Оставить в фургоне", isKush: false, reward: 10000 },
+        { t: "ДЕЛО 3 (ГЛАВА 1): Охранник видел вас. Джимми хочет его запугать. Но если запугаешь — он пойдёт в полицию. Если договоришься — потребует долю, но промолчит.", p: "Джимми Конвей.", ev: "Показания охранника.", fam: "Охранник — отец троих детей.", kush: 0, btn1: "Запугать свидетеля", btn2: "Договориться с ним", isKush: false, reward: 12000 },
+        { t: "ДЕЛО 4 (ГЛАВА 1): Угнанный фургон. Сальваторе предлагает сжечь. Если сжечь — привлечёте внимание. Если спрятать — есть шанс, что найдут.", p: "Сальваторе (водитель).", ev: "Твои отпечатки в фургоне.", fam: "У Сальваторе жена и двое детей.", kush: 0, btn1: "Сжечь фургон", btn2: "Спрятать фургон", isKush: false, reward: 8000 },
+        { t: "ДЕЛО 5 (ГЛАВА 1): Следователь нашел твою куртку. Джимми готов дать показания против тебя.", p: "Джимми Конвей.", ev: "Твоя куртка в машине. Джимми готов говорить.", fam: "У Джимми больная мать.", kush: 0, btn1: "Сдать Джимми", btn2: "Молчать", isKush: false, reward: 0 },
+        { t: "ДЕЛО 6 (ГЛАВА 1 - ФИНАЛ): Вас взяли на выходе. Следователь предлагает сделку.", p: "Джимми Конвей.", ev: "Все улики против вас.", fam: "У Джимми больная мать.", kush: 2000000, btn1: "Сдать Джимми", btn2: "Молчать", isKush: true, reward: 0 },
 
-        // Глава 2 (Угон)
-        { t: "ГЛАВА 2: Джимми пропал. Босс Томми вызвал тебя: 'Угон Ягуара. Но если нас возьмут, я скажу, что ты меня заставил'.", p: "Томми (правая рука).", ev: "Томми не доверяет тебе.", fam: "У Томми больная мать.", kush: 500000, btn1: "Довериться Томми", btn2: "Подстраховаться" },
-        { t: "ГЛАВА 2: Вы угнали Ягуар. Томми оставил отпечатки. Полиция преследует.", p: "Томми.", ev: "Отпечатки Томми на руле.", fam: "У Томми больная мать.", kush: 500000, btn1: "Угнать тачку", btn2: "Бросить тачку" },
-        { t: "ГЛАВА 2: Погоня. Томми предлагает сдать тебя, чтобы спастись.", p: "Томми.", ev: "Томми готов говорить.", fam: "У Томми больная мать.", kush: 0, btn1: "Гнать до конца", btn2: "Остановиться" },
-        { t: "ГЛАВА 2: Гараж. Томми оставил телефон с уликами.", p: "Томми.", ev: "Телефон Томми с перепиской.", fam: "У Томми больная мать.", kush: 200000, btn1: "Перекрасить машину", btn2: "Спрятать машину" },
-        { t: "ГЛАВА 2 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Томми.", ev: "Все улики против вас.", fam: "У Томми больная мать.", kush: 0, btn1: "Сдать Томми", btn2: "Молчать" },
+        // Глава 2 (Ферма) - 5 дел
+        { t: "ДЕЛО 7 (ГЛАВА 2): Ферма с травкой. Томми нужно 200 тысяч на лечение матери. В команде 6 человек. Вы посадили первый урожай, но полиция уже рядом.", p: "Томми 'Два Ствола'.", ev: "Полиция нашла ферму.", fam: "У Томми больная мать.", kush: 0, btn1: "Довериться Томми", btn2: "Подстраховаться", isKush: false, reward: 15000 },
+        { t: "ДЕЛО 8 (ГЛАВА 2): Урожай готов. Нужно перевезти его через границу. Таможня уже знает о ферме.", p: "Томми.", ev: "Таможня нашла груз.", fam: "У Томми больная мать.", kush: 0, btn1: "Перевезти травку", btn2: "Бросить груз", isKush: false, reward: 12000 },
+        { t: "ДЕЛО 9 (ГЛАВА 2): Химик хочет уйти. Он знает слишком много. Томми предлагает его устранить.", p: "Томми.", ev: "Химик готов говорить.", fam: "У Томми больная мать.", kush: 0, btn1: "Устранить химика", btn2: "Отпустить химика", isKush: false, reward: 10000 },
+        { t: "ДЕЛО 10 (ГЛАВА 2): Полиция накрыла ферму. Томми в панике.", p: "Томми.", ev: "Полиция взяла ферму.", fam: "У Томми больная мать.", kush: 0, btn1: "Сдать Томми", btn2: "Молчать", isKush: false, reward: 0 },
+        { t: "ДЕЛО 11 (ГЛАВА 2 - ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Томми.", ev: "Все улики против вас.", fam: "У Томми больная мать.", kush: 500000, btn1: "Сдать Томми", btn2: "Молчать", isKush: true, reward: 0 },
 
-        // Глава 3 (Ювелирка)
-        { t: "ГЛАВА 3: Томми пропал. Босс дал тебе Ленни, старого друга. Он клянется, что не сдаст, но у него беременная жена.", p: "Ленни 'Молот'.", ev: "Ленни в кадре.", fam: "У Ленни беременная жена.", kush: 3000000, btn1: "Довериться Ленни", btn2: "Проверить Ленни" },
-        { t: "ГЛАВА 3: Вы разбили витрину. Бриллианты на 3 миллиона. Тревога.", p: "Ленни.", ev: "Запись камер.", fam: "У Ленни беременная жена.", kush: 3000000, btn1: "Разбить витрину", btn2: "Отойти в сторону" },
-        { t: "ГЛАВА 3: Нужно стереть записи. Ленни оставил улики.", p: "Ленни.", ev: "Улики Ленни в машине.", fam: "У Ленни беременная жена.", kush: 500000, btn1: "Стереть записи", btn2: "Оставить записи" },
-        { t: "ГЛАВА 3: Жена Ленни беременна. Он хочет выйти из игры.", p: "Ленни.", ev: "Ленни хочет уйти.", fam: "У Ленни беременная жена.", kush: 0, btn1: "Надавить на Ленни", btn2: "Отпустить Ленни" },
-        { t: "ГЛАВА 3 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Ленни.", ev: "Все улики против вас.", fam: "У Ленни беременная жена.", kush: 0, btn1: "Сдать Ленни", btn2: "Молчать" },
+        // Глава 3 (Ювелирка) - 5 дел
+        { t: "ДЕЛО 12 (ГЛАВА 3): Сестра Ленни попала в долги. Ростовщики требуют 500 тысяч. Ленни пришёл с планом: ограбить ювелирку.", p: "Ленни 'Молот'.", ev: "Ленни в кадре.", fam: "У Ленни беременная жена.", kush: 0, btn1: "Довериться Ленни", btn2: "Проверить Ленни", isKush: false, reward: 15000 },
+        { t: "ДЕЛО 13 (ГЛАВА 3): Вы разбили витрину. Бриллианты на 3 миллиона. Тревога.", p: "Ленни.", ev: "Запись камер.", fam: "У Ленни беременная жена.", kush: 0, btn1: "Разбить витрину", btn2: "Отойти в сторону", isKush: false, reward: 12000 },
+        { t: "ДЕЛО 14 (ГЛАВА 3): Нужно стереть записи. Ленни оставил улики.", p: "Ленни.", ev: "Улики Ленни в машине.", fam: "У Ленни беременная жена.", kush: 0, btn1: "Стереть записи", btn2: "Оставить записи", isKush: false, reward: 10000 },
+        { t: "ДЕЛО 15 (ГЛАВА 3): Жена Ленни беременна. Он хочет выйти из игры.", p: "Ленни.", ev: "Ленни хочет уйти.", fam: "У Ленни беременная жена.", kush: 0, btn1: "Надавить на Ленни", btn2: "Отпустить Ленни", isKush: false, reward: 8000 },
+        { t: "ДЕЛО 16 (ГЛАВА 3 - ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Ленни.", ev: "Все улики против вас.", fam: "У Ленни беременная жена.", kush: 3000000, btn1: "Сдать Ленни", btn2: "Молчать", isKush: true, reward: 0 },
 
-        // Глава 4 (Контрабанда)
-        { t: "ГЛАВА 4: Ленни сдал тебя, но ты вышел. Босс дал Эрни — человека с принципами. Он не любит предателей.", p: "Эрни 'Тихий'.", ev: "Эрни не любит крыс.", fam: "У Эрни маленький сын.", kush: 1000000, btn1: "Довериться Эрни", btn2: "Подстраховаться" },
-        { t: "ГЛАВА 4: Вы везете контрабандный виски. Таможня нашла груз.", p: "Эрни.", ev: "Таможня нашла груз.", fam: "У Эрни маленький сын.", kush: 1000000, btn1: "Взять груз", btn2: "Бросить груз" },
-        { t: "ГЛАВА 4: Кто-то сдал вас. Эрни знает, кто это.", p: "Эрни.", ev: "Эрни знает стукача.", fam: "У Эрни маленький сын.", kush: 0, btn1: "Найти стукача", btn2: "Затаиться" },
-        { t: "ГЛАВА 4: Эрни берет вину на себя. Он готов сесть.", p: "Эрни.", ev: "Эрни готов сесть.", fam: "У Эрни маленький сын.", kush: 0, btn1: "Взять вину", btn2: "Отдать вину" },
-        { t: "ГЛАВА 4 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Эрни.", ev: "Все улики против вас.", fam: "У Эрни маленький сын.", kush: 0, btn1: "Сдать Эрни", btn2: "Молчать" },
+        // Глава 4 (Контрабанда) - 5 дел
+        { t: "ДЕЛО 17 (ГЛАВА 4): Диего должен мафии за адвоката. Он берётся за любое дело с машинами. Контрабанда виски.", p: "Диего 'Дрифт'.", ev: "Диего не любит крыс.", fam: "У Диего нет семьи, только машины.", kush: 0, btn1: "Довериться Диего", btn2: "Подстраховаться", isKush: false, reward: 15000 },
+        { t: "ДЕЛО 18 (ГЛАВА 4): Вы везете контрабандный виски. Таможня нашла груз.", p: "Диего.", ev: "Таможня нашла груз.", fam: "У Диего нет семьи.", kush: 0, btn1: "Взять груз", btn2: "Бросить груз", isKush: false, reward: 12000 },
+        { t: "ДЕЛО 19 (ГЛАВА 4): Погоня. Диего предлагает уйти от полиции на дрифте.", p: "Диего.", ev: "Полиция преследует.", fam: "У Диего нет семьи.", kush: 0, btn1: "Гнать до конца", btn2: "Остановиться", isKush: false, reward: 10000 },
+        { t: "ДЕЛО 20 (ГЛАВА 4): Диего берет вину на себя. Он готов сесть.", p: "Диего.", ev: "Диего готов сесть.", fam: "У Диего нет семьи.", kush: 0, btn1: "Взять вину", btn2: "Отдать вину", isKush: false, reward: 8000 },
+        { t: "ДЕЛО 21 (ГЛАВА 4 - ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Диего.", ev: "Все улики против вас.", fam: "У Диего нет семьи.", kush: 1000000, btn1: "Сдать Диего", btn2: "Молчать", isKush: true, reward: 0 },
 
-        // Глава 5 (Поджог)
-        { t: "ГЛАВА 5: Эрни мертв. Босс Томми вызвал тебя: 'Поджог паба. Или твоя семья умрет'.", p: "ТОММИ (Босс).", ev: "Томми знает о твоих сдачах.", fam: "Твоя семья в опасности.", kush: 500000, btn1: "Признаться Боссу", btn2: "Отрицать всё" },
-        { t: "ГЛАВА 5: Поджог паба. Погиб сторож.", p: "ТОММИ (Босс).", ev: "Канистра с бензином.", fam: "Твоя семья в опасности.", kush: 500000, btn1: "Поджечь паб", btn2: "Отказаться" },
-        { t: "ГЛАВА 5: Босс угрожает твоей семье.", p: "ТОММИ (Босс).", ev: "Угроза реальна.", fam: "Твоя семья в опасности.", kush: 0, btn1: "Защитить семью", btn2: "Спрятать семью" },
-        { t: "ГЛАВА 5: Следователь предлагает сдать босса.", p: "ТОММИ (Босс).", ev: "Следователь готов помочь.", fam: "Твоя семья в опасности.", kush: 0, btn1: "Сдать Босса", btn2: "Молчать" },
-        { t: "ГЛАВА 5 (ФИНАЛ): Вас взяли. Судьба решается.", p: "ТОММИ (Босс).", ev: "Все улики против вас.", fam: "Твоя семья в опасности.", kush: 0, btn1: "Сдать Босса", btn2: "Молчать" }
+        // Глава 5 (Поджог) - 5 дел
+        { t: "ДЕЛО 22 (ГЛАВА 5): Майкл — сын прокурора. Он хочет доказать, что может всё сам. Босс Томми вызвал его: 'Поджог паба. Или твоя семья умрет'.", p: "Майкл 'Прокурорский'.", ev: "Майкл знает схемы.", fam: "Отец Майкла — прокурор.", kush: 0, btn1: "Признаться Боссу", btn2: "Отрицать всё", isKush: false, reward: 15000 },
+        { t: "ДЕЛО 23 (ГЛАВА 5): Поджог паба. Погиб сторож.", p: "Майкл.", ev: "Канистра с бензином.", fam: "Отец Майкла — прокурор.", kush: 0, btn1: "Поджечь паб", btn2: "Отказаться", isKush: false, reward: 12000 },
+        { t: "ДЕЛО 24 (ГЛАВА 5): Босс угрожает семье Майкла.", p: "Майкл.", ev: "Угроза реальна.", fam: "Отец Майкла — прокурор.", kush: 0, btn1: "Защитить семью", btn2: "Спрятать семью", isKush: false, reward: 10000 },
+        { t: "ДЕЛО 25 (ГЛАВА 5): Следователь предлагает сдать босса.", p: "Майкл.", ev: "Следователь готов помочь.", fam: "Отец Майкла — прокурор.", kush: 0, btn1: "Сдать Босса", btn2: "Молчать", isKush: false, reward: 8000 },
+        { t: "ДЕЛО 26 (ГЛАВА 5 - ФИНАЛ): Вас взяли. Судьба решается.", p: "Майкл.", ev: "Все улики против вас.", fam: "Отец Майкла — прокурор.", kush: 500000, btn1: "Сдать Босса", btn2: "Молчать", isKush: true, reward: 0 }
     ];
 
     const ratingCases = [
@@ -370,13 +373,14 @@
         { name: "ТОММИ", before: "Глава банды.", family: "Жена и двое детей.", partner: "Джимми Конвей." },
         { name: "ЛЕННИ", before: "Владелец паба.", family: "Мать-итальянка.", partner: "Томми 'Два Ствола'." },
         { name: "ЭРНИ", before: "Глава мафии.", family: "Жена Мэй и сын.", partner: "Ленни 'Молот'." },
-        { name: "ДЖЕК", before: "Водитель грузовика.", family: "8 братьев и сестер.", partner: "Эрни 'Тихий'." },
-        { name: "ГАРРИ", before: "Наркобарон.", family: "Жена и пятеро детей.", partner: "Томми (Босс)." }
+        { name: "ДИЕГО", before: "Гонщик.", family: "Нет семьи.", partner: "Эрни 'Тихий'." },
+        { name: "МАЙКЛ", before: "Сын прокурора.", family: "Отец — прокурор.", partner: "Томми (Босс)." }
     ];
 
     let totalExp = parseFloat(localStorage.getItem('prisonExp')) || 0;
     let ratingScore = parseInt(localStorage.getItem('ratingScore')) || 0;
     let balance = parseFloat(localStorage.getItem('balance')) || 0;
+    let storyProgress = parseInt(localStorage.getItem('storyProgress')) || 0;
     let friends = JSON.parse(localStorage.getItem('myFriends')) || [];
     let clan = localStorage.getItem('myClan') || null;
     let p1Choice = null, p2Choice = null, p1Selected = false, timer1, timer2, currentMode = 'bot';
@@ -397,6 +401,23 @@
         if(id === 'rating') document.querySelectorAll('.nav-item')[1].classList.add('active');
         if(id === 'friends') document.querySelectorAll('.nav-item')[2].classList.add('active');
         if(id === 'clans') document.querySelectorAll('.nav-item')[3].classList.add('active');
+    }
+
+    function updateStoryUI() {
+        let currentCaseNum = storyProgress + 1;
+        let currentChapter = 1;
+        if (storyProgress >= 6) currentChapter = 2;
+        if (storyProgress >= 11) currentChapter = 3;
+        if (storyProgress >= 16) currentChapter = 4;
+        if (storyProgress >= 21) currentChapter = 5;
+
+        if (storyProgress < storyCases.length) {
+            document.getElementById('story-continue').style.display = 'block';
+            document.getElementById('story-continue-title').innerText = `ДЕЛО ${currentCaseNum} (ГЛАВА ${currentChapter})`;
+            document.getElementById('story-continue-text').innerText = "Продолжение следует...";
+        } else {
+            document.getElementById('story-continue').style.display = 'none';
+        }
     }
 
     function changeAvatar(event) {
@@ -453,6 +474,8 @@
             document.getElementById('clan-create').style.display = 'block';
             document.getElementById('my-clan-info').style.display = 'none';
         }
+
+        updateStoryUI();
     }
 
     function openDossier() {
@@ -477,12 +500,7 @@
 
     function startGame(mode) {
         currentMode = mode;
-        currentStoryIndex = 0;
-        if(mode === 'story') {
-            let lvl = 0;
-            if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4;
-            currentStoryIndex = lvl;
-        }
+        currentStoryIndex = storyProgress;
         if(mode === 'online') { tg.showAlert("ПОИСК..."); setTimeout(() => { tg.showAlert("НАЙДЕН: KILLER_99"); currentMode = 'bot'; nextRound(); }, 1000); return; }
         nextRound();
     }
@@ -522,7 +540,7 @@
                 <div class="family-title">ИНФО О СЕМЬЕ:</div>
                 <div class="family-text">${currentCaseData.fam}</div>
             </div>
-            <div style="color: var(--pub-gold); font-weight: 900; margin-bottom: 10px;">КУШ: $${currentCaseData.kush.toLocaleString()}</div>
+            <div style="color: var(--pub-gold); font-weight: 900; margin-bottom: 10px;">НАГРАДА: $${currentCaseData.isKush ? currentCaseData.kush.toLocaleString() : currentCaseData.reward.toLocaleString()}</div>
             ${(currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5")) ? '<br>' + hint : ''}
         `;
         
@@ -537,7 +555,6 @@
             mainBtn.innerText = 'НА ДЕЛО';
         }
 
-        // Установка текста кнопок под конкретное дело
         document.getElementById('btn-alpha').innerHTML = `${currentCaseData.btn1}<br><span style="font-size: 12px;">(Риск)</span>`;
         document.getElementById('btn-beta').innerHTML = `${currentCaseData.btn2}<br><span style="font-size: 12px;">(Верность)</span>`;
 
@@ -592,6 +609,7 @@
                 if (!fakeThreat) {
                     isLoseAll = true;
                     totalExp = 0;
+                    balance = 0; 
                 } else {
                     p1Y = 0; p2Y = 10;
                     isWin = true;
@@ -613,9 +631,9 @@
         let text = `Твой срок: ${p1Y} лет.<br>Срок напарника: ${p2Y} лет.<br><br>`;
 
         if (isLoseAll) {
-            text = `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>МАФИЯ КАЗНИЛА ТВОЮ СЕМЬЮ...</span><br><br>Ты сдал босса, но это была не пустая угроза. Ты потерял всё. Опыт сброшен.<br><br>`;
-            balance = 0;
+            text = `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>МАФИЯ КАЗНИЛА ТВОЮ СЕМЬЮ...</span><br><br>Ты сдал босса, но это была не пустая угроза. Ты потерял всё. Опыт и деньги сброшены.<br><br>`;
         } else if (isWin) {
+            let reward = currentCaseData.isKush ? currentCaseData.kush : currentCaseData.reward;
             if (p1Choice === 'silent' && p2Choice === 'silent') {
                 text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ВЫ ОБА МОЛЧАЛИ! МАФИЯ ВЫТАЩИЛА ВАС.</span><br><span style='font-size:12px;'>+1 XP</span>";
             } else if (p1Choice === 'betray' && p2Choice === 'silent') {
@@ -624,19 +642,25 @@
                 text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
             }
             totalExp += 1;
-            if(currentCaseData.kush > 0) {
-                balance += currentCaseData.kush;
-                text += `<br><span style='color:var(--accent);'>+ $${currentCaseData.kush.toLocaleString()}</span>`;
+            if(reward > 0) {
+                balance += reward;
+                text += `<br><span style='color:var(--accent);'>+ $${reward.toLocaleString()}</span>`;
             }
             if(currentMode === 'rating') { ratingScore++; localStorage.setItem('ratingScore', ratingScore); }
         } else {
+            let penalty = Math.min(balance, 10000);
             text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span><br><span style='font-size:12px;'>-1 XP</span>";
             totalExp -= 1;
+            if (penalty > 0) {
+                balance -= penalty;
+                text += `<br><span style='color:var(--danger);'>- $${penalty.toLocaleString()}</span>`;
+            }
             if(currentMode === 'rating') { ratingScore = Math.max(0, ratingScore - 1); localStorage.setItem('ratingScore', ratingScore); }
         }
 
         if(totalExp < 0) totalExp = 0;
         if(totalExp > 25) totalExp = 25;
+        if(balance < 0) balance = 0;
         localStorage.setItem('prisonExp', totalExp);
         localStorage.setItem('balance', balance);
         updateUI();
@@ -645,8 +669,10 @@
         
         if (currentMode === 'story') {
             if (isWin) {
-                currentStoryIndex++;
-                if (currentStoryIndex > storyCases.length) currentStoryIndex = storyCases.length;
+                storyProgress++;
+                if (storyProgress >= storyCases.length) storyProgress = storyCases.length - 1;
+                localStorage.setItem('storyProgress', storyProgress);
+                currentStoryIndex = storyProgress;
             }
         }
     }
