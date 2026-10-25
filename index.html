@@ -18,7 +18,7 @@
         .screen { display: none; width: 100%; flex: 1; flex-direction: column; padding: 15px; overflow-y: auto; padding-bottom: 80px; }
         .screen.active { display: flex; }
         
-        /* ШТОРКА */
+        /* ШТОРКА УВЕДОМЛЕНИЙ */
         .top-shutter { position: absolute; top: 0; left: 0; width: 100%; background: var(--pub-green); border-bottom: 2px solid var(--pub-gold); padding: 10px 15px; z-index: 200; transform: translateY(-100%); transition: transform 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
         .top-shutter.show { transform: translateY(0); }
         .top-shutter-text { font-size: 13px; font-weight: 700; color: var(--pub-gold); }
@@ -39,7 +39,10 @@
         /* КАРТОЧКА ПЕРСОНАЖА */
         .inmate-card { background: linear-gradient(135deg, #1a3a2a 0%, #0a0a0a 100%); border: 2px solid var(--pub-gold); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; position: relative; overflow: hidden; }
         .inmate-card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 42px); pointer-events: none; }
-        .avatar-wrapper { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--pub-gold); display: flex; justify-content: center; align-items: center; background: #000; margin-bottom: 8px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); overflow: hidden; z-index: 1; }
+        
+        .avatar-wrapper { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--pub-gold); display: flex; justify-content: center; align-items: center; background: #000; margin-bottom: 8px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); overflow: hidden; z-index: 1; cursor: pointer; }
+        .avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        
         .inmate-name { font-size: 18px; font-weight: 900; color: var(--pub-gold); text-transform: uppercase; font-family: 'Playfair Display', serif; z-index: 1; text-align: center;}
         .inmate-label { font-size: 9px; color: #888; margin-top: 3px; z-index: 1; text-align: center; }
 
@@ -108,7 +111,16 @@
         .character-switch-bottom { display: flex; justify-content: space-around; margin-top: auto; margin-bottom: 10px; background: var(--card); padding: 8px; border-radius: 10px; border: 1px solid var(--border); }
         .mini-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #555; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s; overflow: hidden; }
         .mini-avatar.active { border-color: var(--pub-gold); box-shadow: 0 0 10px var(--pub-gold); transform: scale(1.1); }
-        .mini-avatar svg { width: 100%; height: 100%; }
+        .mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ЧАТ КЛАНА */
+        .chat-container { display: flex; flex-direction: column; height: 300px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 10px; }
+        .chat-messages { flex: 1; overflow-y: auto; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .chat-msg { background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 8px; font-size: 12px; }
+        .chat-msg .author { color: var(--pub-gold); font-weight: bold; font-size: 10px; }
+        .chat-input-box { display: flex; gap: 5px; }
+        .chat-input-box input { flex: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: white; }
+        .chat-input-box button { background: var(--pub-gold); border: none; padding: 0 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -125,7 +137,7 @@
         <div class="brutal-title" style="font-size: 30px;">ДИЛЕММА<br><span>ДЖЕНТЛЬМЕНОВ</span></div>
         <div class="case-box" style="text-align: left; border-color: var(--pub-gold);">
             <b>СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...</b><br><br>
-            Пять историй. Пять судеб. Пять городов. Каждый из них пошёл на преступление ради своей цели. Но их пути пересекутся. Выбери, за кого ты будешь играть, и помни: твои решения влияют на всех.
+            Пять историй. Пять судеб. Пять городов. Они пошли на это не из-за любви к быстрым деньгам, зависимости, любвки к скорости, чувства беззнаказанности, а из-за безисходности. Их пути пересекутся. Выбери, за кого ты будешь играть, и помни: твои решения влияют на всех.
         </div>
         <button class="btn btn-play" onclick="showScreen('choose-name')">НАЧАТЬ</button>
     </div>
@@ -134,13 +146,13 @@
     <div id="choose-name" class="screen">
         <div class="brutal-title">ВЫБЕРИ ИСТОРИЮ</div>
         <div class="case-box" style="font-size: 11px; margin-bottom: 10px;">
-            У каждого своя причина: быстрые деньги, скорость, зависимость, чувство беззаконности. Кем ты станешь?
+            У каждого своя причина. Но закон один. Кем ты станешь?
         </div>
-        <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич» (Лондон, 2018)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Бывший охранник. Ипотека, двое детей. Идет на ограбления ради семьи.</span></button>
-        <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола» (Афганистан, 2015)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Ветеран. Больная мать. Пошел на ферму с травкой ради лечения.</span></button>
-        <button class="btn" onclick="selectName('Ленни Молот')">Ленни «Молот» (Ливерпуль, 2016)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Из бедного района. Долг сестры. Вымогает и угоняет ради нее.</span></button>
-        <button class="btn" onclick="selectName('Диего Дрифт')">Диего «Дрифт» (Сан-Паулу, 2019)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Гонщик. Долг за адвоката. Делает всё, что связано с машинами.</span></button>
-        <button class="btn" onclick="selectName('Майкл Прокурорский')">Майкл «Прокурорский» (Москва, 2020)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Сын прокурора. Пошел против отца. Мошенничества и подделки — его стихия.</span></button>
+        <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич»<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Бывший охранник. Ипотека, двое детей.</span></button>
+        <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола»<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Ветеран. Больная мать.</span></button>
+        <button class="btn" onclick="selectName('Ленни Молот')">Ленни «Молот»<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Из бедного района. Долг сестры.</span></button>
+        <button class="btn" onclick="selectName('Диего Дрифт')">Диего «Дрифт»<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Гонщик. Долг за адвоката.</span></button>
+        <button class="btn" onclick="selectName('Майкл Прокурорский')">Майкл «Прокурорский»<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Сын прокурора. Мошенничества.</span></button>
     </div>
 
     <!-- ГЛАВНОЕ МЕНЮ -->
@@ -159,13 +171,13 @@
             <div class="story-continue-text" id="story-continue-text">...</div>
         </div>
 
-        <div class="inmate-card" onclick="openDossier()">
-            <label class="avatar-label">
-                <div class="avatar-wrapper" id="avatar-container"></div>
-                <input type="file" class="avatar-upload" accept="image/*" onchange="changeAvatar(event)">
-            </label>
+        <!-- КАРТОЧКА ПЕРСОНАЖА (КЛИК ОТКРЫВАЕТ ДОСЬЕ) -->
+        <div class="inmate-card">
+            <div class="avatar-wrapper" onclick="openDossier()">
+                <img id="avatar-img" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Avatar">
+            </div>
             <div class="inmate-name" id="level-name">ДЖОННИ</div>
-            <div class="inmate-label">НАЖМИ, ЧТОБЫ СМЕНИТЬ ФОТО</div>
+            <div class="inmate-label">НАЖМИ НА ФОТО, ЧТОБЫ УЗНАТЬ ИСТОРИЮ</div>
         </div>
         
         <div class="quote-box" id="quote-text">"Ты либо умрешь героем, либо проживешь достаточно долго, чтобы стать злодеем."</div>
@@ -253,19 +265,38 @@
         </div>
     </div>
 
-    <!-- КЛАНЫ -->
+    <!-- КЛАНЫ (С ЧАТОМ И ДРУЗЬЯМИ) -->
     <div id="clans" class="screen">
-        <div class="brutal-title">КЛАНЫ</div>
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title">КЛАН</div>
+        
         <div id="clan-create" style="margin-bottom: 10px;">
             <input type="text" id="clan-name-input" class="search-input" placeholder="Название клана..." style="width: 100%; margin-bottom: 6px;">
             <button class="btn btn-play" onclick="createClan()">СОЗДАТЬ КЛАН</button>
         </div>
+
         <div id="my-clan-info" style="display: none; width: 100%;">
-            <div class="pub-bg">
-                <div class="pub-title" id="display-clan-name">КЛАН</div>
-                <div style="font-size: 10px; color: #888;">Лидер: ВЫ</div>
+            <div class="pub-bg" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div class="pub-title" id="display-clan-name">КЛАН</div>
+                    <div style="font-size: 10px; color: #888;">Лидер: ВЫ</div>
+                </div>
+                <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; color: var(--danger); border-color: var(--danger);" onclick="leaveClan()">ВЫЙТИ</button>
             </div>
-            <button class="btn" style="color: var(--danger); border-color: var(--danger); justify-content: center;" onclick="leaveClan()">ПОКИНУТЬ</button>
+
+            <!-- СПИСОК ДРУЗЕЙ ДЛЯ ДОБАВЛЕНИЯ В КЛАН -->
+            <div style="font-size: 12px; color: var(--pub-gold); margin-bottom: 5px; font-weight: bold;">ДОБАВИТЬ В КЛАН:</div>
+            <div id="friends-for-clan" style="margin-bottom: 10px;"></div>
+
+            <!-- ЧАТ КЛАНА -->
+            <div style="font-size: 12px; color: var(--pub-gold); margin-bottom: 5px; font-weight: bold;">ЧАТ КЛАНА:</div>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-input-box">
+                    <input type="text" id="chat-input" placeholder="Сообщение...">
+                    <button onclick="sendChatMessage()">➤</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -356,12 +387,13 @@
 
     let userAvatar = localStorage.getItem('userAvatar') || null;
 
+    // ССЫЛКИ НА ФОТО (ЗАМЕНИ НА СВОИ, ЕСЛИ ЗАГРУЗИШЬ)
     const avatars = [
-        `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M20 45 Q50 15 80 45 L80 50 Q50 25 20 50 Z" fill="#333"/><rect x="25" y="40" width="50" height="8" fill="#c9a84c"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M35 70 Q50 85 65 70 Z" fill="#555"/></svg>`,
-        `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M15 40 L85 40 L75 25 L25 25 Z" fill="#444"/><rect x="15" y="40" width="70" height="5" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><rect x="35" y="60" width="30" height="8" fill="#000" rx="4"/><rect x="40" y="62" width="8" height="4" fill="#c9a84c"/><rect x="52" y="62" width="8" height="4" fill="#c9a84c"/></svg>`,
-        `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M25 40 Q50 20 75 40 L75 55 Q50 40 25 55 Z" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M40 60 L45 65" stroke="#fff" stroke-width="2"/><rect x="55" y="70" width="25" height="5" fill="#fff" transform="rotate(15 55 70)"/><circle cx="80" cy="72" r="3" fill="#FF003C"/></svg>`,
-        `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><rect x="20" y="35" width="60" height="30" fill="#000" rx="8"/><path d="M30 45 L40 50 L30 55 Z" fill="#FF003C"/><path d="M70 45 L60 50 L70 55 Z" fill="#FF003C"/><rect x="45" y="70" width="10" height="15" fill="#222"/></svg>`,
-        `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80", // Джонни (Том Харди тип)
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80", // Томми (МакКонахи тип)
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80", // Ленни (Эджертон тип)
+        "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80", // Диего (Рэдклифф тип)
+        "https://images.unsplash.com/photo-1504257432389-52343af06ae3?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80"  // Майкл (Гослинг тип)
     ];
 
     const characters = {
@@ -453,6 +485,8 @@
     
     let friends = JSON.parse(localStorage.getItem('myFriends')) || [];
     let clan = localStorage.getItem('myClan') || null;
+    let clanMessages = JSON.parse(localStorage.getItem('clanMessages')) || [];
+    let clanMembers = JSON.parse(localStorage.getItem('clanMembers')) || [];
 
     let p1Choice = null, p2Choice = null, p1Selected = false, timer1, timer2, currentMode = 'bot';
     let fakeThreat = false;
@@ -524,19 +558,6 @@
         showScreen('main-menu');
     }
 
-    function changeAvatar(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                userAvatar = e.target.result;
-                localStorage.setItem('userAvatar', userAvatar);
-                updateUI();
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
     function updateUI() {
         const charData = characters[currentChar];
         const progress = getCharProgress(currentChar);
@@ -548,16 +569,13 @@
         document.getElementById('level-num').innerText = progress;
         document.getElementById('quote-text').innerText = charData.quote;
         
-        if (userAvatar) {
-            document.getElementById('avatar-container').innerHTML = `<img src="${userAvatar}" style="width:100%;height:100%;object-fit:cover;">`;
-        } else {
-            let charIndex = 0;
-            if (currentChar === 'tommy') charIndex = 1;
-            if (currentChar === 'lenny') charIndex = 2;
-            if (currentChar === 'diego') charIndex = 3;
-            if (currentChar === 'michael') charIndex = 4;
-            document.getElementById('avatar-container').innerHTML = avatars[charIndex];
-        }
+        // Установка аватарки
+        let charIndex = 0;
+        if (currentChar === 'tommy') charIndex = 1;
+        if (currentChar === 'lenny') charIndex = 2;
+        if (currentChar === 'diego') charIndex = 3;
+        if (currentChar === 'michael') charIndex = 4;
+        document.getElementById('avatar-img').src = userAvatar || avatars[charIndex];
 
         let totalCases = charData.cases.length;
         let done = progress;
@@ -573,24 +591,13 @@
         const charKeys = ['johnny', 'tommy', 'lenny', 'diego', 'michael'];
         charKeys.forEach((key, index) => {
             let isActive = key === currentChar ? 'active' : '';
-            switchHtml += `<div class="mini-avatar ${isActive}" onclick="switchChar('${key}')">${avatars[index]}</div>`;
+            switchHtml += `<div class="mini-avatar ${isActive}" onclick="switchChar('${key}')"><img src="${avatars[index]}"></div>`;
         });
         document.getElementById('character-switch').innerHTML = switchHtml;
 
         updateStoryUI();
-
-        let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:10px; font-size:11px;">Список пуст</div>';
-        friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--pub-gold); font-size:10px;">В ИГРЕ</span></div>`);
-        document.getElementById('friends-list').innerHTML = fHtml;
-
-        if(clan) {
-            document.getElementById('clan-create').style.display = 'none';
-            document.getElementById('my-clan-info').style.display = 'block';
-            document.getElementById('display-clan-name').innerText = clan;
-        } else {
-            document.getElementById('clan-create').style.display = 'block';
-            document.getElementById('my-clan-info').style.display = 'none';
-        }
+        updateFriendsUI();
+        updateClanUI();
     }
 
     function switchChar(char) {
@@ -623,6 +630,64 @@
         showScreen('dossier');
     }
 
+    function updateFriendsUI() {
+        let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:10px; font-size:11px;">Список пуст</div>';
+        friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--pub-gold); font-size:10px;">В ИГРЕ</span></div>`);
+        document.getElementById('friends-list').innerHTML = fHtml;
+
+        // Список друзей для добавления в клан
+        let clanFriendsHtml = friends.length ? '' : '<div style="color:#888; font-size:10px;">Нет друзей</div>';
+        friends.forEach(f => {
+            if (!clanMembers.includes(f)) {
+                clanFriendsHtml += `<div class="list-item"><span>@${f}</span> <button class="btn" style="width:auto; padding:2px 8px; margin:0;" onclick="addToClan('${f}')">+</button></div>`;
+            }
+        });
+        document.getElementById('friends-for-clan').innerHTML = clanFriendsHtml;
+    }
+
+    function updateClanUI() {
+        if(clan) {
+            document.getElementById('clan-create').style.display = 'none';
+            document.getElementById('my-clan-info').style.display = 'block';
+            document.getElementById('display-clan-name').innerText = clan;
+            renderChat();
+        } else {
+            document.getElementById('clan-create').style.display = 'block';
+            document.getElementById('my-clan-info').style.display = 'none';
+        }
+    }
+
+    function renderChat() {
+        let chatHtml = '';
+        clanMessages.forEach(msg => {
+            chatHtml += `<div class="chat-msg"><div class="author">${msg.author}</div>${msg.text}</div>`;
+        });
+        let chatBox = document.getElementById('chat-messages');
+        chatBox.innerHTML = chatHtml;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendChatMessage() {
+        let input = document.getElementById('chat-input');
+        let text = input.value.trim();
+        if (!text) return;
+
+        let msg = { author: playerName, text: text };
+        clanMessages.push(msg);
+        localStorage.setItem('clanMessages', JSON.stringify(clanMessages));
+        input.value = '';
+        renderChat();
+    }
+
+    function addToClan(friendName) {
+        if (!clanMembers.includes(friendName)) {
+            clanMembers.push(friendName);
+            localStorage.setItem('clanMembers', JSON.stringify(clanMembers));
+            updateFriendsUI();
+            showShutter(`@${friendName} добавлен в клан!`);
+        }
+    }
+
     function searchFriends() {
         let q = document.getElementById('friend-search').value.trim();
         if(!q) return;
@@ -635,8 +700,22 @@
         showShutter("Вы пригласили друга в суд!");
     }
     
-    function createClan() { let n = document.getElementById('clan-name-input').value.trim(); if(!n) return; clan = n; localStorage.setItem('myClan', clan); updateUI(); }
-    function leaveClan() { clan = null; localStorage.removeItem('myClan'); updateUI(); }
+    function createClan() { 
+        let n = document.getElementById('clan-name-input').value.trim(); 
+        if(!n) return; 
+        clan = n; 
+        localStorage.setItem('myClan', clan); 
+        updateUI(); 
+    }
+    function leaveClan() { 
+        clan = null; 
+        localStorage.removeItem('myClan'); 
+        localStorage.removeItem('clanMessages'); 
+        localStorage.removeItem('clanMembers'); 
+        clanMessages = [];
+        clanMembers = [];
+        updateUI(); 
+    }
 
     function startGame(mode) {
         currentMode = mode;
