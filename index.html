@@ -136,17 +136,17 @@
     <!-- ИНСТРУКЦИЯ -->
     <div id="intro" class="screen active" style="justify-content: center; text-align: center;">
         <div class="brutal-title" style="font-size: 30px;">ДИЛЕММА<br><span>ДЖЕНТЛЬМЕНОВ</span></div>
-        <div class="case-box" style="text-align: left; border-color: var(--pub-gold);" id="txt-intro-text">
+        <div class="case-box" style="text-align: left; border-color: var(--pub-gold);">
             <b>СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...</b><br><br>
             Пять историй. Пять судеб. Пять городов. Каждый из них пошёл на преступление ради своей цели. Но их пути пересекутся. Выбери, за кого ты будешь играть, и помни: твои решения влияют на всех.
         </div>
-        <button class="btn btn-play" onclick="showScreen('choose-name')" id="txt-btn-start">НАЧАТЬ</button>
+        <button class="btn btn-play" onclick="showScreen('choose-name')">НАЧАТЬ</button>
     </div>
 
     <!-- ВЫБОР ПЕРСОНАЖА -->
     <div id="choose-name" class="screen">
-        <div class="brutal-title" id="txt-choose-title">ВЫБЕРИ ИСТОРИЮ</div>
-        <div class="case-box" style="font-size: 11px; margin-bottom: 10px;" id="txt-choose-sub">
+        <div class="brutal-title">ВЫБЕРИ ИСТОРИЮ</div>
+        <div class="case-box" style="font-size: 11px; margin-bottom: 10px;">
             У каждого своя причина. Но риск не прощает ошибок. Кем ты станешь?
         </div>
         <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич»<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Бывший охранник. Ипотека, двое детей.</span></button>
@@ -160,7 +160,7 @@
     <div id="main-menu" class="screen">
         <div class="header">
             <div id="player-name">ДЖОННИ КИРПИЧ</div>
-            <div><span id="txt-menu-exp">ОПЫТ:</span> <span id="exp-counter" style="color: var(--pub-gold);">0</span></div>
+            <div>ОПЫТ: <span id="exp-counter" style="color: var(--pub-gold);">0</span></div>
         </div>
 
         <div id="story-continue" class="story-continue-box">
@@ -175,14 +175,14 @@
                 <div class="balance-overlay">$<span id="balance-display">0</span></div>
             </div>
             <div class="inmate-name" id="level-name">ДЖОННИ</div>
-            <div class="inmate-label" id="txt-menu-label">НАЖМИ НА ФОТО, ЧТОБЫ УЗНАТЬ ИСТОРИЮ</div>
+            <div class="inmate-label">НАЖМИ НА ФОТО, ЧТОБЫ УЗНАТЬ ИСТОРИЮ</div>
         </div>
         
         <div class="quote-box" id="quote-text">"Ты либо умрешь героем, либо проживешь достаточно долго, чтобы стать злодеем."</div>
         
         <div class="progress-container">
             <div class="progress-text">
-                <span><span id="txt-menu-progress">ПРОГРЕСС</span> <span id="level-num">0</span></span>
+                <span>ПРОГРЕСС <span id="level-num">0</span></span>
                 <span id="exp-text">XP: 0 / 7</span>
             </div>
             <div class="progress-bar"><div class="progress-fill" id="exp-bar"></div></div>
@@ -193,12 +193,11 @@
             <div class="rating-badge" id="rating-badge">🏆 <span id="rating-score">0</span></div>
         </div>
         
-        <button class="btn" onclick="showScreen('rules')" style="border-color: var(--pub-gold); color: var(--pub-gold);" id="txt-menu-rules">📜 ПРАВИЛА ИГРЫ</button>
-        <button class="btn" onclick="showScreen('settings')" style="border-color: var(--pub-gold); color: var(--pub-gold);" id="txt-menu-settings">⚙️ НАСТРОЙКИ</button>
+        <button class="btn" onclick="showScreen('rules')" style="border-color: var(--pub-gold); color: var(--pub-gold);">📜 ПРАВИЛА ИГРЫ</button>
         
         <div class="pub-bg" style="margin-top: 8px;">
-            <div class="pub-title" id="txt-menu-theory">ТЕОРИЯ ИГР:</div>
-            <div style="font-size: 11px; color: #ddd; margin-top: 3px;" id="txt-menu-theory-text">
+            <div class="pub-title">ТЕОРИЯ ИГР:</div>
+            <div style="font-size: 11px; color: #ddd; margin-top: 3px;">
                 Дилемма заключенного показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим.
             </div>
         </div>
@@ -208,9 +207,9 @@
 
     <!-- ПРАВИЛА -->
     <div id="rules" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="txt-btn-back-rules">← НАЗАД</button>
-        <div class="brutal-title" id="txt-rules-title">ПРАВИЛА</div>
-        <div class="case-box" style="border-color: var(--pub-gold); font-size: 12px; line-height: 1.5;" id="txt-rules-text">
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title">ПРАВИЛА</div>
+        <div class="case-box" style="border-color: var(--pub-gold); font-size: 12px; line-height: 1.5;">
             <b>КАК ИГРАТЬ:</b><br><br>
             Тебе дают выбор ты сам выбираешь ход дейтсвий. В финалах глав ты видишь улики против напарника и информацию о его семье. Ты должен выбрать: <b>СДАТЬ</b> его или <b>МОЛЧАТЬ</b>.<br><br>
             <b>ЧТО БУДЕТ:</b><br>
@@ -221,52 +220,36 @@
         </div>
     </div>
 
-    <!-- НАСТРОЙКИ -->
-    <div id="settings" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="txt-btn-back-settings">← НАЗАД</button>
-        <div class="brutal-title" id="txt-settings-title">НАСТРОЙКИ</div>
-        <div class="case-box" style="border-color: var(--pub-gold); font-size: 13px;">
-            <b id="txt-settings-lang-label">ЯЗЫК ИНТЕРФЕЙСА:</b><br><br>
-            <select id="lang-select" onchange="changeLanguage()" style="width: 100%; padding: 10px; background: var(--bg); color: var(--accent); border: 1px solid var(--accent); font-family: 'Space Grotesk'; font-weight: bold; border-radius: 5px;">
-                <option value="ru">РУССКИЙ</option>
-                <option value="zh">中文 (КИТАЙСКИЙ)</option>
-            </select>
-            <div style="margin-top: 15px; font-size: 11px; color: #888;" id="txt-settings-warning">
-                * Сюжетные тексты и биографии остаются на русском, так как вы их редактировали.
-            </div>
-        </div>
-    </div>
-
     <!-- ВЫБОР РЕЖИМА -->
     <div id="mode-select" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="txt-btn-back-mode">← НАЗАД</button>
-        <div class="brutal-title" id="txt-mode-title">ВЫБОР РЕЖИМА</div>
-        <button class="btn" onclick="startGame('story')" id="txt-mode-story">📖 СЮЖЕТ</button>
-        <button class="btn" onclick="startGame('rating')" id="txt-mode-rating">🏆 РЕЙТИНГОВАЯ ИГРА (<span id="rating-games-left">15</span>/15)</button>
-        <button class="btn" onclick="startGame('online')" id="txt-mode-online">🌐 ОНЛАЙН (ПОИСК)</button>
-        <button class="btn" onclick="startGame('local')" id="txt-mode-local">📱 ИГРАТЬ С ДРУГОМ</button>
-        <button class="btn" onclick="startGame('bot')" id="txt-mode-bot">🤖 С БОТОМ</button>
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title">ВЫБОР РЕЖИМА</div>
+        <button class="btn" onclick="startGame('story')">📖 СЮЖЕТ</button>
+        <button class="btn" onclick="startGame('rating')">🏆 РЕЙТИНГОВАЯ ИГРА (<span id="rating-games-left">15</span>/15)</button>
+        <button class="btn" onclick="startGame('online')">🌐 ОНЛАЙН (ПОИСК)</button>
+        <button class="btn" onclick="startGame('local')">📱 ИГРАТЬ С ДРУГОМ</button>
+        <button class="btn" onclick="startGame('bot')">🤖 С БОТОМ</button>
     </div>
 
     <!-- ДРУЗЬЯ -->
     <div id="friends" class="screen">
-        <div class="brutal-title" id="txt-friends-title">ДРУЗЬЯ</div>
+        <div class="brutal-title">ДРУЗЬЯ</div>
         <div class="search-box">
             <input type="text" id="friend-search" class="search-input" placeholder="Ник друга...">
             <button class="search-btn" onclick="searchFriends()">🔍</button>
         </div>
         <div id="friends-list" style="width: 100%;"></div>
         <div style="text-align: center; margin-top: 10px;">
-            <button class="btn" style="justify-content: center; border-color: var(--pub-gold); color: var(--pub-gold);" onclick="inviteFriend()" id="txt-btn-invite">ПРИГЛАСИТЬ В ИГРУ</button>
+            <button class="btn" style="justify-content: center; border-color: var(--pub-gold); color: var(--pub-gold);" onclick="inviteFriend()">ПРИГЛАСИТЬ В ИГРУ</button>
         </div>
     </div>
 
     <!-- РЕЙТИНГ -->
     <div id="rating" class="screen">
-        <div class="brutal-title" id="txt-rating-title">РЕЙТИНГ</div>
+        <div class="brutal-title">РЕЙТИНГ</div>
         <div class="prize-box">
-            <div style="color: var(--pub-gold); font-weight: 900; font-size: 13px; margin-bottom: 4px;" id="txt-prize-title">ПРИЗЫ ОТ БОССА</div>
-            <div style="font-size: 10px; color: #ddd;" id="txt-prize-text">
+            <div style="color: var(--pub-gold); font-weight: 900; font-size: 13px; margin-bottom: 4px;">ПРИЗЫ ОТ БОССА</div>
+            <div style="font-size: 10px; color: #ddd;">
                 Каждую неделю Топ-3 получают Telegram Premium в звездах:<br>
                 🥇 1 место: 1/3 подписки<br>
                 🥈 2 место: 1/4 подписки<br>
@@ -275,33 +258,33 @@
             </div>
         </div>
         <div id="rating-list" style="width: 100%;">
-            <div style="text-align: center; color: #888; margin-top: 10px; font-size: 12px;" id="txt-no-players">Пока нет игроков.</div>
+            <div style="text-align: center; color: #888; margin-top: 10px; font-size: 12px;">Пока нет игроков.</div>
         </div>
     </div>
 
     <!-- КЛАНЫ -->
     <div id="clans" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="txt-btn-back-clans">← НАЗАД</button>
-        <div class="brutal-title" id="txt-clans-title">КЛАН</div>
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
+        <div class="brutal-title">КЛАН</div>
         
         <div id="clan-create" style="margin-bottom: 10px;">
             <input type="text" id="clan-name-input" class="search-input" placeholder="Название клана..." style="width: 100%; margin-bottom: 6px;">
-            <button class="btn btn-play" onclick="createClan()" id="txt-btn-create-clan">СОЗДАТЬ КЛАН</button>
+            <button class="btn btn-play" onclick="createClan()">СОЗДАТЬ КЛАН</button>
         </div>
 
         <div id="my-clan-info" style="display: none; width: 100%;">
             <div class="pub-bg" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div class="pub-title" id="display-clan-name">КЛАН</div>
-                    <div style="font-size: 10px; color: #888;" id="txt-clan-leader">Лидер: ВЫ</div>
+                    <div style="font-size: 10px; color: #888;">Лидер: ВЫ</div>
                 </div>
-                <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; color: var(--danger); border-color: var(--danger);" onclick="leaveClan()" id="txt-btn-leave-clan">ВЫЙТИ</button>
+                <button class="btn" style="width: auto; padding: 5px 10px; margin: 0; color: var(--danger); border-color: var(--danger);" onclick="leaveClan()">ВЫЙТИ</button>
             </div>
 
-            <div style="font-size: 12px; color: var(--pub-gold); margin-bottom: 5px; font-weight: bold;" id="txt-clan-add-label">ДОБАВИТЬ В КЛАН:</div>
+            <div style="font-size: 12px; color: var(--pub-gold); margin-bottom: 5px; font-weight: bold;">ДОБАВИТЬ В КЛАН:</div>
             <div id="friends-for-clan" style="margin-bottom: 10px;"></div>
 
-            <div style="font-size: 12px; color: var(--pub-gold); margin-bottom: 5px; font-weight: bold;" id="txt-clan-chat-label">ЧАТ КЛАНА:</div>
+            <div style="font-size: 12px; color: var(--pub-gold); margin-bottom: 5px; font-weight: bold;">ЧАТ КЛАНА:</div>
             <div class="chat-container">
                 <div class="chat-messages" id="chat-messages"></div>
                 <div class="chat-input-box">
@@ -314,11 +297,11 @@
 
     <!-- ДОСЬЕ -->
     <div id="dossier" class="screen">
-        <button class="nav-back" onclick="showScreen('main-menu')" id="txt-btn-back-dossier">← НАЗАД</button>
+        <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
         <div class="brutal-title" id="dossier-name">ИМЯ</div>
-        <div class="dossier-section"><div class="dossier-label" id="txt-doss-before">ПРОШЛОЕ</div><div class="dossier-text" id="dossier-before">...</div></div>
-        <div class="dossier-section"><div class="dossier-label" id="txt-doss-family">СЕМЬЯ</div><div class="dossier-text" id="dossier-family">...</div></div>
-        <div class="dossier-section"><div class="dossier-label" id="txt-doss-partner">НАПАРНИК</div><div class="dossier-text" id="dossier-partner">...</div></div>
+        <div class="dossier-section"><div class="dossier-label">ПРОШЛОЕ</div><div class="dossier-text" id="dossier-before">...</div></div>
+        <div class="dossier-section"><div class="dossier-label">СЕМЬЯ</div><div class="dossier-text" id="dossier-family">...</div></div>
+        <div class="dossier-section"><div class="dossier-label">НАПАРНИК</div><div class="dossier-text" id="dossier-partner">...</div></div>
     </div>
 
     <!-- ЧТЕНИЕ ДЕЛА -->
@@ -327,15 +310,15 @@
         <div class="case-box" id="case-text">Текст дела...</div>
         
         <div id="matrix-container" style="display: none;">
-            <div class="matrix-title" id="txt-matrix-title">ТАБЛИЦА ВЫПЛАТ (ТВОЙ СРОК / ЕГО СРОК)</div>
+            <div class="matrix-title">ТАБЛИЦА ВЫПЛАТ (ТВОЙ СРОК / ЕГО СРОК)</div>
             <table class="matrix-table">
-                <tr><th></th><th id="txt-matrix-he">Он молчит</th><th id="txt-matrix-hb">Он сдаёт</th></tr>
-                <tr><th id="txt-matrix-you">Ты молчишь</th><td class="highlight">3 / 3</td><td>10 / 0</td></tr>
-                <tr><th id="txt-matrix-you2">Ты сдаёшь</th><td class="highlight">0 / 10</td><td>6 / 6</td></tr>
+                <tr><th></th><th>Он молчит</th><th>Он сдаёт</th></tr>
+                <tr><th>Ты молчишь</th><td class="highlight">3 / 3</td><td>10 / 0</td></tr>
+                <tr><th>Ты сдаёшь</th><td class="highlight">0 / 10</td><td>6 / 6</td></tr>
             </table>
         </div>
 
-        <button class="btn btn-play" onclick="startChoosingPhase()" id="txt-btn-read">Я ПРОЧИТАЛ</button>
+        <button class="btn btn-play" onclick="startChoosingPhase()">Я ПРОЧИТАЛ</button>
     </div>
 
     <!-- СУД -->
@@ -349,7 +332,7 @@
         </div>
 
         <div id="matrix-container-game" style="display: none;">
-            <div class="matrix-title" id="txt-matrix-title-2">ТАБЛИЦА ВЫПЛАТ</div>
+            <div class="matrix-title">ТАБЛИЦА ВЫПЛАТ</div>
             <table class="matrix-table">
                 <tr><th></th><th>Он молчит</th><th>Он сдаёт</th></tr>
                 <tr><th>Ты молчишь</th><td class="highlight">3 / 3</td><td>10 / 0</td></tr>
@@ -365,16 +348,16 @@
 
     <!-- ПЕРЕДАЙ ТЕЛЕФОН -->
     <div id="pass-screen" class="screen">
-        <div class="brutal-title" style="margin-top: 30px;" id="txt-pass-title">ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span></div>
-        <div class="case-box" style="text-align: center;" id="txt-pass-text">Передайте телефон Игроку 2.</div>
-        <button class="btn btn-play" onclick="showScreen('game-screen')" id="txt-btn-ready">Я ГОТОВ</button>
+        <div class="brutal-title" style="margin-top: 30px;">ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span></div>
+        <div class="case-box" style="text-align: center;">Передайте телефон Игроку 2.</div>
+        <button class="btn btn-play" onclick="showScreen('game-screen')">Я ГОТОВ</button>
     </div>
 
     <!-- РЕЗУЛЬТАТ -->
     <div id="result-screen" class="screen">
-        <div class="brutal-title" style="margin-top: 30px;" id="txt-verdict">ПРИГОВОР</div>
+        <div class="brutal-title" style="margin-top: 30px;">ПРИГОВОР</div>
         <div class="case-box" style="border-color: var(--pub-gold);" id="result-text"></div>
-        <button class="btn btn-play" onclick="backToMenu()" id="txt-btn-menu">В МЕНЮ</button>
+        <button class="btn btn-play" onclick="backToMenu()">В МЕНЮ</button>
     </div>
 
     <!-- НИЖНЕЕ МЕНЮ -->
@@ -501,222 +484,6 @@
     let currentCaseData = null;
     let currentStoryIndex = 0;
 
-    // ===== ЯЗЫК =====
-    let currentLang = localStorage.getItem('lang') || 'ru';
-
-    const translations = {
-        ru: {
-            introText: "<b>СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...</b><br><br>Пять историй. Пять судеб. Пять городов. Каждый из них пошёл на преступление ради своей цели. Но их пути пересекутся. Выбери, за кого ты будешь играть, и помни: твои решения влияют на всех.",
-            btnStart: "НАЧАТЬ",
-            chooseTitle: "ВЫБЕРИ ИСТОРИЮ",
-            chooseSub: "У каждого своя причина. Но риск не прощает ошибок. Кем ты станешь?",
-            rules: "📜 ПРАВИЛА ИГРЫ",
-            settings: "⚙️ НАСТРОЙКИ",
-            theory: "ТЕОРИЯ ИГР:",
-            theoryText: "Дилемма заключенного показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим.",
-            historyTitle: "ПРОШЛОЕ",
-            familyTitle: "СЕМЬЯ",
-            partnerTitle: "НАПАРНИК",
-            back: "← НАЗАД",
-            settingsTitle: "НАСТРОЙКИ",
-            langLabel: "ЯЗЫК ИНТЕРФЕЙСА:",
-            modeTitle: "ВЫБОР РЕЖИМА",
-            modeStory: "📖 СЮЖЕТ",
-            modeRating: "🏆 РЕЙТИНГОВАЯ ИГРА",
-            modeOnline: "🌐 ОНЛАЙН (ПОИСК)",
-            modeLocal: "📱 ИГРАТЬ С ДРУГОМ",
-            modeBot: "🤖 С БОТОМ",
-            friendTitle: "ДРУЗЬЯ",
-            friendSearch: "Ник друга...",
-            friendInvite: "ПРИГЛАСИТЬ В ИГРУ",
-            ratingTitle: "РЕЙТИНГ",
-            prizeTitle: "ПРИЗЫ ОТ БОССА",
-            prizeText: "Каждую неделю Топ-3 получают Telegram Premium в звездах:<br>🥇 1 место: 1/3 подписки<br>🥈 2 место: 1/4 подписки<br>🥉 3 место: 1/5 подписки<br><span style='color: var(--danger);'>Рейтинг сбрасывается каждый месяц.</span>",
-            noPlayers: "Пока нет игроков.",
-            clanTitle: "КЛАН",
-            clanCreate: "СОЗДАТЬ КЛАН",
-            clanAdd: "ДОБАВИТЬ В КЛАН:",
-            clanChat: "ЧАТ КЛАНА:",
-            clanLeave: "ВЫЙТИ",
-            clanLeader: "Лидер: ВЫ",
-            clanNoFriends: "Нет друзей",
-            chatPlaceholder: "Сообщение...",
-            readCase: "Я ПРОЧИТАЛ",
-            choiceTitle: "РАЗБОРКА",
-            choiceDesc: "Время решать.",
-            choiceBetray: "СДАТЬ",
-            choiceSilent: "МОЛЧАТЬ",
-            choiceRisk: "(Риск)",
-            choiceLoyal: "(Верность)",
-            passTitle: "ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span>",
-            passText: "Передайте телефон Игроку 2.",
-            ready: "Я ГОТОВ",
-            verdict: "ПРИГОВОР",
-            btnMenu: "В МЕНЮ",
-            navHome: "Главная",
-            navRating: "Рейтинг",
-            navFriends: "Друзья",
-            navClans: "Кланы",
-            noFriends: "Список пуст",
-            inGame: "В ИГРЕ",
-            shutterCourt: "Вас пригласили в суд!",
-            rulesText: "<b>КАК ИГРАТЬ:</b><br><br>Тебе дают выбор ты сам выбираешь ход дейтсвий. В финалах глав ты видишь улики против напарника и информацию о его семье. Ты должен выбрать: <b>СДАТЬ</b> его или <b>МОЛЧАТЬ</b>.<br><br><b>ЧТО БУДЕТ:</b><br>• Если ты СДАШЬ, а он МОЛЧИТ: ты выйдешь (0 лет), он сядет на 10 лет.<br>• Если ты МОЛЧИШЬ, а он СДАСТ: ты сядешь на 10 лет, он выйдет.<br>• Если вы оба СДАДИТЕ: вы оба сядете на 6 лет.<br>• Если вы оба МОЛЧИТЕ: вы оба сядете на 3 года, но мафия вас вытащит! Вы идете дальше."
-        },
-        zh: {
-            introText: "<b>系统开始记录...</b><br><br>五个故事。五种命运。五个城市。他们每个人都为了自己的目标而犯罪。但他们的道路将交叉。选择你要扮演谁，记住：你的决定会影响所有人。",
-            btnStart: "开始",
-            chooseTitle: "选择故事",
-            chooseSub: "每个人都有自己的理由。但风险不会原谅错误。你会成为谁？",
-            rules: "📜 游戏规则",
-            settings: "⚙️ 设置",
-            theory: "博弈论：",
-            theoryText: "囚徒困境展示了为什么两个人可能不合作，即使这对双方都有利。",
-            historyTitle: "过去",
-            familyTitle: "家庭",
-            partnerTitle: "搭档",
-            back: "← 返回",
-            settingsTitle: "设置",
-            langLabel: "界面语言：",
-            modeTitle: "选择模式",
-            modeStory: "📖 剧情",
-            modeRating: "🏆 排位赛",
-            modeOnline: "🌐 在线 (搜索)",
-            modeLocal: "📱 和朋友一起玩",
-            modeBot: "🤖 对战电脑",
-            friendTitle: "朋友",
-            friendSearch: "朋友昵称...",
-            friendInvite: "邀请游戏",
-            ratingTitle: "排行榜",
-            prizeTitle: "老板的奖励",
-            prizeText: "每周前三名获得 Telegram Premium 星星：<br>🥇 第一名：1/3 订阅<br>🥈 第二名：1/4 订阅<br>🥉 第三名：1/5 订阅<br><span style='color: var(--danger);'>排行榜每月重置。</span>",
-            noPlayers: "暂无玩家。",
-            clanTitle: "部落",
-            clanCreate: "创建部落",
-            clanAdd: "添加到部落：",
-            clanChat: "部落聊天：",
-            clanLeave: "离开",
-            clanLeader: "首领：你",
-            clanNoFriends: "没有朋友",
-            chatPlaceholder: "消息...",
-            readCase: "我读完了",
-            choiceTitle: "对峙",
-            choiceDesc: "是时候决定了。",
-            choiceBetray: "背叛",
-            choiceSilent: "沉默",
-            choiceRisk: "(风险)",
-            choiceLoyal: "(忠诚)",
-            passTitle: "传递<br><span>手机</span>",
-            passText: "将手机交给玩家 2。",
-            ready: "我准备好了",
-            verdict: "判决",
-            btnMenu: "返回菜单",
-            navHome: "主页",
-            navRating: "排行榜",
-            navFriends: "朋友",
-            navClans: "部落",
-            noFriends: "列表为空",
-            inGame: "在游戏中",
-            shutterCourt: "你被邀请参加审判！",
-            rulesText: "<b>怎么玩：</b><br><br>你可以选择自己的行动。在章节结尾，你会看到针对搭档的证据和他的家庭信息。你必须选择：<b>背叛</b>他或<b>保持沉默</b>。<br><br><b>会发生什么：</b><br>• 如果你背叛，而他沉默：你自由了 (0年)，他坐10年。<br>• 如果你沉默，而他背叛：你坐10年，他自由了。<br>• 如果你们都背叛：你们各坐6年。<br>• 如果你们都沉默：你们各坐3年，但黑手党会把你们弄出来！你们继续前进。"
-        }
-    };
-
-    function applyLanguage() {
-        let t = translations[currentLang];
-        
-        // Инструкция
-        document.getElementById('txt-intro-text').innerHTML = t.introText;
-        document.getElementById('txt-btn-start').innerText = t.btnStart;
-
-        // Выбор персонажа
-        document.getElementById('txt-choose-title').innerText = t.chooseTitle;
-        document.getElementById('txt-choose-sub').innerText = t.chooseSub;
-
-        // Главное меню
-        document.getElementById('txt-menu-exp').innerText = t.exp || "ОПЫТ:";
-        document.getElementById('txt-menu-label').innerText = t.label || "НАЖМИ НА ФОТО, ЧТОБЫ УЗНАТЬ ИСТОРИЮ";
-        document.getElementById('txt-menu-progress').innerText = t.progress || "ПРОГРЕСС";
-        document.getElementById('txt-menu-rules').innerText = t.rules;
-        document.getElementById('txt-menu-settings').innerText = t.settings;
-        document.getElementById('txt-menu-theory').innerText = t.theory;
-        document.getElementById('txt-menu-theory-text').innerText = t.theoryText;
-
-        // Правила
-        document.getElementById('txt-btn-back-rules').innerText = t.back;
-        document.getElementById('txt-rules-title').innerText = t.rules.replace('📜 ', '');
-        document.getElementById('txt-rules-text').innerHTML = t.rulesText;
-
-        // Настройки
-        document.getElementById('txt-btn-back-settings').innerText = t.back;
-        document.getElementById('txt-settings-title').innerText = t.settingsTitle;
-        document.getElementById('txt-settings-lang-label').innerText = t.langLabel;
-
-        // Режим
-        document.getElementById('txt-btn-back-mode').innerText = t.back;
-        document.getElementById('txt-mode-title').innerText = t.modeTitle;
-        document.getElementById('txt-mode-story').innerText = t.modeStory;
-        document.getElementById('txt-mode-rating').innerHTML = `${t.modeRating} (<span id="rating-games-left">15</span>/15)`;
-        document.getElementById('txt-mode-online').innerText = t.modeOnline;
-        document.getElementById('txt-mode-local').innerText = t.modeLocal;
-        document.getElementById('txt-mode-bot').innerText = t.modeBot;
-
-        // Друзья
-        document.getElementById('txt-friends-title').innerText = t.friendTitle;
-        document.getElementById('txt-btn-invite').innerText = t.friendInvite;
-        document.getElementById('friend-search').placeholder = t.friendSearch;
-
-        // Рейтинг
-        document.getElementById('txt-rating-title').innerText = t.ratingTitle;
-        document.getElementById('txt-prize-title').innerText = t.prizeTitle;
-        document.getElementById('txt-prize-text').innerHTML = t.prizeText;
-        document.getElementById('txt-no-players').innerText = t.noPlayers;
-
-        // Клан
-        document.getElementById('txt-btn-back-clans').innerText = t.back;
-        document.getElementById('txt-clans-title').innerText = t.clanTitle;
-        document.getElementById('txt-btn-create-clan').innerText = t.clanCreate;
-        document.getElementById('txt-clan-leader').innerText = t.clanLeader;
-        document.getElementById('txt-btn-leave-clan').innerText = t.clanLeave;
-        document.getElementById('txt-clan-add-label').innerText = t.clanAdd;
-        document.getElementById('txt-clan-chat-label').innerText = t.clanChat;
-        document.getElementById('chat-input').placeholder = t.chatPlaceholder;
-
-        // Досье
-        document.getElementById('txt-btn-back-dossier').innerText = t.back;
-        document.getElementById('txt-doss-before').innerText = t.historyTitle;
-        document.getElementById('txt-doss-family').innerText = t.familyTitle;
-        document.getElementById('txt-doss-partner').innerText = t.partnerTitle;
-
-        // Чтение дела
-        document.getElementById('txt-btn-read').innerText = t.readCase;
-
-        // Суд
-        document.getElementById('txt-matrix-title').innerText = "ТАБЛИЦА ВЫПЛАТ";
-        document.getElementById('action-desc').innerText = t.choiceDesc;
-
-        // Результат
-        document.getElementById('txt-verdict').innerText = t.verdict;
-        document.getElementById('txt-btn-menu').innerText = t.btnMenu;
-
-        // Нижнее меню
-        let navItems = document.querySelectorAll('.bottom-nav .nav-item');
-        if(navItems.length >= 4) {
-            navItems[0].innerHTML = `<i>🏠</i>${t.navHome}`;
-            navItems[1].innerHTML = `<i>🏆</i>${t.navRating}`;
-            navItems[2].innerHTML = `<i>👥</i>${t.navFriends}`;
-            navItems[3].innerHTML = `<i>🛡️</i>${t.navClans}`;
-        }
-
-        updateUI();
-    }
-
-    function changeLanguage() {
-        currentLang = document.getElementById('lang-select').value;
-        localStorage.setItem('lang', currentLang);
-        applyLanguage();
-        tg.showAlert(currentLang === 'ru' ? "Язык изменен" : "语言已更改");
-    }
-
     function showShutter(text) {
         document.getElementById('shutter-text').innerText = text;
         document.getElementById('top-shutter').classList.add('show');
@@ -757,7 +524,7 @@
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'case-screen' || id === 'game-screen' || id === 'result-screen' || id === 'intro' || id === 'pass-screen' || id === 'rules' || id === 'choose-name' || id === 'settings') {
+        if(id === 'case-screen' || id === 'game-screen' || id === 'result-screen' || id === 'intro' || id === 'pass-screen' || id === 'rules' || id === 'choose-name') {
             document.getElementById('bottom-nav').style.display = 'none';
         } else {
             document.getElementById('bottom-nav').style.display = 'flex';
@@ -808,6 +575,7 @@
         document.getElementById('exp-bar').style.width = (done / need * 100) + '%';
         
         document.getElementById('rating-score').innerText = ratingScore;
+        document.getElementById('rating-games-left').innerText = 15 - ratingGamesPlayed;
         
         let switchHtml = '';
         const charKeys = ['johnny', 'tommy', 'lenny', 'diego', 'michael'];
@@ -853,11 +621,11 @@
     }
 
     function updateFriendsUI() {
-        let fHtml = friends.length ? '' : `<div style="text-align:center; color:#888; margin-top:10px; font-size:11px;">${translations[currentLang].noFriends}</div>`;
-        friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--pub-gold); font-size:10px;">${translations[currentLang].inGame}</span></div>`);
+        let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:10px; font-size:11px;">Список пуст</div>';
+        friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--pub-gold); font-size:10px;">В ИГРЕ</span></div>`);
         document.getElementById('friends-list').innerHTML = fHtml;
 
-        let clanFriendsHtml = friends.length ? '' : `<div style="color:#888; font-size:10px;">${translations[currentLang].clanNoFriends}</div>`;
+        let clanFriendsHtml = friends.length ? '' : '<div style="color:#888; font-size:10px;">Нет друзей</div>';
         friends.forEach(f => {
             if (!clanMembers.includes(f)) {
                 clanFriendsHtml += `<div class="list-item"><span>@${f}</span> <button class="btn" style="width:auto; padding:2px 8px; margin:0;" onclick="addToClan('${f}')">+</button></div>`;
@@ -918,7 +686,7 @@
     
     function inviteFriend() {
         tg.showAlert("Приглашение отправлено!");
-        showShutter(translations[currentLang].shutterCourt);
+        showShutter("Вы пригласили друга в суд!");
     }
     
     function createClan() { 
@@ -1118,6 +886,7 @@
                     text = `Твой срок: 0 лет.<br>Срок напарника: 10 лет.<br><br><span style='color:var(--pub-gold); font-size:16px; font-weight:bold;'>ТЫ СДАЛ ЕГО И ВЫШЕЛ!</span><br><span style='font-size:11px;'>+1 XP</span>`;
                 }
             } else {
+                // В обычных делах никаких сроков
                 text = `<span style='color:var(--pub-gold); font-size:16px; font-weight:bold;'>${currentCaseData.successText || "ТЫ ВЫИГРАЛ!"}</span><br><span style='font-size:11px;'>+1 XP</span>`;
             }
             
@@ -1143,6 +912,7 @@
             if (isFinal) {
                 text = `Твой срок: 10 лет.<br>Срок напарника: 0 лет.<br><br><span style='color:var(--danger); font-size:16px; font-weight:bold;'>ОН СДАЛ ТЕБЯ И ВЫШЕЛ!</span><br><span style='font-size:11px;'>-1 XP</span>`;
             } else {
+                // В обычных делах никаких сроков
                 text = `<span style='color:var(--danger); font-size:16px; font-weight:bold;'>${currentCaseData.failText || "ТЫ ПРОИГРАЛ!"}</span><br><span style='font-size:11px;'>-1 XP</span>`;
             }
             
@@ -1180,8 +950,7 @@
         showScreen('main-menu');
     }
 
-    // Применяем язык при загрузке
-    applyLanguage();
+    updateUI();
 </script>
 </body>
 </html>
