@@ -47,7 +47,7 @@
         .timer { font-size: 52px; font-weight: 900; text-align: center; color: var(--pub-gold); margin-bottom: 15px; }
         
         .choices { display: flex; gap: 15px; margin-top: auto; }
-        .choice-btn { flex: 1; padding: 22px 10px; font-size: 16px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-family: 'Space Grotesk', sans-serif;}
+        .choice-btn { flex: 1; padding: 22px 10px; font-size: 15px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-family: 'Space Grotesk', sans-serif; text-align: center; line-height: 1.2;}
         .c-alpha { background: var(--pub-green); color: var(--pub-gold); border: 2px solid var(--pub-gold); }
         .c-beta { background: var(--danger); color: #fff; }
 
@@ -85,12 +85,13 @@
         .avatar-upload { display: none; }
         .avatar-label { cursor: pointer; display: block; }
 
-        /* ТАБЛИЦА ТОЛЬКО ДЛЯ ФИНАЛА */
         .matrix-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; background: var(--card); border: 1px solid var(--pub-gold); }
         .matrix-table th, .matrix-table td { border: 1px solid var(--pub-gold); padding: 10px; text-align: center; font-size: 13px; color: #ddd; }
         .matrix-table th { background: var(--pub-green); color: var(--pub-gold); font-weight: 900; }
         .matrix-table td.highlight { color: var(--pub-gold); font-weight: 900; }
         .matrix-title { text-align: center; color: var(--pub-gold); font-weight: 900; margin-bottom: 10px; font-size: 14px; text-transform: uppercase; }
+
+        .balance-box { background: var(--pub-gold); color: #000; padding: 10px; border-radius: 8px; text-align: center; font-weight: 900; font-size: 18px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -119,6 +120,10 @@
         <div class="header">
             <div id="player-name">ДЖОННИ КИРПИЧ</div>
             <div>ОПЫТ: <span id="exp-counter" style="color: var(--pub-gold);">0</span></div>
+        </div>
+
+        <div class="balance-box">
+            БАЛАНС: $<span id="balance-display">0</span>
         </div>
 
         <div id="story-continue" class="story-continue-box">
@@ -238,7 +243,6 @@
         <div class="timer" id="timer-read">45</div>
         <div class="case-box" id="case-text">Текст дела...</div>
         
-        <!-- ТАБЛИЦА ТОЛЬКО В ФИНАЛЕ -->
         <div id="matrix-container" style="display: none;">
             <div class="matrix-title">ТАБЛИЦА ВЫПЛАТ (ТВОЙ СРОК / ЕГО СРОК)</div>
             <table class="matrix-table">
@@ -260,7 +264,6 @@
             <div style="text-align: center; color: #ddd; font-size: 14px; margin-bottom: 20px;">Судья смотрит на тебя. Присяжные ждут. Твое слово решает всё.</div>
         </div>
 
-        <!-- ТАБЛИЦА ТОЛЬКО В ФИНАЛЕ -->
         <div id="matrix-container-game" style="display: none;">
             <div class="matrix-title">ТАБЛИЦА ВЫПЛАТ</div>
             <table class="matrix-table">
@@ -317,39 +320,50 @@
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
-    // СЮЖЕТНЫЕ ДЕЛА (по мотивам фильмов)
     const storyCases = [
-        { t: "ГЛАВА 1: Ограбление казино 'Белладжио'. Ты и Джимми вскрыли сейф, но сработала сигнализация. Полиция приехала через 5 минут. Следователь нашел отпечатки на сейфе. Джимми в панике. Он говорит: 'Джонни, я не могу сесть, у меня мать больная'.", p: "Джимми Конвей.", ev: "На сейфе четкие отпечатки Джимми. Следователь обещает тебе иммунитет, если ты подтвердишь, что он был за рулем.", fam: "У Джимми больная мать, Элизабет, которая живет в доме престарелых. Он единственный, кто оплачивает ее лечение." },
-        { t: "ГЛАВА 2: Джимми пропал. Тебя снова берут на дело — угон 'Ягуара' у сына прокурора. Твой напарник — Томми, правая рука босса. Он знает, что ты был в тюрьме. Томми говорит: 'Если нас возьмут, я скажу, что ты меня заставил'.", p: "Томми 'Два Ствола'.", ev: "Томми оставил свои отпечатки на руле. Полиция нашла твою куртку на заднем сиденье.", fam: "У Томми больная мать. Он не хочет садиться, чтобы не оставить ее одну." },
-        { t: "ГЛАВА 3: Томми пропал. Тебя берут на ограбление ювелирки 'Тиффани'. Твой новый напарник — Ленни, старый друг. Он говорит: 'Джонни, я тебя не сдам, мы же братья'. Но на записи камер видно двоих.", p: "Ленни 'Молот'.", ev: "На записи камер видно двоих. Ленни был в кадре, но лицо размыто. Следователь предлагает сделку.", fam: "Ленни недавно женился. Его жена беременна. Он хочет выйти из игры." },
-        { t: "ГЛАВА 4: Ленни сдал тебя, но ты вышел под залог. Тебя снова зовут на дело — контрабанда виски. Твой напарник — Эрни, человек с принципами. Он говорит: 'Я не люблю крыс. Если ты меня сдашь, я выйду и найду тебя'.", p: "Эрни 'Тихий'.", ev: "Эрни оставил свой телефон в машине. Там переписка, где он берет всю вину на себя.", fam: "У Эрни маленький сын. Он хочет уйти из бизнеса и открыть паб." },
-        { t: "ГЛАВА 5: Эрни мертв. Ты остался один. Босс Томми вызывает тебя. Он знает, что ты сдавал его людей. Он предлагает тебе последнее дело — поджог паба 'Красный лев'. Томми говорит: 'Если ты меня сдашь, твоя семья умрет'.", p: "ТОММИ (Босс).", ev: "На канистре отпечатки Томми. Но также там есть следы перчаток, которые могут принадлежать тебе.", fam: "Твоя семья под защитой мафии. Но если ты сдашь босса — их не станет." }
+        // Глава 1 (Казино)
+        { t: "ГЛАВА 1: Ограбление казино 'Белладжио'. Ты задолжал ростовщикам 300 тысяч. Джимми пришёл с планом: сейф с 2 миллионами. Вы собрали команду из 11 человек. Маркус вскрыл сейф, но оставил отпечатки. Следователь шепчет: 'Сдай его, и ты свободен'.", p: "Джимми Конвей (правая рука).", ev: "Отпечатки Маркуса (взломщика) на сейфе.", fam: "У Маркуса больная мать, он единственный кормилец.", kush: 2000000, btn1: "Свалить на Маркуса", btn2: "Взять вину на себя" },
+        { t: "ГЛАВА 1: Вы на крыше. В фургоне осталась твоя куртка. Джимми в панике. Если скинешь куртку — найдут во дворе. Если оставишь — найдут в машине и посадят Джимми.", p: "Джимми Конвей.", ev: "Твоя куртка в фургоне.", fam: "У Джимми больная мать.", kush: 500000, btn1: "Скинуть куртку", btn2: "Оставить в фургоне" },
+        { t: "ГЛАВА 1: Охранник видел вас. Джимми хочет его запугать. Но если запугаешь — он пойдёт в полицию. Если договоришься — потребует долю, но промолчит.", p: "Джимми Конвей.", ev: "Показания охранника.", fam: "Охранник — отец троих детей.", kush: 300000, btn1: "Запугать свидетеля", btn2: "Договориться с ним" },
+        { t: "ГЛАВА 1: Угнанный фургон. Сальваторе предлагает сжечь. Если сжечь — привлечёте внимание. Если спрятать — есть шанс, что найдут.", p: "Сальваторе (водитель).", ev: "Твои отпечатки в фургоне.", fam: "У Сальваторе жена и двое детей.", kush: 200000, btn1: "Сжечь фургон", btn2: "Спрятать фургон" },
+        { t: "ГЛАВА 1: Следователь нашел твою куртку. Джимми готов дать показания против тебя.", p: "Джимми Конвей.", ev: "Твоя куртка в машине. Джимми готов говорить.", fam: "У Джимми больная мать.", kush: 0, btn1: "Сдать Джимми", btn2: "Молчать" },
+        { t: "ГЛАВА 1 (ФИНАЛ): Вас взяли на выходе. Следователь предлагает сделку.", p: "Джимми Конвей.", ev: "Все улики против вас.", fam: "У Джимми больная мать.", kush: 0, btn1: "Сдать Джимми", btn2: "Молчать" },
+
+        // Глава 2 (Угон)
+        { t: "ГЛАВА 2: Джимми пропал. Босс Томми вызвал тебя: 'Угон Ягуара. Но если нас возьмут, я скажу, что ты меня заставил'.", p: "Томми (правая рука).", ev: "Томми не доверяет тебе.", fam: "У Томми больная мать.", kush: 500000, btn1: "Довериться Томми", btn2: "Подстраховаться" },
+        { t: "ГЛАВА 2: Вы угнали Ягуар. Томми оставил отпечатки. Полиция преследует.", p: "Томми.", ev: "Отпечатки Томми на руле.", fam: "У Томми больная мать.", kush: 500000, btn1: "Угнать тачку", btn2: "Бросить тачку" },
+        { t: "ГЛАВА 2: Погоня. Томми предлагает сдать тебя, чтобы спастись.", p: "Томми.", ev: "Томми готов говорить.", fam: "У Томми больная мать.", kush: 0, btn1: "Гнать до конца", btn2: "Остановиться" },
+        { t: "ГЛАВА 2: Гараж. Томми оставил телефон с уликами.", p: "Томми.", ev: "Телефон Томми с перепиской.", fam: "У Томми больная мать.", kush: 200000, btn1: "Перекрасить машину", btn2: "Спрятать машину" },
+        { t: "ГЛАВА 2 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Томми.", ev: "Все улики против вас.", fam: "У Томми больная мать.", kush: 0, btn1: "Сдать Томми", btn2: "Молчать" },
+
+        // Глава 3 (Ювелирка)
+        { t: "ГЛАВА 3: Томми пропал. Босс дал тебе Ленни, старого друга. Он клянется, что не сдаст, но у него беременная жена.", p: "Ленни 'Молот'.", ev: "Ленни в кадре.", fam: "У Ленни беременная жена.", kush: 3000000, btn1: "Довериться Ленни", btn2: "Проверить Ленни" },
+        { t: "ГЛАВА 3: Вы разбили витрину. Бриллианты на 3 миллиона. Тревога.", p: "Ленни.", ev: "Запись камер.", fam: "У Ленни беременная жена.", kush: 3000000, btn1: "Разбить витрину", btn2: "Отойти в сторону" },
+        { t: "ГЛАВА 3: Нужно стереть записи. Ленни оставил улики.", p: "Ленни.", ev: "Улики Ленни в машине.", fam: "У Ленни беременная жена.", kush: 500000, btn1: "Стереть записи", btn2: "Оставить записи" },
+        { t: "ГЛАВА 3: Жена Ленни беременна. Он хочет выйти из игры.", p: "Ленни.", ev: "Ленни хочет уйти.", fam: "У Ленни беременная жена.", kush: 0, btn1: "Надавить на Ленни", btn2: "Отпустить Ленни" },
+        { t: "ГЛАВА 3 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Ленни.", ev: "Все улики против вас.", fam: "У Ленни беременная жена.", kush: 0, btn1: "Сдать Ленни", btn2: "Молчать" },
+
+        // Глава 4 (Контрабанда)
+        { t: "ГЛАВА 4: Ленни сдал тебя, но ты вышел. Босс дал Эрни — человека с принципами. Он не любит предателей.", p: "Эрни 'Тихий'.", ev: "Эрни не любит крыс.", fam: "У Эрни маленький сын.", kush: 1000000, btn1: "Довериться Эрни", btn2: "Подстраховаться" },
+        { t: "ГЛАВА 4: Вы везете контрабандный виски. Таможня нашла груз.", p: "Эрни.", ev: "Таможня нашла груз.", fam: "У Эрни маленький сын.", kush: 1000000, btn1: "Взять груз", btn2: "Бросить груз" },
+        { t: "ГЛАВА 4: Кто-то сдал вас. Эрни знает, кто это.", p: "Эрни.", ev: "Эрни знает стукача.", fam: "У Эрни маленький сын.", kush: 0, btn1: "Найти стукача", btn2: "Затаиться" },
+        { t: "ГЛАВА 4: Эрни берет вину на себя. Он готов сесть.", p: "Эрни.", ev: "Эрни готов сесть.", fam: "У Эрни маленький сын.", kush: 0, btn1: "Взять вину", btn2: "Отдать вину" },
+        { t: "ГЛАВА 4 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Эрни.", ev: "Все улики против вас.", fam: "У Эрни маленький сын.", kush: 0, btn1: "Сдать Эрни", btn2: "Молчать" },
+
+        // Глава 5 (Поджог)
+        { t: "ГЛАВА 5: Эрни мертв. Босс Томми вызвал тебя: 'Поджог паба. Или твоя семья умрет'.", p: "ТОММИ (Босс).", ev: "Томми знает о твоих сдачах.", fam: "Твоя семья в опасности.", kush: 500000, btn1: "Признаться Боссу", btn2: "Отрицать всё" },
+        { t: "ГЛАВА 5: Поджог паба. Погиб сторож.", p: "ТОММИ (Босс).", ev: "Канистра с бензином.", fam: "Твоя семья в опасности.", kush: 500000, btn1: "Поджечь паб", btn2: "Отказаться" },
+        { t: "ГЛАВА 5: Босс угрожает твоей семье.", p: "ТОММИ (Босс).", ev: "Угроза реальна.", fam: "Твоя семья в опасности.", kush: 0, btn1: "Защитить семью", btn2: "Спрятать семью" },
+        { t: "ГЛАВА 5: Следователь предлагает сдать босса.", p: "ТОММИ (Босс).", ev: "Следователь готов помочь.", fam: "Твоя семья в опасности.", kush: 0, btn1: "Сдать Босса", btn2: "Молчать" },
+        { t: "ГЛАВА 5 (ФИНАЛ): Вас взяли. Судьба решается.", p: "ТОММИ (Босс).", ev: "Все улики против вас.", fam: "Твоя семья в опасности.", kush: 0, btn1: "Сдать Босса", btn2: "Молчать" }
     ];
 
     const ratingCases = [
-        { t: "Ты и твой напарник ограбили банк. Вас взяли. Следователь нашел отпечатки.", p: "Джимми.", ev: "Отпечатки Джимми на сейфе.", fam: "У Джимми больная мать." },
-        { t: "Угон спорткара. В машине нашли твою куртку.", p: "Томми.", ev: "Твоя куртка в машине.", fam: "У тебя двое детей." },
-        { t: "Ограбление ювелирки. Охранник ранен.", p: "Ленни.", ev: "Запись камер.", fam: "Ленни недавно женился." },
-        { t: "Контрабанда виски. Таможня нашла груз.", p: "Эрни.", ev: "Телефон Эрни в машине.", fam: "У Эрни маленький сын." },
-        { t: "Поджог паба. Погиб сторож.", p: "Томми.", ev: "Канистра с бензином.", fam: "Томми должен денег." },
-        { t: "Вымогательство. Бизнесмен написал заявление.", p: "Джимми.", ev: "Бизнесмен опознал Джимми.", fam: "У Джимми есть брат-полицейский." },
-        { t: "Сожгли конкурентный бар.", p: "Томми.", ev: "Записи с камер.", fam: "Томми ухаживает за твоей сестрой." },
-        { t: "Крышевали бордель. Полиция взяла.", p: "Ленни.", ev: "Деньги в сейфе.", fam: "У Ленни двое детей." },
-        { t: "Подставили политика.", p: "Эрни.", ev: "Улики в машине.", fam: "Эрни шантажирует тебя." },
-        { t: "Сдай Босса. Но он знает, где твоя мать.", p: "БОСС.", ev: "Ордер на арест.", fam: "Твоя мать больна. Босс оплачивает лечение." },
-        { t: "Подпольное казино. Полиция накрыла.", p: "Джимми.", ev: "Фрэнк сливал информацию.", fam: "Фрэнк предал тебя первым." },
-        { t: "Подкупили судью. Нашли переводы.", p: "Томми.", ev: "Переводы на счет Томми.", fam: "У Томми рак." },
-        { t: "Перевозили героин. Вас взяли.", p: "Ленни.", ev: "Наркотики в машине.", fam: "Ленни хочет уйти из бизнеса." },
-        { t: "Обманули поставщика.", p: "Эрни.", ev: "Поставщик опознал Эрни.", fam: "У Эрни больная дочь." },
-        { t: "Сдай Босса. Но он обещал убить тебя.", p: "БОСС.", ev: "Компромат на Босса.", fam: "Твоя семья в опасности." }
-    ];
-
-    const storyContinuations = [
-        { title: "ГЛАВА 1 ЗАВЕРШЕНА", text: "Ты вышел из зала суда. Джимми сдал тебя, и теперь его ищут. Ты понимаешь, что в этом городе никому нельзя верить. Тебя снова зовут на дело." },
-        { title: "ГЛАВА 2 ЗАВЕРШЕНА", text: "Томми оказался крысой. Он сдал тебя боссу, и теперь ты под колпаком. Но ты выжил. Ты знаешь, что следующий напарник — Ленни, и он тоже может предать." },
-        { title: "ГЛАВА 3 ЗАВЕРШЕНА", text: "Ленни сдал тебя, но ты вышел. Ты понимаешь, что даже старые друзья становятся врагами. Босс дает тебе последний шанс — контрабанда. Но напарник — Эрни, который тебя не знает." },
-        { title: "ГЛАВА 4 ЗАВЕРШЕНА", text: "Эрни оказался честным парнем. Он взял всю вину на себя, и его убили в тюрьме. Ты понимаешь, что босс избавляется от всех. Теперь очередь за тобой." },
-        { title: "ФИНАЛ", text: "Ты стоишь перед боссом. Он знает всё. Твое последнее дело — поджог. Но теперь ты знаешь: либо ты сдашь его, либо он убьет тебя. Судьба решается." }
+        { t: "Ты и напарник ограбили банк. Следователь нашел отпечатки.", p: "Джимми.", ev: "Отпечатки Джимми.", fam: "У Джимми больная мать.", kush: 500000, btn1: "Сдать Джимми", btn2: "Молчать" },
+        { t: "Угон спорткара. В машине твоя куртка.", p: "Томми.", ev: "Твоя куртка.", fam: "У тебя двое детей.", kush: 200000, btn1: "Сдать Томми", btn2: "Молчать" },
+        { t: "Ограбление ювелирки. Охранник ранен.", p: "Ленни.", ev: "Запись камер.", fam: "Ленни женился.", kush: 1000000, btn1: "Сдать Ленни", btn2: "Молчать" },
+        { t: "Контрабанда виски. Таможня нашла груз.", p: "Эрни.", ev: "Телефон Эрни.", fam: "У Эрни сын.", kush: 800000, btn1: "Сдать Эрни", btn2: "Молчать" },
+        { t: "Поджог паба. Погиб сторож.", p: "Томми.", ev: "Канистра.", fam: "Томми должен денег.", kush: 300000, btn1: "Сдать Томми", btn2: "Молчать" }
     ];
 
     const levels = [
@@ -362,13 +376,13 @@
 
     let totalExp = parseFloat(localStorage.getItem('prisonExp')) || 0;
     let ratingScore = parseInt(localStorage.getItem('ratingScore')) || 0;
+    let balance = parseFloat(localStorage.getItem('balance')) || 0;
     let friends = JSON.parse(localStorage.getItem('myFriends')) || [];
     let clan = localStorage.getItem('myClan') || null;
     let p1Choice = null, p2Choice = null, p1Selected = false, timer1, timer2, currentMode = 'bot';
     let fakeThreat = false;
     let currentCaseData = null;
     let currentStoryIndex = 0;
-    let currentStoryDealIndex = 0;
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -383,21 +397,6 @@
         if(id === 'rating') document.querySelectorAll('.nav-item')[1].classList.add('active');
         if(id === 'friends') document.querySelectorAll('.nav-item')[2].classList.add('active');
         if(id === 'clans') document.querySelectorAll('.nav-item')[3].classList.add('active');
-        
-        if(id === 'main-menu') updateStoryUI();
-    }
-
-    function updateStoryUI() {
-        let lvl = 0;
-        if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4; if(totalExp >= 25) lvl = 5;
-        
-        if (lvl > 0 && lvl <= 5) {
-            document.getElementById('story-continue').style.display = 'block';
-            document.getElementById('story-continue-title').innerText = storyContinuations[lvl-1].title;
-            document.getElementById('story-continue-text').innerText = storyContinuations[lvl-1].text;
-        } else {
-            document.getElementById('story-continue').style.display = 'none';
-        }
     }
 
     function changeAvatar(event) {
@@ -425,6 +424,7 @@
         document.getElementById('level-name').innerText = levels[Math.min(lvl, 4)].name;
         document.getElementById('exp-counter').innerText = totalExp.toFixed(1);
         document.getElementById('level-num').innerText = lvl + 1;
+        document.getElementById('balance-display').innerText = balance.toLocaleString();
         
         if (userAvatar) {
             document.getElementById('avatar-container').innerHTML = `<img src="${userAvatar}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;">`;
@@ -453,8 +453,6 @@
             document.getElementById('clan-create').style.display = 'block';
             document.getElementById('my-clan-info').style.display = 'none';
         }
-        
-        updateStoryUI();
     }
 
     function openDossier() {
@@ -480,12 +478,10 @@
     function startGame(mode) {
         currentMode = mode;
         currentStoryIndex = 0;
-        currentStoryDealIndex = 0;
         if(mode === 'story') {
             let lvl = 0;
             if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4;
             currentStoryIndex = lvl;
-            currentStoryDealIndex = 0;
         }
         if(mode === 'online') { tg.showAlert("ПОИСК..."); setTimeout(() => { tg.showAlert("НАЙДЕН: KILLER_99"); currentMode = 'bot'; nextRound(); }, 1000); return; }
         nextRound();
@@ -497,9 +493,7 @@
                 showScreen('main-menu');
                 return;
             }
-            let storyIndex = currentStoryIndex;
-            if (storyIndex >= storyCases.length) storyIndex = storyCases.length - 1;
-            currentCaseData = storyCases[storyIndex];
+            currentCaseData = storyCases[currentStoryIndex];
         } else if (currentMode === 'rating') {
             currentCaseData = ratingCases[Math.floor(Math.random() * ratingCases.length)];
         } else {
@@ -511,7 +505,7 @@
         }
 
         fakeThreat = false;
-        if (currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5") || currentCaseData.t.includes("БОСС")) {
+        if (currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5")) {
             fakeThreat = Math.random() > 0.5;
         }
 
@@ -528,21 +522,24 @@
                 <div class="family-title">ИНФО О СЕМЬЕ:</div>
                 <div class="family-text">${currentCaseData.fam}</div>
             </div>
-            ${(currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5") || currentCaseData.t.includes("БОСС")) ? '<br>' + hint : ''}
+            <div style="color: var(--pub-gold); font-weight: 900; margin-bottom: 10px;">КУШ: $${currentCaseData.kush.toLocaleString()}</div>
+            ${(currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5")) ? '<br>' + hint : ''}
         `;
         
-        // Показываем таблицу только в финале
         let isFinal = currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5") || currentCaseData.t.includes("БОСС");
         document.getElementById('matrix-container').style.display = isFinal ? 'block' : 'none';
         document.getElementById('matrix-container-game').style.display = isFinal ? 'block' : 'none';
         
-        // Меняем название кнопки в меню
         let mainBtn = document.getElementById('main-action-btn');
         if (currentMode === 'story' && isFinal) {
             mainBtn.innerText = 'В СУД';
         } else {
             mainBtn.innerText = 'НА ДЕЛО';
         }
+
+        // Установка текста кнопок под конкретное дело
+        document.getElementById('btn-alpha').innerHTML = `${currentCaseData.btn1}<br><span style="font-size: 12px;">(Риск)</span>`;
+        document.getElementById('btn-beta').innerHTML = `${currentCaseData.btn2}<br><span style="font-size: 12px;">(Верность)</span>`;
 
         p1Selected = false; p2Choice = null;
         showScreen('case-screen');
@@ -617,6 +614,7 @@
 
         if (isLoseAll) {
             text = `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>МАФИЯ КАЗНИЛА ТВОЮ СЕМЬЮ...</span><br><br>Ты сдал босса, но это была не пустая угроза. Ты потерял всё. Опыт сброшен.<br><br>`;
+            balance = 0;
         } else if (isWin) {
             if (p1Choice === 'silent' && p2Choice === 'silent') {
                 text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ВЫ ОБА МОЛЧАЛИ! МАФИЯ ВЫТАЩИЛА ВАС.</span><br><span style='font-size:12px;'>+1 XP</span>";
@@ -626,6 +624,10 @@
                 text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
             }
             totalExp += 1;
+            if(currentCaseData.kush > 0) {
+                balance += currentCaseData.kush;
+                text += `<br><span style='color:var(--accent);'>+ $${currentCaseData.kush.toLocaleString()}</span>`;
+            }
             if(currentMode === 'rating') { ratingScore++; localStorage.setItem('ratingScore', ratingScore); }
         } else {
             text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span><br><span style='font-size:12px;'>-1 XP</span>";
@@ -636,6 +638,7 @@
         if(totalExp < 0) totalExp = 0;
         if(totalExp > 25) totalExp = 25;
         localStorage.setItem('prisonExp', totalExp);
+        localStorage.setItem('balance', balance);
         updateUI();
         document.getElementById('result-text').innerHTML = text;
         showScreen('result-screen');
@@ -643,10 +646,7 @@
         if (currentMode === 'story') {
             if (isWin) {
                 currentStoryIndex++;
-                currentStoryDealIndex = 0;
                 if (currentStoryIndex > storyCases.length) currentStoryIndex = storyCases.length;
-            } else {
-                currentStoryDealIndex = 0;
             }
         }
     }
