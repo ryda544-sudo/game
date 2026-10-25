@@ -79,6 +79,18 @@
         .story-continue-text { font-size: 14px; color: #ddd; line-height: 1.6; }
 
         .rating-badge { background: var(--pub-gold); color: #000; padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: 900; }
+        
+        .court-bg { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; border: 2px solid var(--pub-gold); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        
+        .avatar-upload { display: none; }
+        .avatar-label { cursor: pointer; display: block; }
+
+        /* ТАБЛИЦА ТОЛЬКО ДЛЯ ФИНАЛА */
+        .matrix-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; background: var(--card); border: 1px solid var(--pub-gold); }
+        .matrix-table th, .matrix-table td { border: 1px solid var(--pub-gold); padding: 10px; text-align: center; font-size: 13px; color: #ddd; }
+        .matrix-table th { background: var(--pub-green); color: var(--pub-gold); font-weight: 900; }
+        .matrix-table td.highlight { color: var(--pub-gold); font-weight: 900; }
+        .matrix-title { text-align: center; color: var(--pub-gold); font-weight: 900; margin-bottom: 10px; font-size: 14px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -115,9 +127,12 @@
         </div>
 
         <div class="inmate-card" onclick="openDossier()">
-            <div id="avatar-container"></div>
+            <label class="avatar-label">
+                <div id="avatar-container"></div>
+                <input type="file" class="avatar-upload" accept="image/*" onchange="changeAvatar(event)">
+            </label>
             <div class="inmate-name" id="level-name">ТОММИ</div>
-            <div class="inmate-label">ГЛАВА КЛАНА</div>
+            <div class="inmate-label">ГЛАВА КЛАНА (нажми на фото, чтобы сменить)</div>
         </div>
         <div class="progress-container">
             <div class="progress-text">
@@ -128,7 +143,7 @@
         </div>
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <button class="btn btn-play" style="flex: 1; margin-right: 10px;" onclick="showScreen('mode-select')">В СУД</button>
+            <button class="btn btn-play" style="flex: 1; margin-right: 10px;" onclick="showScreen('mode-select')" id="main-action-btn">НА ДЕЛО</button>
             <div class="rating-badge" id="rating-badge">🏆 <span id="rating-score">0</span></div>
         </div>
         
@@ -153,7 +168,7 @@
             • Если ты МОЛЧИШЬ, а он СДАСТ: ты сядешь на 10 лет, он выйдет.<br>
             • Если вы оба СДАДИТЕ: вы оба сядете на 6 лет.<br>
             • Если вы оба МОЛЧИТЕ: вы оба сядете на 3 года, но мафия вас вытащит! Вы идете дальше.<br><br>
-            <b>ВАЖНО:</b> Если ты сдашь напарника, у которого есть семья, ты потеряешь опыт. Если промолчишь — получишь бонус.
+            <b>ВАЖНО:</b> Если ты выиграл (вышел на свободу), ты переходишь к следующему делу. Если проиграл (сел в тюрьму), ты начинаешь это же дело заново.
         </div>
     </div>
 
@@ -222,16 +237,42 @@
     <div id="case-screen" class="screen">
         <div class="timer" id="timer-read">45</div>
         <div class="case-box" id="case-text">Текст дела...</div>
+        
+        <!-- ТАБЛИЦА ТОЛЬКО В ФИНАЛЕ -->
+        <div id="matrix-container" style="display: none;">
+            <div class="matrix-title">ТАБЛИЦА ВЫПЛАТ (ТВОЙ СРОК / ЕГО СРОК)</div>
+            <table class="matrix-table">
+                <tr><th></th><th>Он молчит</th><th>Он сдаёт</th></tr>
+                <tr><th>Ты молчишь</th><td class="highlight">3 / 3</td><td>10 / 0</td></tr>
+                <tr><th>Ты сдаёшь</th><td class="highlight">0 / 10</td><td>6 / 6</td></tr>
+            </table>
+        </div>
+
         <button class="btn btn-play" onclick="startChoosingPhase()">Я ПРОЧИТАЛ</button>
     </div>
 
     <div id="game-screen" class="screen">
         <div class="header"><div>СУД</div><div id="round-text">1/1</div></div>
         <div class="timer" id="timer-choose">90</div>
-        <div class="case-box" style="font-size: 12px; border: none; background: transparent; text-align: center; color: #888;">Примите решение</div>
-        <div class="choices">
-            <button class="choice-btn c-alpha" onclick="makeChoice('betray')">СДАТЬ<br><span style="font-size: 12px;">(Риск)</span></button>
-            <button class="choice-btn c-beta" onclick="makeChoice('silent')">МОЛЧАТЬ<br><span style="font-size: 12px;">(Верность)</span></button>
+        
+        <div class="court-bg">
+            <div style="text-align: center; color: var(--pub-gold); font-weight: 900; font-size: 18px; margin-bottom: 10px;">ЗАЛ СУДА</div>
+            <div style="text-align: center; color: #ddd; font-size: 14px; margin-bottom: 20px;">Судья смотрит на тебя. Присяжные ждут. Твое слово решает всё.</div>
+        </div>
+
+        <!-- ТАБЛИЦА ТОЛЬКО В ФИНАЛЕ -->
+        <div id="matrix-container-game" style="display: none;">
+            <div class="matrix-title">ТАБЛИЦА ВЫПЛАТ</div>
+            <table class="matrix-table">
+                <tr><th></th><th>Он молчит</th><th>Он сдаёт</th></tr>
+                <tr><th>Ты молчишь</th><td class="highlight">3 / 3</td><td>10 / 0</td></tr>
+                <tr><th>Ты сдаёшь</th><td class="highlight">0 / 10</td><td>6 / 6</td></tr>
+            </table>
+        </div>
+
+        <div class="choices" id="choice-buttons">
+            <button class="choice-btn c-alpha" onclick="makeChoice('betray')" id="btn-alpha">СДАТЬ<br><span style="font-size: 12px;">(Риск)</span></button>
+            <button class="choice-btn c-beta" onclick="makeChoice('silent')" id="btn-beta">МОЛЧАТЬ<br><span style="font-size: 12px;">(Верность)</span></button>
         </div>
     </div>
 
@@ -266,6 +307,8 @@
         document.getElementById('player-name').innerText = playerName.toUpperCase();
     }
 
+    let userAvatar = localStorage.getItem('userAvatar') || null;
+
     const avatars = [
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M20 45 Q50 15 80 45 L80 50 Q50 25 20 50 Z" fill="#333"/><rect x="25" y="40" width="50" height="8" fill="#c9a84c"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M35 70 Q50 85 65 70 Z" fill="#555"/></svg>`,
         `<svg viewBox="0 0 100 100" style="width:90px;height:90px;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M15 40 L85 40 L75 25 L25 25 Z" fill="#444"/><rect x="15" y="40" width="70" height="5" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><rect x="35" y="60" width="30" height="8" fill="#000" rx="4"/><rect x="40" y="62" width="8" height="4" fill="#c9a84c"/><rect x="52" y="62" width="8" height="4" fill="#c9a84c"/></svg>`,
@@ -276,14 +319,13 @@
 
     // СЮЖЕТНЫЕ ДЕЛА (по мотивам фильмов)
     const storyCases = [
-        { t: "ГЛАВА 1: Ограбление казино 'Белладжио'. Тебя зовут в банду. Первое дело — вскрыть сейф в казино. Вы с Джимми вскрыли сейф, но сработала сигнализация. Полиция приехала через 5 минут. Следователь нашел отпечатки на сейфе.", p: "Джимми Конвей.", ev: "На сейфе четкие отпечатки Джимми. Следователь обещает тебе иммунитет, если ты подтвердишь, что он был за рулем.", fam: "У Джимми больная мать, Элизабет, которая живет в доме престарелых. Он единственный, кто оплачивает ее лечение." },
-        { t: "ГЛАВА 2: Ты вышел из тюрьмы. Джимми пропал. Тебя снова берут на дело — угон 'Ягуара' у сына прокурора. Но на этот раз твой напарник — Томми, правая рука босса. Он знает, что ты был в тюрьме.", p: "Томми 'Два Ствола'.", ev: "Томми оставил свои отпечатки на руле. Полиция нашла твою куртку на заднем сиденье.", fam: "У Томми больная мать. Он не хочет садиться, чтобы не оставить ее одну." },
-        { t: "ГЛАВА 3: Томми пропал. Тебя берут на ограбление ювелирки 'Тиффани'. Твой новый напарник — Ленни, старый друг. Он клянется, что не сдаст тебя.", p: "Ленни 'Молот'.", ev: "На записи камер видно двоих. Ленни был в кадре, но лицо размыто. Следователь предлагает сделку.", fam: "Ленни недавно женился. Его жена беременна. Он хочет выйти из игры." },
-        { t: "ГЛАВА 4: Ленни сдал тебя, но ты вышел под залог. Тебя снова зовут на дело — контрабанда виски. Твой напарник — Эрни, человек с принципами. Он не любит предателей.", p: "Эрни 'Тихий'.", ev: "Эрни оставил свой телефон в машине. Там переписка, где он берет всю вину на себя.", fam: "У Эрни маленький сын. Он хочет уйти из бизнеса и открыть паб." },
-        { t: "ГЛАВА 5: Эрни мертв. Ты остался один. Босс Томми вызывает тебя. Он знает, что ты сдавал его людей. Он предлагает тебе последнее дело — поджог паба 'Красный лев'.", p: "ТОММИ (Босс).", ev: "На канистре отпечатки Томми. Но также там есть следы перчаток, которые могут принадлежать тебе.", fam: "Твоя семья под защитой мафии. Но если ты сдашь босса — их не станет." }
+        { t: "ГЛАВА 1: Ограбление казино 'Белладжио'. Ты и Джимми вскрыли сейф, но сработала сигнализация. Полиция приехала через 5 минут. Следователь нашел отпечатки на сейфе. Джимми в панике. Он говорит: 'Джонни, я не могу сесть, у меня мать больная'.", p: "Джимми Конвей.", ev: "На сейфе четкие отпечатки Джимми. Следователь обещает тебе иммунитет, если ты подтвердишь, что он был за рулем.", fam: "У Джимми больная мать, Элизабет, которая живет в доме престарелых. Он единственный, кто оплачивает ее лечение." },
+        { t: "ГЛАВА 2: Джимми пропал. Тебя снова берут на дело — угон 'Ягуара' у сына прокурора. Твой напарник — Томми, правая рука босса. Он знает, что ты был в тюрьме. Томми говорит: 'Если нас возьмут, я скажу, что ты меня заставил'.", p: "Томми 'Два Ствола'.", ev: "Томми оставил свои отпечатки на руле. Полиция нашла твою куртку на заднем сиденье.", fam: "У Томми больная мать. Он не хочет садиться, чтобы не оставить ее одну." },
+        { t: "ГЛАВА 3: Томми пропал. Тебя берут на ограбление ювелирки 'Тиффани'. Твой новый напарник — Ленни, старый друг. Он говорит: 'Джонни, я тебя не сдам, мы же братья'. Но на записи камер видно двоих.", p: "Ленни 'Молот'.", ev: "На записи камер видно двоих. Ленни был в кадре, но лицо размыто. Следователь предлагает сделку.", fam: "Ленни недавно женился. Его жена беременна. Он хочет выйти из игры." },
+        { t: "ГЛАВА 4: Ленни сдал тебя, но ты вышел под залог. Тебя снова зовут на дело — контрабанда виски. Твой напарник — Эрни, человек с принципами. Он говорит: 'Я не люблю крыс. Если ты меня сдашь, я выйду и найду тебя'.", p: "Эрни 'Тихий'.", ev: "Эрни оставил свой телефон в машине. Там переписка, где он берет всю вину на себя.", fam: "У Эрни маленький сын. Он хочет уйти из бизнеса и открыть паб." },
+        { t: "ГЛАВА 5: Эрни мертв. Ты остался один. Босс Томми вызывает тебя. Он знает, что ты сдавал его людей. Он предлагает тебе последнее дело — поджог паба 'Красный лев'. Томми говорит: 'Если ты меня сдашь, твоя семья умрет'.", p: "ТОММИ (Босс).", ev: "На канистре отпечатки Томми. Но также там есть следы перчаток, которые могут принадлежать тебе.", fam: "Твоя семья под защитой мафии. Но если ты сдашь босса — их не станет." }
     ];
 
-    // РЕЙТИНГОВЫЕ ДЕЛА (бесконечные)
     const ratingCases = [
         { t: "Ты и твой напарник ограбили банк. Вас взяли. Следователь нашел отпечатки.", p: "Джимми.", ev: "Отпечатки Джимми на сейфе.", fam: "У Джимми больная мать." },
         { t: "Угон спорткара. В машине нашли твою куртку.", p: "Томми.", ev: "Твоя куртка в машине.", fam: "У тебя двое детей." },
@@ -326,6 +368,7 @@
     let fakeThreat = false;
     let currentCaseData = null;
     let currentStoryIndex = 0;
+    let currentStoryDealIndex = 0;
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -357,6 +400,19 @@
         }
     }
 
+    function changeAvatar(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                userAvatar = e.target.result;
+                localStorage.setItem('userAvatar', userAvatar);
+                updateUI();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
     function selectName(name) {
         playerName = name;
         document.getElementById('player-name').innerText = name.toUpperCase();
@@ -369,7 +425,12 @@
         document.getElementById('level-name').innerText = levels[Math.min(lvl, 4)].name;
         document.getElementById('exp-counter').innerText = totalExp.toFixed(1);
         document.getElementById('level-num').innerText = lvl + 1;
-        document.getElementById('avatar-container').innerHTML = avatars[Math.min(lvl, 4)];
+        
+        if (userAvatar) {
+            document.getElementById('avatar-container').innerHTML = `<img src="${userAvatar}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;">`;
+        } else {
+            document.getElementById('avatar-container').innerHTML = avatars[Math.min(lvl, 4)];
+        }
 
         let prev = lvl > 0 ? [7, 12, 17, 22][lvl-1] : 0;
         let curr = lvl < 5 ? [7, 12, 17, 22, 25][lvl] : 25;
@@ -419,10 +480,12 @@
     function startGame(mode) {
         currentMode = mode;
         currentStoryIndex = 0;
+        currentStoryDealIndex = 0;
         if(mode === 'story') {
             let lvl = 0;
             if(totalExp >= 7) lvl = 1; if(totalExp >= 12) lvl = 2; if(totalExp >= 17) lvl = 3; if(totalExp >= 22) lvl = 4;
             currentStoryIndex = lvl;
+            currentStoryDealIndex = 0;
         }
         if(mode === 'online') { tg.showAlert("ПОИСК..."); setTimeout(() => { tg.showAlert("НАЙДЕН: KILLER_99"); currentMode = 'bot'; nextRound(); }, 1000); return; }
         nextRound();
@@ -434,7 +497,9 @@
                 showScreen('main-menu');
                 return;
             }
-            currentCaseData = storyCases[currentStoryIndex];
+            let storyIndex = currentStoryIndex;
+            if (storyIndex >= storyCases.length) storyIndex = storyCases.length - 1;
+            currentCaseData = storyCases[storyIndex];
         } else if (currentMode === 'rating') {
             currentCaseData = ratingCases[Math.floor(Math.random() * ratingCases.length)];
         } else {
@@ -466,6 +531,19 @@
             ${(currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5") || currentCaseData.t.includes("БОСС")) ? '<br>' + hint : ''}
         `;
         
+        // Показываем таблицу только в финале
+        let isFinal = currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5") || currentCaseData.t.includes("БОСС");
+        document.getElementById('matrix-container').style.display = isFinal ? 'block' : 'none';
+        document.getElementById('matrix-container-game').style.display = isFinal ? 'block' : 'none';
+        
+        // Меняем название кнопки в меню
+        let mainBtn = document.getElementById('main-action-btn');
+        if (currentMode === 'story' && isFinal) {
+            mainBtn.innerText = 'В СУД';
+        } else {
+            mainBtn.innerText = 'НА ДЕЛО';
+        }
+
         p1Selected = false; p2Choice = null;
         showScreen('case-screen');
         
@@ -535,14 +613,6 @@
             }
         }
 
-        if (p1Choice === 'betray' && currentCaseData.fam && !currentCaseData.fam.includes('нет')) {
-            extraText += "<br><span style='color:var(--danger);'>Ты предал напарника, зная о его семье. Репутация упала (-0.5 XP).</span>";
-            if(!isLoseAll) totalExp -= 0.5;
-        } else if (p1Choice === 'silent' && currentCaseData.fam && !currentCaseData.fam.includes('нет')) {
-            extraText += "<br><span style='color:var(--pub-gold);'>Ты защитил семью напарника. Мафия ценит верность (+0.5 XP).</span>";
-            if(!isLoseAll) totalExp += 0.5;
-        }
-
         let text = `Твой срок: ${p1Y} лет.<br>Срок напарника: ${p2Y} лет.<br><br>`;
 
         if (isLoseAll) {
@@ -562,8 +632,6 @@
             totalExp -= 1;
             if(currentMode === 'rating') { ratingScore = Math.max(0, ratingScore - 1); localStorage.setItem('ratingScore', ratingScore); }
         }
-        
-        text += extraText;
 
         if(totalExp < 0) totalExp = 0;
         if(totalExp > 25) totalExp = 25;
@@ -573,8 +641,13 @@
         showScreen('result-screen');
         
         if (currentMode === 'story') {
-            currentStoryIndex++;
-            if (currentStoryIndex > storyCases.length) currentStoryIndex = storyCases.length;
+            if (isWin) {
+                currentStoryIndex++;
+                currentStoryDealIndex = 0;
+                if (currentStoryIndex > storyCases.length) currentStoryIndex = storyCases.length;
+            } else {
+                currentStoryDealIndex = 0;
+            }
         }
     }
 
