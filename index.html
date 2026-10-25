@@ -18,6 +18,12 @@
         .screen { display: none; width: 100%; flex: 1; flex-direction: column; padding: 15px; overflow-y: auto; padding-bottom: 80px; }
         .screen.active { display: flex; }
         
+        /* ШТОРКА */
+        .top-shutter { position: absolute; top: 0; left: 0; width: 100%; background: var(--pub-green); border-bottom: 2px solid var(--pub-gold); padding: 10px 15px; z-index: 200; transform: translateY(-100%); transition: transform 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .top-shutter.show { transform: translateY(0); }
+        .top-shutter-text { font-size: 13px; font-weight: 700; color: var(--pub-gold); }
+        .top-shutter-btn { background: var(--pub-gold); border: none; color: #000; padding: 5px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px; }
+
         .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: var(--card); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
         .nav-item.active { color: var(--accent); }
@@ -27,79 +33,80 @@
         .btn:active { border-color: var(--accent); color: var(--accent); transform: scale(0.98); }
         .btn-play { background: var(--pub-green); color: var(--pub-gold); border: 2px solid var(--pub-gold); justify-content: center; font-size: 18px; padding: 15px; }
         .btn-play:active { background: var(--pub-gold); color: #000; }
-        .btn-play.locked { opacity: 0.5; pointer-events: none; }
 
-        .header { width: 100%; display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 15px; font-size: 11px; color: #888; font-weight: 700; text-transform: uppercase; }
+        .header { width: 100%; display: flex; justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 10px; font-size: 11px; color: #888; font-weight: 700; text-transform: uppercase; }
         
         /* КАРТОЧКА ПЕРСОНАЖА */
-        .inmate-card { background: linear-gradient(135deg, #1a3a2a 0%, #0a0a0a 100%); border: 2px solid var(--pub-gold); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; position: relative; overflow: hidden; }
+        .inmate-card { background: linear-gradient(135deg, #1a3a2a 0%, #0a0a0a 100%); border: 2px solid var(--pub-gold); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; position: relative; overflow: hidden; }
         .inmate-card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 42px); pointer-events: none; }
-        .avatar-wrapper { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--pub-gold); display: flex; justify-content: center; align-items: center; background: #000; margin-bottom: 10px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); overflow: hidden; z-index: 1; }
-        .inmate-name { font-size: 20px; font-weight: 900; color: var(--pub-gold); text-transform: uppercase; font-family: 'Playfair Display', serif; z-index: 1;}
-        .inmate-label { font-size: 10px; color: #888; margin-top: 3px; z-index: 1; }
+        .avatar-wrapper { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--pub-gold); display: flex; justify-content: center; align-items: center; background: #000; margin-bottom: 8px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); overflow: hidden; z-index: 1; }
+        .inmate-name { font-size: 18px; font-weight: 900; color: var(--pub-gold); text-transform: uppercase; font-family: 'Playfair Display', serif; z-index: 1; text-align: center;}
+        .inmate-label { font-size: 9px; color: #888; margin-top: 3px; z-index: 1; text-align: center; }
 
-        /* ШКАЛА ПРОГРЕССА */
-        .progress-container { width: 100%; margin-bottom: 15px; }
-        .progress-text { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; margin-bottom: 4px; color: #ccc; }
-        .progress-bar { width: 100%; height: 10px; background: #000; border-radius: 5px; overflow: hidden; border: 1px solid var(--border); }
+        /* ШТОРКА БАЛАНСА */
+        .balance-shutter { width: 100%; background: var(--pub-gold); color: #000; padding: 5px 10px; border-radius: 6px; font-weight: 900; font-size: 13px; text-align: center; margin-bottom: 10px; }
+
+        .quote-box { font-size: 10px; font-style: italic; color: #aaa; text-align: center; margin-bottom: 10px; line-height: 1.3; padding: 0 5px; }
+
+        .progress-container { width: 100%; margin-bottom: 10px; }
+        .progress-text { display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; margin-bottom: 3px; color: #ccc; }
+        .progress-bar { width: 100%; height: 8px; background: #000; border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
         .progress-fill { height: 100%; background: linear-gradient(90deg, #00FF41, #00cc33); width: 0%; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 10px var(--accent); }
 
-        .brutal-title { font-size: 28px; font-weight: 900; text-align: center; margin-bottom: 15px; text-transform: uppercase; line-height: 1.1; font-family: 'Playfair Display', serif;}
+        .brutal-title { font-size: 24px; font-weight: 900; text-align: center; margin-bottom: 10px; text-transform: uppercase; line-height: 1.1; font-family: 'Playfair Display', serif;}
         .brutal-title span { color: var(--pub-gold); }
 
-        .case-box { background: var(--card); border-left: 4px solid var(--pub-gold); padding: 15px; margin-bottom: 12px; font-size: 13px; line-height: 1.5; color: #ddd; border-radius: 0 8px 8px 0;}
-        .timer { font-size: 48px; font-weight: 900; text-align: center; color: var(--pub-gold); margin-bottom: 10px; }
+        .case-box { background: var(--card); border-left: 4px solid var(--pub-gold); padding: 12px; margin-bottom: 10px; font-size: 12px; line-height: 1.4; color: #ddd; border-radius: 0 8px 8px 0;}
+        .timer { font-size: 42px; font-weight: 900; text-align: center; color: var(--pub-gold); margin-bottom: 8px; }
         
-        .choices { display: flex; gap: 10px; margin-top: auto; }
-        .choice-btn { flex: 1; padding: 18px 8px; font-size: 13px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-family: 'Space Grotesk', sans-serif; text-align: center; line-height: 1.2;}
+        .choices { display: flex; gap: 8px; margin-top: auto; }
+        .choice-btn { flex: 1; padding: 15px 6px; font-size: 12px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-family: 'Space Grotesk', sans-serif; text-align: center; line-height: 1.2;}
         .c-alpha { background: var(--pub-green); color: var(--pub-gold); border: 2px solid var(--pub-gold); }
         .c-beta { background: var(--danger); color: #fff; }
 
-        .dossier-section { width: 100%; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-        .dossier-label { font-size: 10px; color: var(--pub-gold); text-transform: uppercase; font-weight: 700; margin-bottom: 3px; }
-        .dossier-text { font-size: 12px; color: #ccc; line-height: 1.4; }
+        .dossier-section { width: 100%; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        .dossier-label { font-size: 9px; color: var(--pub-gold); text-transform: uppercase; font-weight: 700; margin-bottom: 2px; }
+        .dossier-text { font-size: 11px; color: #ccc; line-height: 1.3; }
 
-        .nav-back { background: none; border: none; color: #888; font-size: 12px; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-bottom: 15px; text-align: left; font-family: 'Space Grotesk', sans-serif;}
+        .nav-back { background: none; border: none; color: #888; font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-bottom: 10px; text-align: left; font-family: 'Space Grotesk', sans-serif;}
 
-        .list-item { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); font-size: 13px;}
-        .search-box { display: flex; gap: 8px; margin-bottom: 15px; }
-        .search-input { flex: 1; background: var(--card); border: 2px solid var(--border); color: white; padding: 10px; border-radius: 8px; font-family: 'Space Grotesk'; font-size: 13px; }
-        .search-btn { background: var(--pub-gold); border: none; color: #000; padding: 0 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 10px; border-radius: 8px; margin-bottom: 6px; border: 1px solid var(--border); font-size: 12px;}
+        .search-box { display: flex; gap: 6px; margin-bottom: 10px; }
+        .search-input { flex: 1; background: var(--card); border: 2px solid var(--border); color: white; padding: 8px; border-radius: 8px; font-family: 'Space Grotesk'; font-size: 12px; }
+        .search-btn { background: var(--pub-gold); border: none; color: #000; padding: 0 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        .evidence-box { background: rgba(201, 168, 76, 0.1); border: 1px solid var(--pub-gold); padding: 12px; margin-bottom: 12px; border-radius: 8px; }
-        .evidence-title { color: var(--pub-gold); font-weight: 900; font-size: 12px; margin-bottom: 3px; text-transform: uppercase;}
-        .evidence-text { font-size: 12px; color: #ddd; line-height: 1.4;}
-        .family-box { background: rgba(255, 0, 60, 0.1); border: 1px solid var(--danger); padding: 12px; margin-bottom: 12px; border-radius: 8px; }
-        .family-title { color: var(--danger); font-weight: 900; font-size: 12px; margin-bottom: 3px; text-transform: uppercase;}
-        .family-text { font-size: 12px; color: #ddd; line-height: 1.4;}
+        .evidence-box { background: rgba(201, 168, 76, 0.1); border: 1px solid var(--pub-gold); padding: 10px; margin-bottom: 10px; border-radius: 8px; }
+        .evidence-title { color: var(--pub-gold); font-weight: 900; font-size: 11px; margin-bottom: 2px; text-transform: uppercase;}
+        .evidence-text { font-size: 11px; color: #ddd; line-height: 1.3;}
+        .family-box { background: rgba(255, 0, 60, 0.1); border: 1px solid var(--danger); padding: 10px; margin-bottom: 10px; border-radius: 8px; }
+        .family-title { color: var(--danger); font-weight: 900; font-size: 11px; margin-bottom: 2px; text-transform: uppercase;}
+        .family-text { font-size: 11px; color: #ddd; line-height: 1.3;}
 
-        .pub-bg { background: var(--pub-green); border: 2px solid var(--pub-gold); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-        .pub-title { color: var(--pub-gold); font-weight: 900; font-size: 14px; font-family: 'Playfair Display', serif;}
+        .pub-bg { background: var(--pub-green); border: 2px solid var(--pub-gold); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+        .pub-title { color: var(--pub-gold); font-weight: 900; font-size: 13px; font-family: 'Playfair Display', serif;}
         
-        .prize-box { background: linear-gradient(45deg, #1a3a2a, #0a0a0a); border: 2px solid var(--pub-gold); padding: 12px; border-radius: 8px; margin-bottom: 12px; text-align: center;}
+        .prize-box { background: linear-gradient(45deg, #1a3a2a, #0a0a0a); border: 2px solid var(--pub-gold); padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: center;}
         
-        .story-continue-box { background: linear-gradient(135deg, #1a3a2a 0%, #0a0a0a 100%); border: 2px solid var(--pub-gold); border-radius: 10px; padding: 15px; margin-bottom: 12px; display: none; }
-        .story-continue-title { color: var(--pub-gold); font-weight: 900; font-size: 15px; font-family: 'Playfair Display', serif; margin-bottom: 8px; }
-        .story-continue-text { font-size: 13px; color: #ddd; line-height: 1.5; }
+        .story-continue-box { background: linear-gradient(135deg, #1a3a2a 0%, #0a0a0a 100%); border: 2px solid var(--pub-gold); border-radius: 10px; padding: 12px; margin-bottom: 10px; display: none; }
+        .story-continue-title { color: var(--pub-gold); font-weight: 900; font-size: 14px; font-family: 'Playfair Display', serif; margin-bottom: 6px; }
+        .story-continue-text { font-size: 12px; color: #ddd; line-height: 1.4; }
 
         .rating-badge { background: var(--pub-gold); color: #000; padding: 4px 8px; border-radius: 10px; font-size: 11px; font-weight: 900; }
         
-        .court-bg { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; border: 2px solid var(--pub-gold); border-radius: 10px; padding: 15px; margin-bottom: 12px; }
+        .court-bg { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; border: 2px solid var(--pub-gold); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
         
         .avatar-upload { display: none; }
         .avatar-label { cursor: pointer; display: block; }
 
-        .matrix-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; background: var(--card); border: 1px solid var(--pub-gold); }
-        .matrix-table th, .matrix-table td { border: 1px solid var(--pub-gold); padding: 8px; text-align: center; font-size: 12px; color: #ddd; }
+        .matrix-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; background: var(--card); border: 1px solid var(--pub-gold); }
+        .matrix-table th, .matrix-table td { border: 1px solid var(--pub-gold); padding: 6px; text-align: center; font-size: 11px; color: #ddd; }
         .matrix-table th { background: var(--pub-green); color: var(--pub-gold); font-weight: 900; }
         .matrix-table td.highlight { color: var(--pub-gold); font-weight: 900; }
-        .matrix-title { text-align: center; color: var(--pub-gold); font-weight: 900; margin-bottom: 8px; font-size: 12px; text-transform: uppercase; }
+        .matrix-title { text-align: center; color: var(--pub-gold); font-weight: 900; margin-bottom: 6px; font-size: 11px; text-transform: uppercase; }
 
-        .balance-box { background: var(--pub-gold); color: #000; padding: 8px; border-radius: 8px; text-align: center; font-weight: 900; font-size: 16px; margin-bottom: 12px; }
-
-        /* МИНИ-АВАТАРКИ ДЛЯ ПЕРЕКЛЮЧЕНИЯ ПЕРСОНАЖЕЙ */
-        .character-switch { display: flex; justify-content: space-around; margin-bottom: 15px; background: var(--card); padding: 8px; border-radius: 10px; border: 1px solid var(--border); }
-        .mini-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #555; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s; overflow: hidden; }
+        /* ПЕРЕКЛЮЧАТЕЛЬ ПЕРСОНАЖЕЙ ВНИЗУ */
+        .character-switch-bottom { display: flex; justify-content: space-around; margin-top: auto; margin-bottom: 10px; background: var(--card); padding: 8px; border-radius: 10px; border: 1px solid var(--border); }
+        .mini-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #555; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s; overflow: hidden; }
         .mini-avatar.active { border-color: var(--pub-gold); box-shadow: 0 0 10px var(--pub-gold); transform: scale(1.1); }
         .mini-avatar svg { width: 100%; height: 100%; }
     </style>
@@ -107,12 +114,18 @@
 <body>
 
 <div class="app-container">
+    <!-- ШТОРКА УВЕДОМЛЕНИЙ -->
+    <div id="top-shutter" class="top-shutter">
+        <div class="top-shutter-text" id="shutter-text">Вас пригласили в суд!</div>
+        <button class="top-shutter-btn" onclick="hideShutter()">ОК</button>
+    </div>
+
     <!-- ИНСТРУКЦИЯ -->
     <div id="intro" class="screen active" style="justify-content: center; text-align: center;">
-        <div class="brutal-title" style="font-size: 36px;">ДИЛЕММА<br><span>ДЖЕНТЛЬМЕНОВ</span></div>
+        <div class="brutal-title" style="font-size: 30px;">ДИЛЕММА<br><span>ДЖЕНТЛЬМЕНОВ</span></div>
         <div class="case-box" style="text-align: left; border-color: var(--pub-gold);">
             <b>СИСТЕМА НАЧИНАЕТ ЗАПИСЬ...</b><br><br>
-            Пять историй. Пять судеб. Один город. Каждый из них пошёл на преступление ради своей цели. Но их пути пересекутся. Выбери, за кого ты будешь играть, и помни: твои решения влияют на всех.
+            Пять историй. Пять судеб. Пять городов. Каждый из них пошёл на преступление ради своей цели. Но их пути пересекутся. Выбери, за кого ты будешь играть, и помни: твои решения влияют на всех.
         </div>
         <button class="btn btn-play" onclick="showScreen('choose-name')">НАЧАТЬ</button>
     </div>
@@ -120,14 +133,14 @@
     <!-- ВЫБОР ПЕРСОНАЖА -->
     <div id="choose-name" class="screen">
         <div class="brutal-title">ВЫБЕРИ ИСТОРИЮ</div>
-        <div class="case-box" style="font-size: 12px; margin-bottom: 15px;">
-            У каждого своя причина. Но Лондон не прощает ошибок. Кем ты станешь?
+        <div class="case-box" style="font-size: 11px; margin-bottom: 10px;">
+            У каждого своя причина: быстрые деньги, скорость, зависимость, чувство беззаконности. Кем ты станешь?
         </div>
-        <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич» (Лондон, 2018)<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Бывший охранник. Ипотека, двое детей. Идет на ограбления ради семьи.</span></button>
-        <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола» (Афганистан, 2015)<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Ветеран. Больная мать. Пошел на ферму с травкой ради лечения.</span></button>
-        <button class="btn" onclick="selectName('Ленни Молот')">Ленни «Молот» (Ливерпуль, 2016)<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Из бедного района. Долг сестры. Вымогает и угоняет ради нее.</span></button>
-        <button class="btn" onclick="selectName('Диего Дрифт')">Диего «Дрифт» (Сан-Паулу, 2019)<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Гонщик. Долг за адвоката. Делает всё, что связано с машинами.</span></button>
-        <button class="btn" onclick="selectName('Майкл Прокурорский')">Майкл «Прокурорский» (Москва, 2020)<br><span style="font-size: 10px; font-weight: normal; text-transform: none;">Сын прокурора. Пошел против отца. Мошенничества и подделки — его стихия.</span></button>
+        <button class="btn" onclick="selectName('Джонни Кирпич')">Джонни «Кирпич» (Лондон, 2018)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Бывший охранник. Ипотека, двое детей. Идет на ограбления ради семьи.</span></button>
+        <button class="btn" onclick="selectName('Томми Два Ствола')">Томми «Два Ствола» (Афганистан, 2015)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Ветеран. Больная мать. Пошел на ферму с травкой ради лечения.</span></button>
+        <button class="btn" onclick="selectName('Ленни Молот')">Ленни «Молот» (Ливерпуль, 2016)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Из бедного района. Долг сестры. Вымогает и угоняет ради нее.</span></button>
+        <button class="btn" onclick="selectName('Диего Дрифт')">Диего «Дрифт» (Сан-Паулу, 2019)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Гонщик. Долг за адвоката. Делает всё, что связано с машинами.</span></button>
+        <button class="btn" onclick="selectName('Майкл Прокурорский')">Майкл «Прокурорский» (Москва, 2020)<br><span style="font-size: 9px; font-weight: normal; text-transform: none;">Сын прокурора. Пошел против отца. Мошенничества и подделки — его стихия.</span></button>
     </div>
 
     <!-- ГЛАВНОЕ МЕНЮ -->
@@ -137,10 +150,7 @@
             <div>ОПЫТ: <span id="exp-counter" style="color: var(--pub-gold);">0</span></div>
         </div>
 
-        <!-- ПЕРЕКЛЮЧАТЕЛЬ ПЕРСОНАЖЕЙ -->
-        <div class="character-switch" id="character-switch"></div>
-
-        <div class="balance-box">
+        <div class="balance-shutter">
             БАЛАНС: $<span id="balance-display">0</span>
         </div>
 
@@ -155,8 +165,10 @@
                 <input type="file" class="avatar-upload" accept="image/*" onchange="changeAvatar(event)">
             </label>
             <div class="inmate-name" id="level-name">ДЖОННИ</div>
-            <div class="inmate-label">НАЖМИ НА ФОТО, ЧТОБЫ СМЕНИТЬ</div>
+            <div class="inmate-label">НАЖМИ, ЧТОБЫ СМЕНИТЬ ФОТО</div>
         </div>
+        
+        <div class="quote-box" id="quote-text">"Ты либо умрешь героем, либо проживешь достаточно долго, чтобы стать злодеем."</div>
         
         <div class="progress-container">
             <div class="progress-text">
@@ -175,25 +187,27 @@
         
         <div class="pub-bg" style="margin-top: 8px;">
             <div class="pub-title">ТЕОРИЯ ИГР:</div>
-            <div style="font-size: 12px; color: #ddd; margin-top: 3px;">
-                Дилемма заключенного показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим. В этой игре «Сдать» не всегда лучший выбор, так как твой напарник может поступить так же.
+            <div style="font-size: 11px; color: #ddd; margin-top: 3px;">
+                Дилемма заключенного показывает, почему два человека могут не сотрудничать, даже если это выгодно обоим.
             </div>
         </div>
+
+        <!-- ПЕРЕКЛЮЧАТЕЛЬ ПЕРСОНАЖЕЙ ВНИЗУ -->
+        <div class="character-switch-bottom" id="character-switch"></div>
     </div>
 
     <!-- ПРАВИЛА -->
     <div id="rules" class="screen">
         <button class="nav-back" onclick="showScreen('main-menu')">← НАЗАД</button>
         <div class="brutal-title">ПРАВИЛА</div>
-        <div class="case-box" style="border-color: var(--pub-gold); font-size: 13px; line-height: 1.6;">
+        <div class="case-box" style="border-color: var(--pub-gold); font-size: 12px; line-height: 1.5;">
             <b>КАК ИГРАТЬ:</b><br><br>
             Тебе дают дело. Ты видишь улики против напарника и информацию о его семье. Ты должен выбрать: <b>СДАТЬ</b> его или <b>МОЛЧАТЬ</b>.<br><br>
             <b>ЧТО БУДЕТ:</b><br>
             • Если ты СДАШЬ, а он МОЛЧИТ: ты выйдешь (0 лет), он сядет на 10 лет.<br>
             • Если ты МОЛЧИШЬ, а он СДАСТ: ты сядешь на 10 лет, он выйдет.<br>
             • Если вы оба СДАДИТЕ: вы оба сядете на 6 лет.<br>
-            • Если вы оба МОЛЧИТЕ: вы оба сядете на 3 года, но мафия вас вытащит! Вы идете дальше.<br><br>
-            <b>ВАЖНО:</b> Если ты выиграл (вышел на свободу), ты переходишь к следующему делу. Если проиграл (сел в тюрьму), ты начинаешь это же дело заново.
+            • Если вы оба МОЛЧИТЕ: вы оба сядете на 3 года, но мафия вас вытащит! Вы идете дальше.
         </div>
     </div>
 
@@ -216,8 +230,8 @@
             <button class="search-btn" onclick="searchFriends()">🔍</button>
         </div>
         <div id="friends-list" style="width: 100%;"></div>
-        <div style="text-align: center; margin-top: 15px;">
-            <button class="btn" style="justify-content: center; border-color: var(--pub-gold); color: var(--pub-gold);" onclick="inviteFriend()">ПРИГЛАСИТЬ</button>
+        <div style="text-align: center; margin-top: 10px;">
+            <button class="btn" style="justify-content: center; border-color: var(--pub-gold); color: var(--pub-gold);" onclick="inviteFriend()">ПРИГЛАСИТЬ В ИГРУ</button>
         </div>
     </div>
 
@@ -225,8 +239,8 @@
     <div id="rating" class="screen">
         <div class="brutal-title">РЕЙТИНГ</div>
         <div class="prize-box">
-            <div style="color: var(--pub-gold); font-weight: 900; font-size: 14px; margin-bottom: 4px;">ПРИЗЫ ОТ БОССА</div>
-            <div style="font-size: 11px; color: #ddd;">
+            <div style="color: var(--pub-gold); font-weight: 900; font-size: 13px; margin-bottom: 4px;">ПРИЗЫ ОТ БОССА</div>
+            <div style="font-size: 10px; color: #ddd;">
                 Каждую неделю Топ-3 получают Telegram Premium в звездах:<br>
                 🥇 1 место: 1/3 подписки<br>
                 🥈 2 место: 1/4 подписки<br>
@@ -235,21 +249,21 @@
             </div>
         </div>
         <div id="rating-list" style="width: 100%;">
-            <div style="text-align: center; color: #888; margin-top: 15px; font-size: 13px;">Пока нет игроков.</div>
+            <div style="text-align: center; color: #888; margin-top: 10px; font-size: 12px;">Пока нет игроков.</div>
         </div>
     </div>
 
     <!-- КЛАНЫ -->
     <div id="clans" class="screen">
         <div class="brutal-title">КЛАНЫ</div>
-        <div id="clan-create" style="margin-bottom: 15px;">
-            <input type="text" id="clan-name-input" class="search-input" placeholder="Название клана..." style="width: 100%; margin-bottom: 8px;">
+        <div id="clan-create" style="margin-bottom: 10px;">
+            <input type="text" id="clan-name-input" class="search-input" placeholder="Название клана..." style="width: 100%; margin-bottom: 6px;">
             <button class="btn btn-play" onclick="createClan()">СОЗДАТЬ КЛАН</button>
         </div>
         <div id="my-clan-info" style="display: none; width: 100%;">
             <div class="pub-bg">
                 <div class="pub-title" id="display-clan-name">КЛАН</div>
-                <div style="font-size: 11px; color: #888;">Лидер: ВЫ</div>
+                <div style="font-size: 10px; color: #888;">Лидер: ВЫ</div>
             </div>
             <button class="btn" style="color: var(--danger); border-color: var(--danger); justify-content: center;" onclick="leaveClan()">ПОКИНУТЬ</button>
         </div>
@@ -287,8 +301,8 @@
         <div class="timer" id="timer-choose">90</div>
         
         <div class="court-bg">
-            <div style="text-align: center; color: var(--pub-gold); font-weight: 900; font-size: 16px; margin-bottom: 8px;">ЗАЛ СУДА</div>
-            <div style="text-align: center; color: #ddd; font-size: 12px; margin-bottom: 15px;">Судья смотрит на тебя. Присяжные ждут. Твое слово решает всё.</div>
+            <div style="text-align: center; color: var(--pub-gold); font-weight: 900; font-size: 14px; margin-bottom: 6px;">ЗАЛ СУДА</div>
+            <div style="text-align: center; color: #ddd; font-size: 11px; margin-bottom: 12px;">Судья смотрит на тебя. Присяжные ждут. Твое слово решает всё.</div>
         </div>
 
         <div id="matrix-container-game" style="display: none;">
@@ -301,21 +315,21 @@
         </div>
 
         <div class="choices" id="choice-buttons">
-            <button class="choice-btn c-alpha" onclick="makeChoice('betray')" id="btn-alpha">СДАТЬ<br><span style="font-size: 11px;">(Риск)</span></button>
-            <button class="choice-btn c-beta" onclick="makeChoice('silent')" id="btn-beta">МОЛЧАТЬ<br><span style="font-size: 11px;">(Верность)</span></button>
+            <button class="choice-btn c-alpha" onclick="makeChoice('betray')" id="btn-alpha">СДАТЬ<br><span style="font-size: 10px;">(Риск)</span></button>
+            <button class="choice-btn c-beta" onclick="makeChoice('silent')" id="btn-beta">МОЛЧАТЬ<br><span style="font-size: 10px;">(Верность)</span></button>
         </div>
     </div>
 
     <!-- ПЕРЕДАЙ ТЕЛЕФОН -->
     <div id="pass-screen" class="screen">
-        <div class="brutal-title" style="margin-top: 40px;">ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span></div>
+        <div class="brutal-title" style="margin-top: 30px;">ПЕРЕДАЙ<br><span>ТЕЛЕФОН</span></div>
         <div class="case-box" style="text-align: center;">Передайте телефон Игроку 2.</div>
         <button class="btn btn-play" onclick="showScreen('game-screen')">Я ГОТОВ</button>
     </div>
 
     <!-- РЕЗУЛЬТАТ -->
     <div id="result-screen" class="screen">
-        <div class="brutal-title" style="margin-top: 40px;">ПРИГОВОР</div>
+        <div class="brutal-title" style="margin-top: 30px;">ПРИГОВОР</div>
         <div class="case-box" style="border-color: var(--pub-gold);" id="result-text"></div>
         <button class="btn btn-play" onclick="backToMenu()">В МЕНЮ</button>
     </div>
@@ -342,7 +356,6 @@
 
     let userAvatar = localStorage.getItem('userAvatar') || null;
 
-    // 5 АВАТАРОК (SVG)
     const avatars = [
         `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M20 45 Q50 15 80 45 L80 50 Q50 25 20 50 Z" fill="#333"/><rect x="25" y="40" width="50" height="8" fill="#c9a84c"/><circle cx="50" cy="65" r="18" fill="#222"/><path d="M35 70 Q50 85 65 70 Z" fill="#555"/></svg>`,
         `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><path d="M15 40 L85 40 L75 25 L25 25 Z" fill="#444"/><rect x="15" y="40" width="70" height="5" fill="#222"/><circle cx="50" cy="65" r="18" fill="#222"/><rect x="35" y="60" width="30" height="8" fill="#000" rx="4"/><rect x="40" y="62" width="8" height="4" fill="#c9a84c"/><rect x="52" y="62" width="8" height="4" fill="#c9a84c"/></svg>`,
@@ -351,46 +364,61 @@
         `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><circle cx="50" cy="50" r="50" fill="#1a1a1a"/><circle cx="50" cy="60" r="22" fill="#222"/><circle cx="38" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><circle cx="62" cy="55" r="7" fill="none" stroke="#c9a84c" stroke-width="2"/><path d="M45 75 Q50 80 55 75" fill="none" stroke="#000" stroke-width="4"/><path d="M25 80 Q50 100 75 80" fill="#333"/></svg>`
     ];
 
-    // СЮЖЕТНЫЕ ДЕЛА (по 5 глав на каждого)
     const characters = {
         johnny: {
             name: "ДЖОННИ КИРПИЧ",
-            history: "Лондон, 2018. Бывший охранник. Ипотека, двое детей. Пошел на ограбления.",
+            history: "Лондон, 2018. Бывший охранник. Ипотека, двое детей.",
             family: "Жена Карен и двое детей.",
             partner: "Джимми Конвей.",
+            quote: "Ты либо умрешь героем, либо проживешь достаточно долго, чтобы стать злодеем.",
             cases: [
-                { t: "ГЛАВА 1: Ограбление казино. Тебе нужна тачка для побега. Диего (Дрифт) должен её угнать.", p: "Джимми Конвей.", ev: "Казино 'Белладжио'.", fam: "У Джимми больная мать.", kush: 2000000, btn1: "Ограбить казино", btn2: "Отказаться", isKush: false, reward: 15000, requires: "diego" },
-                { t: "ГЛАВА 1 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Джимми.", ev: "Улики против вас.", fam: "У Джимми больная мать.", kush: 2000000, btn1: "Сдать Джимми", btn2: "Молчать", isKush: true, reward: 0, requires: null }
+                { t: "ГЛАВА 1: Ограбление казино 'Белладжио'. Тебе нужна тачка для побега. Диего (Дрифт) должен её угнать.", p: "Джимми Конвей.", ev: "Казино 'Белладжио'.", fam: "У Джимми больная мать.", kush: 2000000, btn1: "Ограбить казино", btn2: "Отказаться", isKush: false, reward: 15000, requires: "diego" },
+                { t: "ГЛАВА 2: Банк на Паддингтон-стрит. У тебя есть тачка от Диего, но нужны деньги на оружие. Томми (Травка) должен продать урожай.", p: "Джимми.", ev: "Банк на Паддингтон-стрит.", fam: "У Джимми больная мать.", kush: 1000000, btn1: "Ограбить банк", btn2: "Отказаться", isKush: false, reward: 20000, requires: "tommy" },
+                { t: "ГЛАВА 3: Ювелирка 'Тиффани'. Тебе нужны деньги на адвоката. Ленни (Молот) должен провернуть вымогательство.", p: "Джимми.", ev: "Ювелирка 'Тиффани'.", fam: "У Джимми больная мать.", kush: 3000000, btn1: "Ограбить ювелирку", btn2: "Отказаться", isKush: false, reward: 25000, requires: "lenny" },
+                { t: "ГЛАВА 4: Инкассаторы. Тебе нужна схема от Майкла (Прокурорский), чтобы подставить их.", p: "Джимми.", ev: "Инкассаторская машина.", fam: "У Джимми больная мать.", kush: 1500000, btn1: "Ограбить инкассаторов", btn2: "Отказаться", isKush: false, reward: 30000, requires: "michael" },
+                { t: "ГЛАВА 5 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Джимми.", ev: "Улики против вас.", fam: "У Джимми больная мать.", kush: 2000000, btn1: "Сдать Джимми", btn2: "Молчать", isKush: true, reward: 0, requires: null }
             ]
         },
         tommy: {
             name: "ТОММИ ДВА СТВОЛА",
-            history: "Афганистан, 2015. Ветеран. Больная мать. Ферма с травкой.",
+            history: "Афганистан, 2015. Ветеран. Больная мать.",
             family: "Больная мать.",
             partner: "Томми 'Два Ствола'.",
+            quote: "Война никогда не меняется. Но и мы тоже.",
             cases: [
                 { t: "ГЛАВА 1: Ферма с травкой. Тебе нужны деньги на динамит. Джонни (Кирпич) должен ограбить банк.", p: "Томми.", ev: "Полиция нашла ферму.", fam: "У Томми больная мать.", kush: 500000, btn1: "Посадить травку", btn2: "Отказаться", isKush: false, reward: 15000, requires: "johnny" },
-                { t: "ГЛАВА 1 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Томми.", ev: "Улики против вас.", fam: "У Томми больная мать.", kush: 500000, btn1: "Сдать Томми", btn2: "Молчать", isKush: true, reward: 0, requires: null }
+                { t: "ГЛАВА 2: Перевозка урожая. Тебе нужна тачка от Диего (Дрифт).", p: "Томми.", ev: "Полиция на трассе.", fam: "У Томми больная мать.", kush: 400000, btn1: "Перевезти урожай", btn2: "Отказаться", isKush: false, reward: 20000, requires: "diego" },
+                { t: "ГЛАВА 3: Продажа урожая. Тебе нужна схема от Майкла (Прокурорский).", p: "Томми.", ev: "Покупатели.", fam: "У Томми больная мать.", kush: 600000, btn1: "Продать урожай", btn2: "Отказаться", isKush: false, reward: 25000, requires: "michael" },
+                { t: "ГЛАВА 4: Разборки с конкурентами. Тебе нужна помощь от Ленни (Молот).", p: "Томми.", ev: "Конкуренты.", fam: "У Томми больная мать.", kush: 300000, btn1: "Разобраться", btn2: "Отказаться", isKush: false, reward: 30000, requires: "lenny" },
+                { t: "ГЛАВА 5 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Томми.", ev: "Улики против вас.", fam: "У Томми больная мать.", kush: 500000, btn1: "Сдать Томми", btn2: "Молчать", isKush: true, reward: 0, requires: null }
             ]
         },
         lenny: {
             name: "ЛЕННИ МОЛОТ",
-            history: "Ливерпуль, 2016. Из бедного района. Долг сестры. Вымогательства.",
+            history: "Ливерпуль, 2016. Из бедного района. Долг сестры.",
             family: "Сестра в долгах.",
             partner: "Ленни 'Молот'.",
+            quote: "Семья — это всё. Остальное — пыль.",
             cases: [
                 { t: "ГЛАВА 1: Вымогательство. Тебе нужна схема с деньгами. Майкл (Прокурорский) должен её провернуть.", p: "Ленни.", ev: "Долг сестры.", fam: "У Ленни сестра в долгах.", kush: 300000, btn1: "Вымогать", btn2: "Отказаться", isKush: false, reward: 15000, requires: "michael" },
-                { t: "ГЛАВА 1 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Ленни.", ev: "Улики против вас.", fam: "У Ленни сестра в долгах.", kush: 300000, btn1: "Сдать Ленни", btn2: "Молчать", isKush: true, reward: 0, requires: null }
+                { t: "ГЛАВА 2: Крышевание. Тебе нужна тачка от Диего (Дрифт).", p: "Ленни.", ev: "Полиция накрыла.", fam: "У Ленни сестра в долгах.", kush: 400000, btn1: "Крышевать", btn2: "Отказаться", isKush: false, reward: 20000, requires: "diego" },
+                { t: "ГЛАВА 3: Угон. Тебе нужно прикрытие от Джонни (Кирпич).", p: "Ленни.", ev: "Угон.", fam: "У Ленни сестра в долгах.", kush: 500000, btn1: "Угнать", btn2: "Отказаться", isKush: false, reward: 25000, requires: "johnny" },
+                { t: "ГЛАВА 4: Разборки с ростовщиком. Тебе нужна помощь от Томми (Травка).", p: "Ленни.", ev: "Ростовщик.", fam: "У Ленни сестра в долгах.", kush: 600000, btn1: "Разобраться", btn2: "Отказаться", isKush: false, reward: 30000, requires: "tommy" },
+                { t: "ГЛАВА 5 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Ленни.", ev: "Улики против вас.", fam: "У Ленни сестра в долгах.", kush: 300000, btn1: "Сдать Ленни", btn2: "Молчать", isKush: true, reward: 0, requires: null }
             ]
         },
         diego: {
             name: "ДИЕГО ДРИФТ",
-            history: "Сан-Паулу, 2019. Гонщик. Долг за адвоката. Угоны.",
+            history: "Сан-Паулу, 2019. Гонщик. Долг за адвоката.",
             family: "Нет семьи.",
             partner: "Диего.",
+            quote: "Скорость — это единственное, что имеет значение.",
             cases: [
                 { t: "ГЛАВА 1: Угон тачки для Джонни. Он должен ограбить банк.", p: "Диего.", ev: "Полиция ищет угнанную тачку.", fam: "У Диего нет семьи.", kush: 200000, btn1: "Угнать тачку", btn2: "Отказаться", isKush: false, reward: 15000, requires: "johnny" },
-                { t: "ГЛАВА 1 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Диего.", ev: "Улики против вас.", fam: "У Диего нет семьи.", kush: 200000, btn1: "Сдать Диего", btn2: "Молчать", isKush: true, reward: 0, requires: null }
+                { t: "ГЛАВА 2: Гонка. Тебе нужны деньги на адвоката. Джонни (Кирпич) должен ограбить казино.", p: "Диего.", ev: "Нелегальная гонка.", fam: "У Диего нет семьи.", kush: 300000, btn1: "Участвовать в гонке", btn2: "Отказаться", isKush: false, reward: 20000, requires: "johnny" },
+                { t: "ГЛАВА 3: Перевозка. Тебе нужна схема от Майкла (Прокурорский).", p: "Диего.", ev: "Полиция на трассе.", fam: "У Диего нет семьи.", kush: 400000, btn1: "Перевезти", btn2: "Отказаться", isKush: false, reward: 25000, requires: "michael" },
+                { t: "ГЛАВА 4: Побег. Тебе нужна помощь от Ленни (Молот).", p: "Диего.", ev: "Погоня.", fam: "У Диего нет семьи.", kush: 500000, btn1: "Сбежать", btn2: "Отказаться", isKush: false, reward: 30000, requires: "lenny" },
+                { t: "ГЛАВА 5 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Диего.", ev: "Улики против вас.", fam: "У Диего нет семьи.", kush: 200000, btn1: "Сдать Диего", btn2: "Молчать", isKush: true, reward: 0, requires: null }
             ]
         },
         michael: {
@@ -398,9 +426,13 @@
             history: "Москва, 2020. Сын прокурора. Схемы, подделки.",
             family: "Отец — прокурор.",
             partner: "Майкл.",
+            quote: "Закон — это инструмент. И я знаю, как его использовать.",
             cases: [
                 { t: "ГЛАВА 1: Схема с поддельными документами для Ленни. Он должен выкупить сестру.", p: "Майкл.", ev: "Полиция ищет подделки.", fam: "Отец Майкла — прокурор.", kush: 500000, btn1: "Провернуть схему", btn2: "Отказаться", isKush: false, reward: 15000, requires: "lenny" },
-                { t: "ГЛАВА 1 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Майкл.", ev: "Улики против вас.", fam: "Отец Майкла — прокурор.", kush: 500000, btn1: "Сдать Майкла", btn2: "Молчать", isKush: true, reward: 0, requires: null }
+                { t: "ГЛАВА 2: Схема с деньгами. Тебе нужна помощь от Джонни (Кирпич).", p: "Майкл.", ev: "Финансовая пирамида.", fam: "Отец Майкла — прокурор.", kush: 600000, btn1: "Провернуть схему", btn2: "Отказаться", isKush: false, reward: 20000, requires: "johnny" },
+                { t: "ГЛАВА 3: Мошенничество. Тебе нужна тачка от Диего (Дрифт).", p: "Майкл.", ev: "Полиция ищет мошенника.", fam: "Отец Майкла — прокурор.", kush: 700000, btn1: "Мошенничать", btn2: "Отказаться", isKush: false, reward: 25000, requires: "diego" },
+                { t: "ГЛАВА 4: Подкуп. Тебе нужна помощь от Томми (Травка).", p: "Майкл.", ev: "Прокуратура.", fam: "Отец Майкла — прокурор.", kush: 800000, btn1: "Подкупить", btn2: "Отказаться", isKush: false, reward: 30000, requires: "tommy" },
+                { t: "ГЛАВА 5 (ФИНАЛ): Вас взяли. Следователь предлагает сделку.", p: "Майкл.", ev: "Улики против вас.", fam: "Отец Майкла — прокурор.", kush: 500000, btn1: "Сдать Майкла", btn2: "Молчать", isKush: true, reward: 0, requires: null }
             ]
         }
     };
@@ -413,7 +445,6 @@
         { t: "Поджог паба. Погиб сторож.", p: "Томми.", ev: "Канистра.", fam: "Томми должен денег.", kush: 300000, btn1: "Сдать Томми", btn2: "Молчать" }
     ];
 
-    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
     let currentChar = localStorage.getItem('currentChar') || 'johnny';
     let totalExp = parseFloat(localStorage.getItem('prisonExp')) || 0;
     let ratingScore = parseInt(localStorage.getItem('ratingScore')) || 0;
@@ -428,7 +459,16 @@
     let currentCaseData = null;
     let currentStoryIndex = 0;
 
-    // ПРОВЕРКА ЛИМИТА РЕЙТИНГА (7 ДНЕЙ)
+    function showShutter(text) {
+        document.getElementById('shutter-text').innerText = text;
+        document.getElementById('top-shutter').classList.add('show');
+        setTimeout(() => { hideShutter(); }, 5000);
+    }
+
+    function hideShutter() {
+        document.getElementById('top-shutter').classList.remove('show');
+    }
+
     function checkRatingLimit() {
         let now = Date.now();
         if (now - lastRatingReset > 7 * 24 * 60 * 60 * 1000) {
@@ -472,7 +512,6 @@
     }
 
     function selectName(name) {
-        // Определяем ключ по имени
         if (name.includes('Джонни')) currentChar = 'johnny';
         if (name.includes('Томми')) currentChar = 'tommy';
         if (name.includes('Ленни')) currentChar = 'lenny';
@@ -503,16 +542,15 @@
         const progress = getCharProgress(currentChar);
         const balance = getCharBalance(currentChar);
         
-        // Обновляем имя и аватарку
         document.getElementById('player-name').innerText = charData.name;
         document.getElementById('balance-display').innerText = balance.toLocaleString();
         document.getElementById('exp-counter').innerText = totalExp.toFixed(1);
         document.getElementById('level-num').innerText = progress;
+        document.getElementById('quote-text').innerText = charData.quote;
         
         if (userAvatar) {
             document.getElementById('avatar-container').innerHTML = `<img src="${userAvatar}" style="width:100%;height:100%;object-fit:cover;">`;
         } else {
-            // Берем аватарку по индексу персонажа
             let charIndex = 0;
             if (currentChar === 'tommy') charIndex = 1;
             if (currentChar === 'lenny') charIndex = 2;
@@ -521,7 +559,6 @@
             document.getElementById('avatar-container').innerHTML = avatars[charIndex];
         }
 
-        // Прогресс-бар
         let totalCases = charData.cases.length;
         let done = progress;
         let need = totalCases;
@@ -530,8 +567,8 @@
         document.getElementById('exp-bar').style.width = (done / need * 100) + '%';
         
         document.getElementById('rating-score').innerText = ratingScore;
+        document.getElementById('rating-games-left').innerText = 15 - ratingGamesPlayed;
         
-        // Обновляем переключатель персонажей
         let switchHtml = '';
         const charKeys = ['johnny', 'tommy', 'lenny', 'diego', 'michael'];
         charKeys.forEach((key, index) => {
@@ -540,15 +577,12 @@
         });
         document.getElementById('character-switch').innerHTML = switchHtml;
 
-        // Сюжет
         updateStoryUI();
 
-        // Друзья
-        let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:15px; font-size:12px;">Список пуст</div>';
-        friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--pub-gold); font-size:11px;">В ИГРЕ</span></div>`);
+        let fHtml = friends.length ? '' : '<div style="text-align:center; color:#888; margin-top:10px; font-size:11px;">Список пуст</div>';
+        friends.forEach(f => fHtml += `<div class="list-item"><span>@${f}</span> <span style="color:var(--pub-gold); font-size:10px;">В ИГРЕ</span></div>`);
         document.getElementById('friends-list').innerHTML = fHtml;
 
-        // Клан
         if(clan) {
             document.getElementById('clan-create').style.display = 'none';
             document.getElementById('my-clan-info').style.display = 'block';
@@ -595,7 +629,12 @@
         if(!friends.includes(q)) { friends.push(q); localStorage.setItem('myFriends', JSON.stringify(friends)); updateUI(); tg.showAlert(`@${q} добавлен!`); }
         document.getElementById('friend-search').value = '';
     }
-    function inviteFriend() { tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/your_bot&text=Играй со мной!`); }
+    
+    function inviteFriend() {
+        tg.showAlert("Приглашение отправлено!");
+        showShutter("Вы пригласили друга в суд!");
+    }
+    
     function createClan() { let n = document.getElementById('clan-name-input').value.trim(); if(!n) return; clan = n; localStorage.setItem('myClan', clan); updateUI(); }
     function leaveClan() { clan = null; localStorage.removeItem('myClan'); updateUI(); }
 
@@ -615,6 +654,15 @@
             if (progress >= charData.cases.length) {
                 tg.showAlert("Ты уже прошел все дела этого персонажа.");
                 return;
+            }
+            let currentCase = charData.cases[progress];
+            if (currentCase.requires) {
+                let reqProgress = getCharProgress(currentCase.requires);
+                if (reqProgress === 0) {
+                    let reqName = characters[currentCase.requires].name;
+                    tg.showAlert(`${reqName} еще не выполнил нужное дело. Сначала пройди его.`);
+                    return;
+                }
             }
             currentStoryIndex = progress;
         }
@@ -669,7 +717,7 @@
                 <div class="family-title">ИНФО О СЕМЬЕ:</div>
                 <div class="family-text">${currentCaseData.fam}</div>
             </div>
-            <div style="color: var(--pub-gold); font-weight: 900; margin-bottom: 8px;">НАГРАДА: $${currentCaseData.isKush ? currentCaseData.kush.toLocaleString() : currentCaseData.reward.toLocaleString()}</div>
+            <div style="color: var(--pub-gold); font-weight: 900; margin-bottom: 6px;">НАГРАДА: $${currentCaseData.isKush ? currentCaseData.kush.toLocaleString() : currentCaseData.reward.toLocaleString()}</div>
             ${(currentCaseData.t.includes("ФИНАЛ") || currentCaseData.t.includes("ГЛАВА 5")) ? '<br>' + hint : ''}
         `;
         
@@ -684,8 +732,8 @@
             mainBtn.innerText = 'НА ДЕЛО';
         }
 
-        document.getElementById('btn-alpha').innerHTML = `${currentCaseData.btn1}<br><span style="font-size: 11px;">(Риск)</span>`;
-        document.getElementById('btn-beta').innerHTML = `${currentCaseData.btn2}<br><span style="font-size: 11px;">(Верность)</span>`;
+        document.getElementById('btn-alpha').innerHTML = `${currentCaseData.btn1}<br><span style="font-size: 10px;">(Риск)</span>`;
+        document.getElementById('btn-beta').innerHTML = `${currentCaseData.btn2}<br><span style="font-size: 10px;">(Верность)</span>`;
 
         p1Selected = false; p2Choice = null;
         showScreen('case-screen');
@@ -760,15 +808,15 @@
         let text = `Твой срок: ${p1Y} лет.<br>Срок напарника: ${p2Y} лет.<br><br>`;
 
         if (isLoseAll) {
-            text = `<span style='color:var(--danger); font-size:20px; font-weight:bold;'>МАФИЯ КАЗНИЛА ТВОЮ СЕМЬЮ...</span><br><br>Ты сдал босса, но это была не пустая угроза. Ты потерял всё. Опыт и деньги сброшены.<br><br>`;
+            text = `<span style='color:var(--danger); font-size:18px; font-weight:bold;'>МАФИЯ КАЗНИЛА ТВОЮ СЕМЬЮ...</span><br><br>Ты сдал босса, но это была не пустая угроза. Ты потерял всё. Опыт и деньги сброшены.<br><br>`;
         } else if (isWin) {
             let reward = currentCaseData.isKush ? currentCaseData.kush : currentCaseData.reward;
             if (p1Choice === 'silent' && p2Choice === 'silent') {
-                text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ВЫ ОБА МОЛЧАЛИ! МАФИЯ ВЫТАЩИЛА ВАС.</span><br><span style='font-size:12px;'>+1 XP</span>";
+                text += "<span style='color:var(--pub-gold); font-size:18px; font-weight:bold;'>ВЫ ОБА МОЛЧАЛИ! МАФИЯ ВЫТАЩИЛА ВАС.</span><br><span style='font-size:11px;'>+1 XP</span>";
             } else if (p1Choice === 'betray' && p2Choice === 'silent') {
-                text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ТЫ СДАЛ ЕГО И ВЫШЕЛ!</span><br><span style='font-size:12px;'>+1 XP</span>";
+                text += "<span style='color:var(--pub-gold); font-size:18px; font-weight:bold;'>ТЫ СДАЛ ЕГО И ВЫШЕЛ!</span><br><span style='font-size:11px;'>+1 XP</span>";
             } else if (isFinal) {
-                text += "<span style='color:var(--pub-gold); font-size:20px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:12px;'>+1 XP</span>";
+                text += "<span style='color:var(--pub-gold); font-size:18px; font-weight:bold;'>ТЫ ВЫШЕЛ НА СВОБОДУ!</span><br><span style='font-size:11px;'>+1 XP</span>";
             }
             totalExp += 1;
             
@@ -788,7 +836,7 @@
         } else {
             let currentBalance = getCharBalance(currentChar);
             let penalty = Math.min(currentBalance, 10000);
-            text += "<span style='color:var(--danger); font-size:20px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span><br><span style='font-size:12px;'>-1 XP</span>";
+            text += "<span style='color:var(--danger); font-size:18px; font-weight:bold;'>ВЕЧЕР В ХАТУ...</span><br><span style='font-size:11px;'>-1 XP</span>";
             totalExp -= 1;
             if (penalty > 0) {
                 currentBalance -= penalty;
